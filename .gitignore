@@ -55,7 +55,6 @@ playground.xcworkspace
 Manifest.lock
 Carthage
 Pods
-*.zip
 release_notes.md
 ._*
 
