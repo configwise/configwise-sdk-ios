@@ -1,0 +1,68 @@
+# Ignore OS generated files and commons #
+#########################################
+.DS_Store*
+ehthumbs.db
+Thumbs.db
+*.tmp
+*.log
+*.swp
+tmp
+null
+*~
+
+
+# GIT specific #
+################
+!.gitkeep
+
+
+# Ignore IDE and build tools #
+##############################
+.idea/
+*.iml
+*.ipr
+*.iws
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xcuserdatad
+*.xcscmblueprint
+*.xccheckout
+*.moved-aside
+xcproject4
+output/
+Build
+DerivedData
+Index
+
+## Obj-C/Swift specific
+*.hmap
+*.ipa
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+
+# Project specific ignores #
+############################
+Manifest.lock
+Carthage
+Pods
+*.zip
+release_notes.md
+._*
+
+# Fastlane specific #
+#####################
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
