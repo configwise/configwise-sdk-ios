@@ -15,6 +15,8 @@ struct SignInView: View {
     @State var email: String = ""
     @State var password: String = ""
     
+    @State var showUnderConstruction = false
+    
     struct ErrorStyle: ViewModifier {
         func body(content: Content) -> some View {
             return content
@@ -93,13 +95,13 @@ struct SignInView: View {
                         .padding(.vertical)
                 }
                 HStack {
-                    Text("Email:")
-                    TextField("Type your email please", text: self.$email)
+                    Image(systemName: "person.fill")
+                    TextField("Email", text: self.$email)
                     .textContentType(.emailAddress)
                 }
                 HStack {
-                    Text("Password:")
-                    SecureField("Type your password", text: self.$password)
+                    Image(systemName: "lock.fill")
+                    SecureField("Password", text: self.$password)
                     .textContentType(.password)
                 }
                 HStack {
@@ -110,6 +112,23 @@ struct SignInView: View {
                     }
                 }
                 Spacer()
+                HStack {
+                    Button(action: {
+                        // TODO [smuravev] Implement 'Forgot password' action here
+                        self.showUnderConstruction = true
+                    }) {
+                        Text("Forgot password")
+                    }
+                    .alert(isPresented: self.$showUnderConstruction) { () -> Alert in
+                        Alert(
+                            title: Text("UNDER CONSTRUCTION"),
+                            message: Text("We are working hard to implement it asap."),
+                            dismissButton: .default(Text("OK")) {
+                                self.showUnderConstruction = false
+                            }
+                        )
+                    }
+                }
             }
         }
         .padding()
