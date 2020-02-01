@@ -10,16 +10,62 @@ import SwiftUI
 import ConfigWiseSDK
 
 struct MainView: View {
-
+    
     @EnvironmentObject var appEnvironment: AppEnvironment
-
+    
     var body: some View {
-        NavigationView {
-            List(self.appEnvironment.components.value ?? []) { component in
-                Text(component.appName)
+        TabView {
+            CatalogView()
+                .tabItem {
+                    Image(systemName: "rectangle.grid.1x2")
+                    Text("Catalog")
+                }
+
+            AppContentView()
+            .tabItem {
+                Image(systemName: "rectangle.grid.2x2")
+                Text("AppContent")
             }
-            .navigationBarTitle("Catalog")
-            .navigationBarItems(trailing: HStack {
+        }
+    }
+    
+    struct CatalogView: View {
+        
+        @EnvironmentObject var appEnvironment: AppEnvironment
+        
+        var body: some View {
+            NavigationView {
+                List(self.appEnvironment.components.value ?? []) { component in
+                    Text(component.appName)
+                }
+                .onAppear {
+                    self.appEnvironment.fetchComponents()
+                }
+                .navigationBarTitle("Catalog")
+                .navigationBarItems(trailing: NavBarItemsView())
+            }
+        }
+    }
+    
+    struct AppContentView: View {
+        
+        @EnvironmentObject var appEnvironment: AppEnvironment
+        
+        var body: some View {
+            NavigationView {
+                Text("UNDER CONSTRUCTION")
+                .navigationBarTitle("AppContent")
+                .navigationBarItems(trailing: NavBarItemsView())
+            }
+        }
+    }
+    
+    struct NavBarItemsView: View {
+        
+        @EnvironmentObject var appEnvironment: AppEnvironment
+        
+        var body: some View {
+            HStack {
                 if self.appEnvironment.isLoading {
                     ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
                         indicator.style = .medium
@@ -34,9 +80,6 @@ struct MainView: View {
                         Text("Logout")
                     }
                 }
-            })
-            .onAppear {
-                self.appEnvironment.fetchComponents()
             }
         }
     }
