@@ -33,16 +33,91 @@ struct MainView: View {
         
         @EnvironmentObject var appEnvironment: AppEnvironment
         
+        private struct NameTextStyle: ViewModifier {
+            func body(content: Content) -> some View {
+                return content
+                    .font(Font.system(size: 16))
+                    .padding(.vertical)
+            }
+        }
+        
+        private struct SizeTextStyle: ViewModifier {
+            func body(content: Content) -> some View {
+                return content
+                    .foregroundColor(.gray)
+                    .font(Font.system(size: 12))
+                    .padding(.vertical)
+            }
+        }
+        
         var body: some View {
             NavigationView {
                 List(self.appEnvironment.components.value ?? []) { component in
-                    Text(component.appName)
+                    NavigationLink(destination: CanvasView(component)) {
+                        HStack {
+                            ComponentThumbnailView(component)
+                            VStack(alignment: .leading) {
+                                Text(component.appName)
+                                    .modifier(NameTextStyle())
+
+                                Text("\(component.totalSize / 1024 / 1024) Mb")
+                                    .modifier(SizeTextStyle())
+                            }
+                        }
+                    }
                 }
                 .onAppear {
                     self.appEnvironment.fetchComponents()
                 }
                 .navigationBarTitle("Catalog")
                 .navigationBarItems(trailing: NavBarItemsView())
+            }
+        }
+
+        struct ComponentThumbnailView: View {
+            
+            @ObservedObject var thumbnailImage: ComponentThumbnailImage
+            
+            init(_ component: ComponentEntity) {
+                self.thumbnailImage = ComponentThumbnailImage(component)
+            }
+            
+            var body: some View {
+                VStack {
+                    if self.thumbnailImage.uiImage.isLoading {
+                        ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
+                            indicator.style = .medium
+                            indicator.hidesWhenStopped = false
+                        }
+                    } else {
+                        Image(uiImage: self.thumbnailImage.uiImage.value ?? UIImage())
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    }
+                }
+                .frame(width: 100, height: 100)
+            }
+        }
+        
+        class ComponentThumbnailImage: ObservableObject {
+            
+            @Published var uiImage: Loadable<UIImage> = .notRequested
+            
+            init(_ component: ComponentEntity) {
+                self.uiImage = .isLoading(last: self.uiImage.value)
+                component.getThumbnailFileData(block: { [weak self] data, error in
+                    if let error = error {
+                        self?.uiImage = .failed(error)
+                        return
+                    }
+
+                    guard let data = data else {
+                        self?.uiImage = .loaded(UIImage())
+                        return
+                    }
+
+                    self?.uiImage = .loaded(UIImage(data: data) ?? UIImage())
+                })
             }
         }
     }

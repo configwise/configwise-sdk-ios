@@ -21,7 +21,7 @@ struct SignInView: View {
         func body(content: Content) -> some View {
             return content
                 .foregroundColor(.red)
-                .font(Font.custom("Arial Rounded MT Bold", size: 18))
+                .font(Font.system(size: 18))
         }
     }
     
