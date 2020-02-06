@@ -16,7 +16,13 @@ struct CanvasView: View {
     
     private let canvasAdapter = CanvasAdapter()
     
-    @ObservedObject var componentModel: ComponentModel
+    @ObservedObject private var componentModel: ComponentModel
+    
+    @State private var selectedSceneEnvironment: SceneEnvironment = .basicLight
+    
+    private var sceneEnvironmentIcon = [ "sun.max", "moon", "lightbulb" ]
+    
+    @State private var showDimensions = false
 
     init(_ component: ComponentEntity) {
         self.component = component
@@ -26,7 +32,31 @@ struct CanvasView: View {
     var body: some View {
         let modelNodeLoadable = self.componentModel.modelNodeLoadable
         
-        return ZStack {
+        let selectedSceneEnvironmentBinding = Binding<SceneEnvironment>(
+            get: {
+                self.selectedSceneEnvironment
+            },
+            set: {
+                self.selectedSceneEnvironment = $0
+                self.canvasAdapter.sceneEnvironment = $0
+            }
+        )
+        
+        let showDimensionsBinding = Binding<Bool>(
+            get: {
+                self.showDimensions
+            },
+            set: {
+                self.showDimensions = $0
+                if $0 {
+                    self.canvasAdapter.enableMeasurementUnits()
+                } else {
+                    self.canvasAdapter.disableMeasurementsUnits()
+                }
+            }
+        )
+        
+        return ZStack(alignment: .top) {
             if modelNodeLoadable.isLoading || modelNodeLoadable.isNotRequested {
                 VStack {
                     Text("Loading \(self.componentModel.loadingProgress)%")
@@ -42,7 +72,7 @@ struct CanvasView: View {
                     Text("ERROR:")
                         .foregroundColor(.red)
                         .font(Font.system(size: 18))
-                    
+
                     Text(modelNodeLoadable.error?.localizedDescription ?? "Unable to load model.")
                         .foregroundColor(.red)
                         .font(Font.system(size: 14))
@@ -58,7 +88,7 @@ struct CanvasView: View {
                 }
                 .onAppear {
                     self.canvasAdapter.removeModels()
-                    
+
                     guard let modelNode = modelNodeLoadable.value else {
                         return
                     }
@@ -67,7 +97,7 @@ struct CanvasView: View {
                         modelNode: modelNode,
                         notifyCanvasManagementDelegate: false
                     )
-                    
+
                     self.canvasAdapter.focusToCenter(animate: false, resetCameraZoom: true, resetCameraOrientation: true)
                 }
             }
@@ -75,6 +105,20 @@ struct CanvasView: View {
         .onAppear {
             self.componentModel.load()
         }
+        .navigationBarItems(
+            trailing: HStack {
+                Picker(selection: selectedSceneEnvironmentBinding, label: Text("")) {
+                    ForEach(SceneEnvironment.allCases.indices) {
+                        Image(systemName: self.sceneEnvironmentIcon[$0]).tag(SceneEnvironment.allCases[$0])
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                
+                Spacer()
+                
+                Toggle(isOn: showDimensionsBinding) { Text("") }
+            }
+        )
     }
     
     class ComponentModel: ObservableObject {

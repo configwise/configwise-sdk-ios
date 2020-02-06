@@ -59,7 +59,7 @@ struct MainView: View {
                             VStack(alignment: .leading) {
                                 Text(component.appName)
                                     .modifier(NameTextStyle())
-
+                                
                                 Text("\(component.totalSize / 1024 / 1024) Mb")
                                     .modifier(SizeTextStyle())
                             }
@@ -70,7 +70,7 @@ struct MainView: View {
                     self.appEnvironment.fetchComponents()
                 }
                 .navigationBarTitle("Catalog")
-                .navigationBarItems(trailing: NavBarItemsView())
+                .navigationBarItems(leading: LeadingNavBarItemsView(), trailing: TrailingNavBarItemsView())
             }
         }
 
@@ -129,13 +129,30 @@ struct MainView: View {
         var body: some View {
             NavigationView {
                 Text("UNDER CONSTRUCTION")
-                .navigationBarTitle("AppContent")
-                .navigationBarItems(trailing: NavBarItemsView())
+                    .navigationBarTitle("AppContent")
+                    .navigationBarItems(leading: LeadingNavBarItemsView(), trailing: TrailingNavBarItemsView())
             }
         }
     }
     
-    struct NavBarItemsView: View {
+    struct TrailingNavBarItemsView: View {
+        
+        @EnvironmentObject var appEnvironment: AppEnvironment
+        
+        var body: some View {
+            HStack {
+                if self.appEnvironment.mode == .B2B {
+                    Button(action: {
+                        AuthService.sharedInstance.signOut()
+                    }) {
+                        Text("Logout")
+                    }
+                }
+            }
+        }
+    }
+    
+    struct LeadingNavBarItemsView: View {
         
         @EnvironmentObject var appEnvironment: AppEnvironment
         
@@ -145,14 +162,6 @@ struct MainView: View {
                     ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
                         indicator.style = .medium
                         indicator.hidesWhenStopped = false
-                    }
-                }
-                
-                if self.appEnvironment.mode == .B2B {
-                    Button(action: {
-                        AuthService.sharedInstance.signOut()
-                    }) {
-                        Text("Logout")
                     }
                 }
             }
