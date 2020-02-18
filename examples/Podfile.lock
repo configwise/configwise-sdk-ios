@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (4.9.1)
+  - Alamofire (5.0.0)
   - AssetImportKit (1.1.0):
     - Assimp (~> 5.0.0)
   - Assimp (5.0.0)
@@ -50,7 +50,7 @@ SPEC REPOS:
     - SwiftTryCatch
 
 SPEC CHECKSUMS:
-  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  Alamofire: 58ff2bfb8daaacaa233d5c36e37b10a5248f59b1
   AssetImportKit: e6b9bef73328a94133f55336215f3666247d67cb
   Assimp: 356b8e72306a2c757f6f5e1174f76df79c7ef38e
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
@@ -62,6 +62,6 @@ SPEC CHECKSUMS:
   Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
   SwiftTryCatch: fb6d2b34abe48efd69578dac919293a44f95b481
 
-PODFILE CHECKSUM: edbb82c6eb11d00d58487a950ee6af54831947c3
+PODFILE CHECKSUM: a379ad86ef0f9b73643461138bcaedd1a7579393
 
 COCOAPODS: 1.8.4

@@ -1,6 +1,19 @@
 # Uncomment this line to define a global platform for your project
 platform :ios, '12.0'
 
+# TODO [smuravev] There is known issue if we run project on real device iOS v13.3.1 and above
+#                 and only used 'personal team' (free apple development program) in 'Signing & Capabilities' settings
+#                 of your project. This issue not exist if we use paid apple development account or if we run project
+#                 on simulator. See more details about this issue in the following links:
+#                  - https://stackoverflow.com/questions/60015309/running-ios-apps-causes-runtime-error-for-frameworks-code-signature-invalid
+#                  - https://github.com/Alamofire/Alamofire/issues/3051
+#                  - https://github.com/NativeScript/NativeScript/issues/8294
+#                  - https://github.com/flutter/flutter/issues/49504
+#                 As a temporary workaround, we use `use_modular_headers!` instead of `use_frameworks!`
+#                 Also, run `pod update`, then clean project in Xcode (CMD+SHIFT+K), then run project.
+#                 After apple fixes this issue, we must continue use `use_frameworks!`, here.
+#use_modular_headers!
+
 # Uncomment this line if you're using Swift
 use_frameworks!
 

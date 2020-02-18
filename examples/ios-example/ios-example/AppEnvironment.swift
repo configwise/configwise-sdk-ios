@@ -16,6 +16,11 @@ enum Navigation {
     case main
 }
 
+enum OpenDetailedViewAs {
+    case canvas
+    case ar
+}
+
 final class AppEnvironment: ObservableObject {
     
     @Published var navigation: Navigation = .signIn
@@ -25,6 +30,8 @@ final class AppEnvironment: ObservableObject {
     @Published var catalog: Loadable<CatalogEntity> = .notRequested
     
     @Published var components: Loadable<[ComponentEntity]> = .notRequested
+    
+    @Published var openDetailedViewAs: OpenDetailedViewAs = .ar
     
     var isLoading: Bool {
         company.isLoading || catalog.isLoading || components.isLoading
@@ -38,7 +45,7 @@ final class AppEnvironment: ObservableObject {
         // Let's initialize ConfigWiseSDK here
         ConfigWiseSDK.initialize([
             .variant: self.mode,
-            .companyAuthToken: "YOUR_COMPANY_AUTH_TOKEN",
+            .companyAuthToken: "f3f7c77157b64b0cb8f84e3112c5cdb1",
             .debugLogging: true,
             .debug3d: false
         ])
@@ -181,4 +188,16 @@ extension AppEnvironment {
             self.navigation = .signIn
         }
     }
+}
+
+// MARK: - Helpers
+
+extension String: Identifiable {
+    public var id: String? {
+        self
+    }
+}
+
+func delay(_ delay: Double, closure: @escaping () -> Void) {
+    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay, execute: closure)
 }

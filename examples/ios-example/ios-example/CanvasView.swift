@@ -12,148 +12,96 @@ import ConfigWiseSDK
 
 struct CanvasView: View {
     
-    var component: ComponentEntity
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     private let canvasAdapter = CanvasAdapter()
     
-    @ObservedObject private var componentModel: ComponentModel
-    
-    @State private var selectedSceneEnvironment: SceneEnvironment = .basicLight
-    
-    private var sceneEnvironmentIcon = [ "sun.max", "moon", "lightbulb" ]
-    
-    @State private var showDimensions = false
+    @ObservedObject private var componentData: ComponentData
 
     init(_ component: ComponentEntity) {
-        self.component = component
-        self.componentModel = ComponentModel(component)
+        self.componentData = ComponentData(component)
     }
     
     var body: some View {
-        let modelNodeLoadable = self.componentModel.modelNodeLoadable
+        let componentDataFailed = Binding<Bool>(
+            get: {
+                self.componentData.isFailed
+            },
+            set: { _ = $0 }
+        )
         
         let selectedSceneEnvironmentBinding = Binding<SceneEnvironment>(
             get: {
-                self.selectedSceneEnvironment
+                self.canvasAdapter.sceneEnvironment
             },
             set: {
-                self.selectedSceneEnvironment = $0
                 self.canvasAdapter.sceneEnvironment = $0
             }
         )
         
-        let showDimensionsBinding = Binding<Bool>(
+        let showSizesBinding = Binding<Bool>(
             get: {
-                self.showDimensions
+                self.canvasAdapter.showSizes
             },
             set: {
-                self.showDimensions = $0
-                if $0 {
-                    self.canvasAdapter.enableMeasurementUnits()
-                } else {
-                    self.canvasAdapter.disableMeasurementsUnits()
-                }
+                self.canvasAdapter.showSizes = $0
             }
         )
         
-        return ZStack(alignment: .top) {
-            if modelNodeLoadable.isLoading || modelNodeLoadable.isNotRequested {
-                VStack {
-                    Text("Loading \(self.componentModel.loadingProgress)%")
-                        .padding(.vertical)
-
+        return ZStack {
+            SceneView(
+                onInitView: { (view: SCNView) in
+                    self.canvasAdapter.sceneView = view
+                    self.canvasAdapter.gesturesEnabled = true
+                    self.canvasAdapter.cameraControlEnabled = true
+                    self.canvasAdapter.groundEnabled = false
+                    self.canvasAdapter.resetCameraPropertiesOnFocusToCenter = true
+                },
+                onUpdateView: { (view: SCNView) in
+                }
+            )
+            .onAppear {
+                self.componentData.loadModel()
+            }
+            .onReceive(self.componentData.$modelNodeLoadable, perform: { modelNodeLoadable in
+                if modelNodeLoadable.isLoaded, let model = modelNodeLoadable.value {
+                    self.canvasAdapter.addModel(modelNode: model)
+                    self.canvasAdapter.focusToCenter(animate: false, resetCameraZoom: true, resetCameraOrientation: true)
+                }
+            })
+        }
+        .alert(isPresented: componentDataFailed) {
+            Alert(
+                title: Text("ERROR"),
+                message: Text(self.componentData.error?.localizedDescription ?? "Unable to load component data."),
+                dismissButton: .default(Text("OK")) {
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+            )
+        }
+        .navigationBarItems(
+            trailing: HStack {
+                if self.componentData.isLoading {
+                    Spacer()
                     ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
                         indicator.style = .medium
                         indicator.hidesWhenStopped = false
                     }
-                }
-            } else if modelNodeLoadable.isFailed {
-                VStack {
-                    Text("ERROR:")
-                        .foregroundColor(.red)
-                        .font(Font.system(size: 18))
-
-                    Text(modelNodeLoadable.error?.localizedDescription ?? "Unable to load model.")
-                        .foregroundColor(.red)
-                        .font(Font.system(size: 14))
-                }
-            } else if modelNodeLoadable.isLoaded {
-                SceneView { (scnView: SCNView) in
-                    // Let's setup canvasAdapter here
-                    self.canvasAdapter.sceneView = scnView
-                    self.canvasAdapter.enableGestures()
-                    self.canvasAdapter.enableCameraControl()
-                    self.canvasAdapter.disableGround()
-                    self.canvasAdapter.resetCameraPropertiesOnFocusToCenter = true
-                }
-                .onAppear {
-                    self.canvasAdapter.removeModels()
-
-                    guard let modelNode = modelNodeLoadable.value else {
-                        return
+                    if self.componentData.loadingProgress != nil {
+                        Text("\(self.componentData.loadingProgress!)%")
                     }
-
-                    self.canvasAdapter.addModel(
-                        modelNode: modelNode,
-                        notifyCanvasManagementDelegate: false
-                    )
-
-                    self.canvasAdapter.focusToCenter(animate: false, resetCameraZoom: true, resetCameraOrientation: true)
-                }
-            }
-        }
-        .onAppear {
-            self.componentModel.load()
-        }
-        .navigationBarItems(
-            trailing: HStack {
-                Picker(selection: selectedSceneEnvironmentBinding, label: Text("")) {
-                    ForEach(SceneEnvironment.allCases.indices) {
-                        Image(systemName: self.sceneEnvironmentIcon[$0]).tag(SceneEnvironment.allCases[$0])
+                } else {
+                    Picker(selection: selectedSceneEnvironmentBinding, label: Text("")) {
+                        Image(systemName: "sun.max").tag(SceneEnvironment.basicLight)
+                        Image(systemName: "moon").tag(SceneEnvironment.basicDark)
+                        Image(systemName: "lightbulb").tag(SceneEnvironment.studio)
                     }
+                    .pickerStyle(SegmentedPickerStyle())
+                    Spacer()
+                    Toggle(isOn: showSizesBinding) { Text("") }
                 }
-                .pickerStyle(SegmentedPickerStyle())
-                
-                Spacer()
-                
-                Toggle(isOn: showDimensionsBinding) { Text("") }
             }
         )
-    }
-    
-    class ComponentModel: ObservableObject {
-        
-        @Published var modelNodeLoadable: Loadable<CNVModelNode> = .notRequested
-        
-        @Published var loadingProgress = 0
-        
-        private var component: ComponentEntity
-        
-        init(_ component: ComponentEntity) {
-            self.component = component
-        }
-        
-        func load() {
-            self.loadingProgress = 0
-            self.modelNodeLoadable = .isLoading(last: self.modelNodeLoadable.value)
-            ModelLoaderService.sharedInstance.loadModelBy(component: self.component, block: { [weak self] model, error in
-                if let error = error {
-                    self?.modelNodeLoadable = .failed(error)
-                    return
-                }
-                guard let model = model else {
-                    self?.modelNodeLoadable = .failed("Loaded model is nil")
-                    return
-                }
-                
-                self?.modelNodeLoadable = .loaded(model)
-            }, progressBlock: { [weak self] status, completed in
-                self?.loadingProgress = Int(completed * 100)
-                if status == .done {
-                    self?.loadingProgress = 100
-                }
-            })
-        }
     }
 }
 
