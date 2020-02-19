@@ -23,7 +23,6 @@
 		109BE11723FBEBDB007CE275 /* ComponentListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 109BE11623FBEBDB007CE275 /* ComponentListItemView.swift */; };
 		10B0945C23F80B970019FFC3 /* NodeRender.metal in Sources */ = {isa = PBXBuildFile; fileRef = 10B0945B23F80B970019FFC3 /* NodeRender.metal */; };
 		10B0945E23F924020019FFC3 /* ArView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B0945D23F924020019FFC3 /* ArView.swift */; };
-		10B0946023F980550019FFC3 /* ComponentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B0945F23F980550019FFC3 /* ComponentData.swift */; };
 		10B0946223F9A1AA0019FFC3 /* ArSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B0946123F9A1AA0019FFC3 /* ArSceneView.swift */; };
 		10C1284823B8C17C007A3261 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C1284723B8C17C007A3261 /* ActivityIndicator.swift */; };
 		10D4D6B823E840F200C065EB /* SceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D4D6B723E840F200C065EB /* SceneView.swift */; };
@@ -49,7 +48,6 @@
 		109BE11623FBEBDB007CE275 /* ComponentListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentListItemView.swift; sourceTree = "<group>"; };
 		10B0945B23F80B970019FFC3 /* NodeRender.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = NodeRender.metal; sourceTree = "<group>"; };
 		10B0945D23F924020019FFC3 /* ArView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArView.swift; sourceTree = "<group>"; };
-		10B0945F23F980550019FFC3 /* ComponentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentData.swift; sourceTree = "<group>"; };
 		10B0946123F9A1AA0019FFC3 /* ArSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArSceneView.swift; sourceTree = "<group>"; };
 		10C1284723B8C17C007A3261 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		10D4D6B723E840F200C065EB /* SceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneView.swift; sourceTree = "<group>"; };
@@ -103,7 +101,6 @@
 				10B0946123F9A1AA0019FFC3 /* ArSceneView.swift */,
 				109BE11423FBEAF1007CE275 /* ComponentThumbnailView.swift */,
 				109BE11623FBEBDB007CE275 /* ComponentListItemView.swift */,
-				10B0945F23F980550019FFC3 /* ComponentData.swift */,
 				10C1284723B8C17C007A3261 /* ActivityIndicator.swift */,
 				1080AF5923B1B13700249C69 /* Loadable.swift */,
 				10B0945B23F80B970019FFC3 /* NodeRender.metal */,
@@ -271,7 +268,6 @@
 				1080AF5A23B1B13700249C69 /* Loadable.swift in Sources */,
 				10B0945E23F924020019FFC3 /* ArView.swift in Sources */,
 				1080AF5423B07BAF00249C69 /* ContentView.swift in Sources */,
-				10B0946023F980550019FFC3 /* ComponentData.swift in Sources */,
 				102006F223A7B0CE00539D91 /* SceneDelegate.swift in Sources */,
 				10B0945C23F80B970019FFC3 /* NodeRender.metal in Sources */,
 			);

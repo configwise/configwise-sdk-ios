@@ -16,16 +16,16 @@ struct CanvasView: View {
     
     private let canvasAdapter = CanvasAdapter()
     
-    @ObservedObject private var componentData: ComponentData
+    @ObservedObject private var observableState: ObservableState
 
     init(_ component: ComponentEntity) {
-        self.componentData = ComponentData(component)
+        self.observableState = ObservableState(component)
     }
     
     var body: some View {
         let componentDataFailed = Binding<Bool>(
             get: {
-                self.componentData.isFailed
+                self.observableState.isFailed
             },
             set: { _ = $0 }
         )
@@ -61,19 +61,34 @@ struct CanvasView: View {
                 }
             )
             .onAppear {
-                self.componentData.loadModel()
+                self.observableState.loadModel()
             }
-            .onReceive(self.componentData.$modelNodeLoadable, perform: { modelNodeLoadable in
+            .onReceive(self.observableState.$modelNodeLoadable, perform: { modelNodeLoadable in
                 if modelNodeLoadable.isLoaded, let model = modelNodeLoadable.value {
                     self.canvasAdapter.addModel(modelNode: model)
                     self.canvasAdapter.focusToCenter(animate: false, resetCameraZoom: true, resetCameraOrientation: true)
                 }
             })
+            
+            if self.observableState.isLoading {
+                VStack {
+                    VStack {
+                        Text("Loading \(self.observableState.loadingProgress != nil ? "\(self.observableState.loadingProgress!)%" : "...")")
+
+                        ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
+                            indicator.style = .large
+                            indicator.hidesWhenStopped = false
+                        }
+                    }
+                    .padding()
+                }
+                .modifier(LoadingViewStyle())
+            }
         }
         .alert(isPresented: componentDataFailed) {
             Alert(
                 title: Text("ERROR"),
-                message: Text(self.componentData.error?.localizedDescription ?? "Unable to load component data."),
+                message: Text(self.observableState.error?.localizedDescription ?? "Unable to load component data."),
                 dismissButton: .default(Text("OK")) {
                     self.presentationMode.wrappedValue.dismiss()
                 }
@@ -81,27 +96,132 @@ struct CanvasView: View {
         }
         .navigationBarItems(
             trailing: HStack {
-                if self.componentData.isLoading {
-                    Spacer()
-                    ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
-                        indicator.style = .medium
-                        indicator.hidesWhenStopped = false
+                // 'Open product link' button
+                Button(action: {
+                    guard let component = self.observableState.component else {
+                        return
                     }
-                    if self.componentData.loadingProgress != nil {
-                        Text("\(self.componentData.loadingProgress!)%")
+                    
+                    ComponentService.sharedInstance.obtainProductUrlByComponentOfCurrentCompany(component: component) { productUrl, error in
+                        if let error = error {
+                            print("Unable to open product link due error: \(error.localizedDescription)")
+                            return
+                        }
+                        guard let productUrl = productUrl else {
+                            print("Unable to open product link due no product url")
+                            return
+                        }
+                        
+                        UIApplication.shared.open(productUrl, options: [:])
                     }
-                } else {
-                    Picker(selection: selectedSceneEnvironmentBinding, label: Text("")) {
-                        Image(systemName: "sun.max").tag(SceneEnvironment.basicLight)
-                        Image(systemName: "moon").tag(SceneEnvironment.basicDark)
-                        Image(systemName: "lightbulb").tag(SceneEnvironment.studio)
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
-                    Spacer()
-                    Toggle(isOn: showSizesBinding) { Text("") }
+                }) {
+                    Image(systemName: "safari")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                 }
+                .frame(width: 30, height: 30, alignment: .center)
+                .disabled(!self.observableState.isLoaded || self.observableState.component?.productLinkUrl == nil)
+
+                Spacer()
+                
+                // 'Scene environment' selector
+                Picker(selection: selectedSceneEnvironmentBinding, label: Text("")) {
+                    Image(systemName: "sun.max").tag(SceneEnvironment.basicLight)
+                    Image(systemName: "moon").tag(SceneEnvironment.basicDark)
+                    Image(systemName: "lightbulb").tag(SceneEnvironment.studio)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                
+                Spacer()
+                
+                // 'Show / Hide sizes' switcher
+                Toggle(isOn: showSizesBinding) { Text("") }
             }
         )
+    }
+}
+
+private class ObservableState: ObservableObject {
+    
+    @Published var componentLoadable: Loadable<ComponentEntity> = .notRequested
+    
+    @Published var modelNodeLoadable: Loadable<ModelNode> = .notRequested
+    
+    @Published var loadingProgress: Int?
+    
+    var model: ModelNode? {
+        modelNodeLoadable.value
+    }
+    
+    var component: ComponentEntity? {
+        componentLoadable.value
+    }
+    
+    var isLoading: Bool {
+        componentLoadable.isLoading || modelNodeLoadable.isLoading
+    }
+    
+    var isLoaded: Bool {
+        componentLoadable.isLoaded && modelNodeLoadable.isLoaded
+    }
+    
+    var isFailed: Bool {
+        componentLoadable.isFailed || modelNodeLoadable.isFailed
+    }
+    
+    var error: Error? {
+        componentLoadable.error ?? modelNodeLoadable.error
+    }
+    
+    init(_ component: ComponentEntity) {
+        self.componentLoadable = .isLoading(last: component)
+        guard let componentId = component.objectId else {
+            self.componentLoadable = .failed("Invalid component - no identifier found.")
+            return
+        }
+        ComponentService.sharedInstance.obtainComponentById(id: componentId) { component, error in
+            if let error = error {
+                self.componentLoadable = .failed(error)
+                return
+            }
+            guard let component = component else {
+                self.componentLoadable = .failed("Fetched component is nil.")
+                return
+            }
+            self.componentLoadable = .loaded(component)
+        }
+    }
+    
+    func loadModel() {
+        self.modelNodeLoadable = .isLoading(last: self.modelNodeLoadable.value)
+
+        guard !componentLoadable.isFailed else {
+            self.modelNodeLoadable = .failed(componentLoadable.error!)
+            return
+        }
+        guard let component = self.componentLoadable.value else {
+            self.modelNodeLoadable = .failed("Unable to load model due component is nil.")
+            return
+        }
+
+        self.loadingProgress = 0
+        ModelLoaderService.sharedInstance.loadModelBy(component: component, block: { [weak self] model, error in
+            self?.loadingProgress = 100
+            delay(0.3) { self?.loadingProgress = nil }
+            
+            if let error = error {
+                self?.modelNodeLoadable = .failed(error)
+                return
+            }
+            guard let model = model else {
+                self?.modelNodeLoadable = .failed("Loaded model is nil")
+                return
+            }
+
+            self?.modelNodeLoadable = .loaded(model)
+        }, progressBlock: { [weak self] status, completed in
+            self?.loadingProgress = Int(completed * 100)
+        })
     }
 }
 

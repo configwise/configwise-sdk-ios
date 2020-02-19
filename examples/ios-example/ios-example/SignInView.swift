@@ -48,15 +48,18 @@ struct SignInView: View {
             Spacer()
             if company.isLoading {
                 VStack {
-                    Text("Loading ...")
-                        .padding(.vertical)
+                    VStack {
+                        Text("Loading ...")
 
-                    ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
-                        // indicator.color = .blue
-                        indicator.style = .large
-                        indicator.hidesWhenStopped = false
+                        ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
+                            // indicator.color = .blue
+                            indicator.style = .large
+                            indicator.hidesWhenStopped = false
+                        }
                     }
+                    .padding()
                 }
+                .modifier(LoadingViewStyle())
             }
             
             Spacer()
@@ -79,14 +82,19 @@ struct SignInView: View {
 
         return VStack {
             if company.isLoading {
-                Text("Loading ...")
-                    .padding(.vertical)
+                VStack {
+                    VStack {
+                        Text("Loading ...")
 
-                ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
-                    // indicator.color = .blue
-                    indicator.style = .large
-                    indicator.hidesWhenStopped = false
+                        ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
+                            // indicator.color = .blue
+                            indicator.style = .large
+                            indicator.hidesWhenStopped = false
+                        }
+                    }
+                    .padding()
                 }
+                .modifier(LoadingViewStyle())
             } else {
                 Spacer()
                 if company.isFailed {

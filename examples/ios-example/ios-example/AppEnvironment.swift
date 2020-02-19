@@ -45,7 +45,7 @@ final class AppEnvironment: ObservableObject {
         // Let's initialize ConfigWiseSDK here
         ConfigWiseSDK.initialize([
             .variant: self.mode,
-            .companyAuthToken: "f3f7c77157b64b0cb8f84e3112c5cdb1",
+            .companyAuthToken: "YOUR_COMPANY_AUTH_TOKEN",
             .debugLogging: true,
             .debug3d: false
         ])
@@ -81,74 +81,9 @@ final class AppEnvironment: ObservableObject {
         // Remove observers
         NotificationCenter.default.removeObserver(self)
     }
-    
-    func signIn(email: String? = nil, password: String? = nil) {
-        self.company = .isLoading(last: self.company.value)
-        AuthService.sharedInstance.signIn(email: email, password: password) { user, error in
-            if let error = error {
-                self.company = .failed(error)
-                self.navigation = .signIn
-                return
-            }
-            guard user != nil else {
-                self.company = .failed("Unauthorized - user not found.")
-                self.navigation = .signIn
-                return
-            }
-            
-            AuthService.sharedInstance.currentCompany { company, error in
-                if let error = error {
-                    self.company = .failed(error)
-                    self.navigation = .signIn
-                    return
-                }
-                guard let company = company else {
-                    self.company = .failed("Unauthorized - company not found.")
-                    self.navigation = .signIn
-                    return
-                }
-                
-                self.company = .loaded(company)
-                self.navigation = .main
-            }
-        }
-    }
-    
-    func fetchComponents() {
-        self.catalog = .isLoading(last: self.catalog.value)
-        guard let company = self.company.value else {
-            self.catalog = .notRequested
-            self.components = .notRequested
-            return
-        }
-        
-        CatalogService.sharedInstance.obtainCatalogByCompany(company: company) { catalog, error in
-            if let error = error {
-                self.catalog = .failed(error)
-                self.components = .failed(error)
-                return
-            }
-            guard let catalog = catalog else {
-                let error: Error = "No catalog yet. Please create it first."
-                self.catalog = .failed(error)
-                self.components = .failed(error)
-                return
-            }
-            
-            self.catalog = .loaded(catalog)
-            
-            self.components = .isLoading(last: self.components.value)
-            ComponentService.sharedInstance.obtainAllComponentsByCatalog(catalog: catalog) { components, error in
-                if let error = error {
-                    self.components = .failed(error)
-                    return
-                }
-
-                self.components = .loaded(components)
-            }
-        }
-    }
 }
+
+// MARK: - Observers
 
 extension AppEnvironment {
     
@@ -190,6 +125,87 @@ extension AppEnvironment {
     }
 }
 
+// MARK: - AuthN / AuthZ
+
+extension AppEnvironment {
+    
+    func signIn(email: String? = nil, password: String? = nil) {
+        self.company = .isLoading(last: self.company.value)
+        AuthService.sharedInstance.signIn(email: email, password: password) { user, error in
+            if let error = error {
+                self.company = .failed(error)
+                self.navigation = .signIn
+                return
+            }
+            guard user != nil else {
+                self.company = .failed("Unauthorized - user not found.")
+                self.navigation = .signIn
+                return
+            }
+            
+            AuthService.sharedInstance.currentCompany { company, error in
+                if let error = error {
+                    self.company = .failed(error)
+                    self.navigation = .signIn
+                    return
+                }
+                guard let company = company else {
+                    self.company = .failed("Unauthorized - company not found.")
+                    self.navigation = .signIn
+                    return
+                }
+                
+                self.company = .loaded(company)
+                self.navigation = .main
+            }
+        }
+    }
+}
+
+// MARK: - Components
+
+extension AppEnvironment {
+    
+    func obtainComponents() {
+        self.catalog = .isLoading(last: self.catalog.value)
+        guard let company = self.company.value else {
+            self.catalog = .notRequested
+            self.components = .notRequested
+            return
+        }
+        
+        CatalogService.sharedInstance.obtainCatalogByCompany(company: company) { catalog, error in
+            if let error = error {
+                self.catalog = .failed(error)
+                self.components = .failed(error)
+                return
+            }
+            guard let catalog = catalog else {
+                let error: Error = "No catalog yet. Please create it first."
+                self.catalog = .failed(error)
+                self.components = .failed(error)
+                return
+            }
+            
+            self.catalog = .loaded(catalog)
+            
+            self.components = .isLoading(last: self.components.value)
+            ComponentService.sharedInstance.obtainAllComponentsByCatalog(catalog: catalog) { components, error in
+                if let error = error {
+                    self.components = .failed(error)
+                    return
+                }
+
+                self.components = .loaded(components)
+            }
+        }
+    }
+    
+    func getComponentById(_ id: String) -> ComponentEntity? {
+        return self.components.value?.first { $0.objectId == id }
+    }
+}
+
 // MARK: - Helpers
 
 extension String: Identifiable {
@@ -200,4 +216,15 @@ extension String: Identifiable {
 
 func delay(_ delay: Double, closure: @escaping () -> Void) {
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay, execute: closure)
+}
+
+struct LoadingViewStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        return content
+            .background(Color.white)
+            .cornerRadius(10)
+            .overlay(RoundedRectangle(cornerRadius: 10)
+            .stroke(Color.gray, lineWidth: 1))
+            .shadow(radius: 10)
+    }
 }

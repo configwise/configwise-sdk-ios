@@ -47,7 +47,7 @@ struct MainView: View {
                     }
                 }
                 .onAppear {
-                    self.appEnvironment.fetchComponents()
+                    self.appEnvironment.obtainComponents()
                 }
                 .navigationBarTitle("Catalog")
                 .navigationBarItems(trailing: TrailingNavBarItemsView())
@@ -93,7 +93,7 @@ struct MainView: View {
                     }
                 } else {
                     Picker(selection: openDetailedViewAsBinding, label: Text("")) {
-                        Image(systemName: "camera.viewfinder").tag(OpenDetailedViewAs.ar)
+                        Image(systemName: "arkit").tag(OpenDetailedViewAs.ar)
                         Image(systemName: "cube").tag(OpenDetailedViewAs.canvas)
                     }
                     .pickerStyle(SegmentedPickerStyle())

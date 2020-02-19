@@ -16,19 +16,15 @@ struct ArView: View {
     
     @EnvironmentObject var appEnvironment: AppEnvironment
     
+    @ObservedObject private var observableState = ObservableState()
+    
     private let arAdapter: ArAdapter = ArAdapter()
     
-    @ObservedObject private var componentData: ComponentData
+    private var initialComponent: ComponentEntity
     
-    @State private var componentDataArray = [ComponentData]()
+    @State private var isLoading = false
     
-    private var selectedComponentData: ComponentData? {
-        guard let id = self.arAdapter.selectedModelNode?.id else {
-            return nil
-        }
-        
-        return self.componentDataArray.first { $0.id == id }
-    }
+    @State private var loadingProgress: Int?
     
     @State private var criticalErrorMessage: String?
     
@@ -39,7 +35,7 @@ struct ArView: View {
     @State private var showAddComponentDialog = false
 
     init(_ component: ComponentEntity) {
-        self.componentData = ComponentData(component)
+        self.initialComponent = component
     }
     
     struct HelpMessageTextStyle: ViewModifier {
@@ -70,6 +66,8 @@ struct ArView: View {
                     self.arAdapter.movementEnabled = true
                     self.arAdapter.rotationEnabled = true
                     self.arAdapter.scalingEnabled = true
+                    self.arAdapter.snappingsEnabled = true
+                    self.arAdapter.overlappingOfModelsAllowed = true
                 },
                 onUpdateView: { (view: ARSCNView) in
                 }
@@ -80,22 +78,6 @@ struct ArView: View {
             .onDisappear {
                 self.arAdapter.pauseArSession()
             }
-            .onReceive(self.componentData.$componentLoadable, perform: { componentLoadable in
-                if let error = componentLoadable.error {
-                    self.criticalErrorMessage = error.localizedDescription
-                    return
-                }
-            })
-            .onReceive(self.componentData.$modelNodeLoadable, perform: { modelNodeLoadable in
-                if let error = modelNodeLoadable.error {
-                    self.errorMessage = error.localizedDescription
-                    return
-                }
-                if modelNodeLoadable.isLoaded, let model = modelNodeLoadable.value {
-                    self.componentDataArray.append(self.componentData)
-                    self.arAdapter.addModel(modelNode: model, simdWorldPosition: self.componentData.initialSimdWorldPosition, selectModel: true)
-                }
-            })
             
             if self.helpMessage != nil {
                 VStack {
@@ -103,6 +85,21 @@ struct ArView: View {
                         .modifier(HelpMessageTextStyle())
                 }
                 .background(Color(red: 230.0 / 255.0, green: 243.0 / 255.0, blue: 255.0 / 255.0, opacity: 0.7))
+            }
+            
+            if self.isLoading {
+                VStack {
+                    VStack {
+                        Text("Loading \(self.loadingProgress != nil ? "\(self.loadingProgress!)%" : "...")")
+
+                        ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
+                            indicator.style = .large
+                            indicator.hidesWhenStopped = false
+                        }
+                    }
+                    .padding()
+                }
+                .modifier(LoadingViewStyle())
             }
         }
         .alert(isPresented: isErrorMessageBinding) {
@@ -121,20 +118,7 @@ struct ArView: View {
             )
         }
         .navigationBarItems(
-            trailing: HStack {
-                if self.componentData.isLoading {
-                    Spacer()
-                    ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
-                        indicator.style = .medium
-                        indicator.hidesWhenStopped = false
-                    }
-                    if self.componentData.loadingProgress != nil {
-                        Text("\(self.componentData.loadingProgress!)%")
-                    }
-                } else {
-                    self.toolbar
-                }
-            }
+            trailing: self.toolbar
         )
     }
     
@@ -149,6 +133,48 @@ struct ArView: View {
         )
         
         return HStack {
+            // 'Open product link' button
+            Button(action: {
+                guard let selectedComponent = self.observableState.selectedComponent else {
+                    return
+                }
+                
+                ComponentService.sharedInstance.obtainProductUrlByComponentOfCurrentCompany(component: selectedComponent) { productUrl, error in
+                    if let error = error {
+                        self.errorMessage = error.localizedDescription
+                        return
+                    }
+                    guard let productUrl = productUrl else {
+                        self.errorMessage = "No external product link."
+                        return
+                    }
+                    
+                    UIApplication.shared.open(productUrl, options: [:])
+                }
+            }) {
+                Image(systemName: "safari")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            }
+            .frame(width: 30, height: 30, alignment: .center)
+            .disabled(self.observableState.selectedComponent == nil || self.observableState.selectedComponent?.productLinkUrl == nil)
+            
+            Spacer()
+            
+            // 'Delete' button
+            Button(action: {
+                if let modelId = self.observableState.selectedModel?.id {
+                    self.arAdapter.removeModelBy(id: modelId)
+                }
+            }) {
+                Image(systemName: "trash")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            }
+            .frame(width: 30, height: 30, alignment: .center)
+            .disabled(self.observableState.selectedModel == nil)
+
+            // 'Add' button
             Button(action: {
                 self.showAddComponentDialog = true
             }) {
@@ -160,7 +186,10 @@ struct ArView: View {
             .sheet(isPresented: self.$showAddComponentDialog) {
                 self.addComponentDialog
             }
+            
+            Spacer()
 
+            // 'Show / Hide sizes' switcher
             Toggle(isOn: showSizesBinding) { Text("") }
         }
     }
@@ -170,6 +199,7 @@ struct ArView: View {
             List(self.appEnvironment.components.value ?? []) { component in
                 ComponentListItemView(component, selectAction: {
                     self.arAdapter.resetSelection()
+                    self.addModel(of: component)
                     self.showAddComponentDialog = false
                 })
             }
@@ -183,6 +213,36 @@ struct ArView: View {
             }
             .padding(.vertical)
         }
+    }
+}
+
+// MARK: - Loading
+
+extension ArView {
+    
+    private func addModel(of component: ComponentEntity, to simdWorldPosition: float3? = nil) {
+        self.isLoading = true
+        self.loadingProgress = 0
+        ModelLoaderService.sharedInstance.loadModelBy(component: component, block: { model, error in
+            self.loadingProgress = 100
+            delay(0.3) {
+                self.isLoading = false
+                self.loadingProgress = nil
+            }
+
+            if let error = error {
+                self.errorMessage = error.localizedDescription
+                return
+            }
+            guard let model = model else {
+                self.errorMessage = "Loaded model is nil"
+                return
+            }
+            
+            self.arAdapter.addModel(modelNode: model, simdWorldPosition: simdWorldPosition, selectModel: true)
+        }, progressBlock: { status, completed in
+            self.loadingProgress = Int(completed * 100)
+        })
     }
 }
 
@@ -219,77 +279,38 @@ extension ArView: ArManagementDelegate {
     }
     
     func onArPlaneDetected(simdWorldPosition: float3) {
-        if self.componentData.initialSimdWorldPosition == nil {
-            self.componentData.initialSimdWorldPosition = simdWorldPosition
-        }
-        self.componentData.loadModel()
+        self.addModel(of: self.initialComponent, to: simdWorldPosition)
     }
     
-    func onArModelAdded(id: String, error: Error?) {
+    func onArModelAdded(modelId: String, componentId: String, error: Error?) {
         if let error = error {
-            self.componentDataArray.removeAll { $0.id == id }
             self.errorMessage = error.localizedDescription
             return
         }
     }
     
-    func onModelPositionChanged(id: String, position: SCNVector3, rotation: SCNVector4) {
+    func onModelPositionChanged(modelId: String, componentId: String, position: SCNVector3, rotation: SCNVector4) {
     }
     
-    func onModelSelected(id: String) {
-        refreshOnModelSelection()
+    func onModelSelected(modelId: String, componentId: String) {
+        self.observableState.selectedModel = self.arAdapter.selectedModelNode
+        self.observableState.selectedComponent = self.appEnvironment.getComponentById(componentId)
     }
     
-    func onModelDeleted(id: String) {
-        self.componentDataArray.removeAll { $0.id == id }
+    func onModelDeleted(modelId: String, componentId: String) {
     }
     
     func onSelectionReset() {
-        refreshOnModelSelection()
-    }
-    
-    private func refreshOnModelSelection() {
-        self.refreshSnappingAreas()
+        self.observableState.selectedModel = nil
+        self.observableState.selectedComponent = nil
     }
 }
 
-// MARK: - Snappings
-
-// TODO [smuravev] Remove the following code after we move showSnappingAreas() & hideSnappingAreas() functionalities
-//                 to CanvasAdapter (ArAdapter) in the ConfigWiseSDK
-extension ArView {
+private class ObservableState: ObservableObject {
     
-    private func refreshSnappingAreas() {
-        guard let selectedComponentData = self.selectedComponentData else {
-            // Hide all snappings if no selected model in AR scene
-            self.arAdapter.removeAllSnappings()
-            return
-        }
-        
-        // If there is selected model in the AR scene then we show snappings of it
-        var snappingsDictionary = [String: [SnappingAreaEntity]]()
-        if let selectedComponent = selectedComponentData.component {
-            selectedComponent.snappingAreas.forEach {
-                let snappingArea = $0
-                
-                self.arAdapter.modelNodes.filter { modelNode in
-                    modelNode.id != selectedComponentData.id
-                        && snappingArea.connectToComponentId == selectedComponent.objectId ?? ""
-                }.forEach { modelNode in
-                    if let id = modelNode.id {
-                        var snappings = snappingsDictionary[id]
-                        if snappings == nil {
-                            snappings = []
-                        }
-                        snappings?.append(snappingArea)
-                        snappingsDictionary[id] = snappings
-                    }
-                }
-            }
-
-            self.arAdapter.addSnappings(modelId: selectedComponentData.id, snappingsDictionary: snappingsDictionary)
-        }
-    }
+    @Published var selectedModel: ModelNode?
+    
+    @Published var selectedComponent: ComponentEntity?
 }
 
 #if DEBUG
