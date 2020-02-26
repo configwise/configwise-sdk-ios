@@ -1,6 +1,3 @@
-[TOC]
-
-
 # ConfigWiseSDK (iOS)
 
 This repository contains iOS project of examples code to explain how to use ConfigWiseSDK.
