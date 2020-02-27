@@ -175,7 +175,7 @@ Before using ConfigWiseSDK in your code, you need to initialize it first. Here i
                                                        //         This feature will get stable in further ConfigWoseSDK releases.
     ])
 
-In SwiftUI based projects, we recommend to initialize ConfigWiseSDK in the constructor `environmentObject`.
+In SwiftUI based projects, we recommend to initialize ConfigWiseSDK in the constructor of class what you inject as `environmentObject` then.
 See [AppEnvironment.init()](examples/ios-example/ios-example/AppEnvironment.swift):
 
     var mode: SdkVariant {
@@ -195,7 +195,7 @@ See [AppEnvironment.init()](examples/ios-example/ios-example/AppEnvironment.swif
         
     }
 
-To inject this initialization, in to SwiftUI life cycle, add `lazy var appEnvironment = AppEnvironment()` as a property of
+To inject this initialization (in to SwiftUI life cycle), add `lazy var appEnvironment = AppEnvironment()` as a property of
 `SceneDelegate.swift`. Then register `appEnvironment` as `environmentObject`:
 
     class SceneDelegate: UIResponder, UIWindowSceneDelegate {
