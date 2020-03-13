@@ -68,7 +68,7 @@ struct ComponentListItemView: View {
                 }
             }) {
                 VStack(alignment: .leading) {
-                    Text(self.component.appName)
+                    Text(self.component.genericName)
                         .modifier(NameTextStyle())
                     
                     Text("\(self.component.totalSize / 1024 / 1024) Mb")
