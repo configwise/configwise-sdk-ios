@@ -66,6 +66,9 @@ These settings are required for AR usage - to permit your application to access 
 Unfortunately, there are some known issues (restrictions) to pack `.metal` code inside of ConfigWiseSDK framework - that's why `.metal` code must 
 be part of your project to pass compilation steps.  
 
+# Tutorial
+[![Alt text](https://www.configwise.io/hubfs/configWise-tutorial-thumbnail.png)](https://www.youtube.com/watch?v=ozQA3NmBJsg)
+Make sure to watch this tutorial provided by Rebeloper.
 
 # Quick start
 
