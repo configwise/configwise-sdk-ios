@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '12.0'
+platform :ios, '13.0'
 
 # TODO [smuravev] There is known issue if we run project on real device iOS v13.3.1 and above
 #                 and only used 'personal team' (free apple development program) in 'Signing & Capabilities' settings
@@ -22,5 +22,5 @@ workspace 'examples'
 target 'ios-example' do
     project 'ios-example/ios-example.xcodeproj'
 
-    pod 'ConfigWiseSDK'
+    pod 'ConfigWiseSDK', '1.2.3'
 end
