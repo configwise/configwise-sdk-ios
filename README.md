@@ -49,12 +49,6 @@ These settings are required for AR usage - to permit your application to access 
         <key>NSCameraUsageDescription</key>
         <string>To enable Augmented Reality user experience.</string>
         
-        <key>NSLocationAlwaysUsageDescription</key>
-        <string>To accurate detect your position in Augmented Reality mode.</string>
-        
-        <key>NSLocationWhenInUseUsageDescription</key>
-        <string>To accurate detect your position in Augmented Reality mode.</string>
-        
         <key>NSPhotoLibraryAddUsageDescription</key>
         <string>To be able to save images.</string>
         
