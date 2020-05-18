@@ -22,5 +22,5 @@ workspace 'examples'
 target 'ios-example' do
     project 'ios-example/ios-example.xcodeproj'
 
-    pod 'ConfigWiseSDK', '1.2.5'
+    pod 'ConfigWiseSDK', '1.2.6'
 end

@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (5.1.0)
+  - Alamofire (5.2.0)
   - AssetImportKit (1.1.0):
     - Assimp (~> 5.0.0)
   - Assimp (5.0.0)
@@ -8,7 +8,7 @@ PODS:
   - CocoaLumberjack/Core (3.6.1)
   - CocoaLumberjack/Swift (3.6.1):
     - CocoaLumberjack/Core
-  - ConfigWiseSDK (1.2.5):
+  - ConfigWiseSDK (1.2.6):
     - Alamofire
     - AssetImportKit
     - CocoaLumberjack/Swift
@@ -27,7 +27,7 @@ PODS:
   - SwiftTryCatch (0.0.1)
 
 DEPENDENCIES:
-  - ConfigWiseSDK (= 1.2.5)
+  - ConfigWiseSDK (= 1.2.6)
 
 SPEC REPOS:
   trunk:
@@ -44,18 +44,18 @@ SPEC REPOS:
     - SwiftTryCatch
 
 SPEC CHECKSUMS:
-  Alamofire: 9d5c5f602928e512395b30950c5984eca840093c
+  Alamofire: c1ca147559e730bfb2182c8c7aafbdd90a867987
   AssetImportKit: e6b9bef73328a94133f55336215f3666247d67cb
   Assimp: 356b8e72306a2c757f6f5e1174f76df79c7ef38e
   Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
   Bolts-Swift: afbbaf8c8186e7f769be4afa656949c14087ba44
   CocoaLumberjack: b17ae15142558d08bbacf69775fa10c4abbebcc9
-  ConfigWiseSDK: c60270bfc69878cb035ee86755e336a175c08295
+  ConfigWiseSDK: ad25ce9d1280cee3fbd6ad0bbcb481d2443c9e9c
   Parse: 79bdda34fdb7eb2a707a43a951c8aae236cb3e34
   ParseLiveQuery: bcb96da6d782c953ea96fba2883ff298b05cc0f4
   Starscream: 08172b481e145289c4930cb567230fb55897cfa4
   SwiftTryCatch: fb6d2b34abe48efd69578dac919293a44f95b481
 
-PODFILE CHECKSUM: 439bbe5146cf24854190f97888b5955f3f89e7f3
+PODFILE CHECKSUM: dc816d118462a5a2c6416d9c2f7775d63bac3e7b
 
 COCOAPODS: 1.9.1
