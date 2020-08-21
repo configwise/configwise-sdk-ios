@@ -1,6 +1,6 @@
 # ConfigWiseSDK (iOS)
 
-This repository contains iOS project of examples code to explain how to use ConfigWiseSDK.
+This repository contains iOS project (code examples) to explain how to use ConfigWiseSDK.
 See more info about ConfigWise service, here: [https://www.configwise.io](https://www.configwise.io)  
 
 ConfigWiseSDK (iOS) is distributed through Cocoapods.
@@ -24,7 +24,7 @@ ConfigWiseSDK requires the following minimal requirements:
 
 1. Real iPhone (iPad) with installed iOS v12.0 and above.
 **NOTICE:** Unfortunately, AR (augmented reality) doesn't work on simulator.
-So, if you plan to use `ArAdapter` of ConfigWoseSDK then make sure you run / debug your project on real iPhone (iPad). 
+So, if you plan to use `ArAdapter` of ConfigWiseSDK then make sure you run / debug your project on real iPhone (iPad). 
 2. Xcode v11.X
 3. Cocoapods v1.9.X and above
 4. Swift 4.2 and above (we recommend to use Swift 5)
@@ -103,13 +103,13 @@ There are 2 authorization modes supported by ConfigWiseSDK:
 - B2C (`COMPANY_AUTH_TOKEN` is required) - use this method if you NO need ConfigWise users SignIn flow.
 Eg: to provide public access to your application or if if you want to use own authorization flow.
 
-    To obtain `COMPANY_AUTH_TOKEN`, go to `CBO (company back office) > Company profile`: https://manage.configwise.io/configwise/cbo/profile
+    To obtain `COMPANY_AUTH_TOKEN`, go to `CBO (company back office) > Company profile`: [https://manage.configwise.io/configwise/cbo/profile](https://manage.configwise.io/configwise/cbo/profile)
     
     ![b2c-company-auth-token](doc/b2c-compoany-auth-token.png)
 
 - B2B (ConfigWise user credentials are required) - use this method to only permit registered ConfigWise users 
 of your company to access to your mobile application. This method requires to type `email/password` by your company users
-to access backend data. To manage your company users, go to `CBO > Users`: https://manage.configwise.io/configwise/cbo/employees
+to access backend data. To manage your company users, go to `CBO > Users`: [https://manage.configwise.io/configwise/cbo/employees](https://manage.configwise.io/configwise/cbo/employees)
 
     ![b2b-users-list](doc/b2b-users-list.png)
 
@@ -117,7 +117,7 @@ to access backend data. To manage your company users, go to `CBO > Users`: https
     
             var mode: SdkVariant {
                 .B2B
-            } 
+            }
 
 So, we are ready to build and run example project - make sure `ios-example` scheme in selected in Xcode.
 Connect your iPhone (iPad) - choose you device in the 'device selector' of Xcode IDE. 
