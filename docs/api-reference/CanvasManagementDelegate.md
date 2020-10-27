@@ -6,7 +6,7 @@ public protocol CanvasManagementDelegate: AdapterManagementDelegate
 
 ## Inheritance
 
-[`AdapterManagementDelegate`](configwise-sdk-ios/api-reference/AdapterManagementDelegate)
+[`AdapterManagementDelegate`](api-reference/AdapterManagementDelegate)
 
 ## Requirements
 

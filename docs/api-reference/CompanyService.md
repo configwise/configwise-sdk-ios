@@ -6,7 +6,7 @@ public class CompanyService: DaoAwareService
 
 ## Inheritance
 
-[`DaoAwareService`](configwise-sdk-ios/api-reference/DaoAwareService)
+[`DaoAwareService`](api-reference/DaoAwareService)
 
 ## Properties
 

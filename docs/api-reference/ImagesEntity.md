@@ -6,7 +6,7 @@ public class ImagesEntity: EmbeddedEntity
 
 ## Inheritance
 
-[`EmbeddedEntity`](configwise-sdk-ios/api-reference/EmbeddedEntity)
+[`EmbeddedEntity`](api-reference/EmbeddedEntity)
 
 ## Properties
 

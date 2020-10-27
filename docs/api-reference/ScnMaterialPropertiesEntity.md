@@ -6,7 +6,7 @@ public class ScnMaterialPropertiesEntity: EmbeddedEntity
 
 ## Inheritance
 
-[`EmbeddedEntity`](configwise-sdk-ios/api-reference/EmbeddedEntity)
+[`EmbeddedEntity`](api-reference/EmbeddedEntity)
 
 ## Properties
 

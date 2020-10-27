@@ -6,7 +6,7 @@ public class ComponentEntity: CatalogAwareEntity, PFSubclassing
 
 ## Inheritance
 
-[`CatalogAwareEntity`](configwise-sdk-ios/api-reference/CatalogAwareEntity), `PFSubclassing`
+[`CatalogAwareEntity`](api-reference/CatalogAwareEntity), `PFSubclassing`
 
 ## Properties
 
