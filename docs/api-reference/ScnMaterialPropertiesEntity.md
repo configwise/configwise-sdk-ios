@@ -6,7 +6,7 @@ public class ScnMaterialPropertiesEntity: EmbeddedEntity
 
 ## Inheritance
 
-[`EmbeddedEntity`](/EmbeddedEntity)
+[`EmbeddedEntity`](EmbeddedEntity)
 
 ## Properties
 

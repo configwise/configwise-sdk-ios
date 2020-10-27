@@ -6,7 +6,7 @@ public class MaterialService: DaoAwareService
 
 ## Inheritance
 
-[`DaoAwareService`](/DaoAwareService)
+[`DaoAwareService`](DaoAwareService)
 
 ## Properties
 

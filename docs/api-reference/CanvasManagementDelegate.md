@@ -6,7 +6,7 @@ public protocol CanvasManagementDelegate: AdapterManagementDelegate
 
 ## Inheritance
 
-[`AdapterManagementDelegate`](/AdapterManagementDelegate)
+[`AdapterManagementDelegate`](AdapterManagementDelegate)
 
 ## Requirements
 

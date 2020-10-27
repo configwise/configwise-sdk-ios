@@ -6,7 +6,7 @@ public class TagToMaterialsEntity: EmbeddedEntity
 
 ## Inheritance
 
-[`EmbeddedEntity`](/EmbeddedEntity)
+[`EmbeddedEntity`](EmbeddedEntity)
 
 ## Properties
 

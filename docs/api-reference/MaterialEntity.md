@@ -6,7 +6,7 @@ public class MaterialEntity: CatalogAwareEntity, PFSubclassing
 
 ## Inheritance
 
-[`CatalogAwareEntity`](/CatalogAwareEntity), `PFSubclassing`
+[`CatalogAwareEntity`](CatalogAwareEntity), `PFSubclassing`
 
 ## Properties
 

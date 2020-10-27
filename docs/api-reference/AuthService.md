@@ -6,7 +6,7 @@ public class AuthService: DaoAwareService
 
 ## Inheritance
 
-[`DaoAwareService`](/DaoAwareService)
+[`DaoAwareService`](DaoAwareService)
 
 ## Properties
 

@@ -6,7 +6,7 @@ public class SceneService: DaoAwareService
 
 ## Inheritance
 
-[`DaoAwareService`](/DaoAwareService)
+[`DaoAwareService`](DaoAwareService)
 
 ## Properties
 

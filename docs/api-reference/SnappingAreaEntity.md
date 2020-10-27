@@ -6,7 +6,7 @@ public class SnappingAreaEntity: EmbeddedEntity
 
 ## Inheritance
 
-[`EmbeddedEntity`](/EmbeddedEntity)
+[`EmbeddedEntity`](EmbeddedEntity)
 
 ## Properties
 

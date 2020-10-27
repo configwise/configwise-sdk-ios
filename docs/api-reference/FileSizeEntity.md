@@ -6,7 +6,7 @@ public class FileSizeEntity: EmbeddedEntity
 
 ## Inheritance
 
-[`EmbeddedEntity`](/EmbeddedEntity)
+[`EmbeddedEntity`](EmbeddedEntity)
 
 ## Properties
 

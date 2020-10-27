@@ -6,7 +6,7 @@ public protocol ArManagementDelegate: AdapterManagementDelegate
 
 ## Inheritance
 
-[`AdapterManagementDelegate`](/AdapterManagementDelegate)
+[`AdapterManagementDelegate`](AdapterManagementDelegate)
 
 ## Requirements
 
