@@ -105,13 +105,13 @@ Eg: to provide public access to your application or if if you want to use own au
 
     To obtain `COMPANY_AUTH_TOKEN`, go to `CBO (company back office) > Company profile`: [https://manage.configwise.io/configwise/cbo/profile](https://manage.configwise.io/configwise/cbo/profile)
     
-    ![b2c-company-auth-token](doc/b2c-compoany-auth-token.png)
+    ![b2c-company-auth-token](docs/b2c-compoany-auth-token.png)
 
 - B2B (ConfigWise user credentials are required) - use this method to only permit registered ConfigWise users 
 of your company to access to your mobile application. This method requires to type `email/password` by your company users
 to access backend data. To manage your company users, go to `CBO > Users`: [https://manage.configwise.io/configwise/cbo/employees](https://manage.configwise.io/configwise/cbo/employees)
 
-    ![b2b-users-list](doc/b2b-users-list.png)
+    ![b2b-users-list](docs/b2b-users-list.png)
 
     To use `B2B` mode - change `SdkVariant` to `.B2B` mode in the `ios-example/AppEnvironment.swift` file.
     
