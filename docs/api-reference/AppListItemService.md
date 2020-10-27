@@ -6,7 +6,7 @@ public class AppListItemService: DaoAwareService
 
 ## Inheritance
 
-[`DaoAwareService`](DaoAwareService)
+[`DaoAwareService`](configwise-sdk-ios/DaoAwareService)
 
 ## Properties
 

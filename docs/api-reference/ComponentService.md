@@ -6,7 +6,7 @@ public class ComponentService: DaoAwareService
 
 ## Inheritance
 
-[`DaoAwareService`](DaoAwareService)
+[`DaoAwareService`](configwise-sdk-ios/DaoAwareService)
 
 ## Properties
 

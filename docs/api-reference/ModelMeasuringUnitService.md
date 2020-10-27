@@ -6,7 +6,7 @@ public class ModelMeasuringUnitService: DaoAwareService
 
 ## Inheritance
 
-[`DaoAwareService`](DaoAwareService)
+[`DaoAwareService`](configwise-sdk-ios/DaoAwareService)
 
 ## Properties
 

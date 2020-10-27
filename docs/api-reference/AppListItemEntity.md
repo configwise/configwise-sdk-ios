@@ -6,7 +6,7 @@ public class AppListItemEntity: CatalogAwareEntity, PFSubclassing
 
 ## Inheritance
 
-[`CatalogAwareEntity`](CatalogAwareEntity), `PFSubclassing`
+[`CatalogAwareEntity`](configwise-sdk-ios/CatalogAwareEntity), `PFSubclassing`
 
 ## Properties
 
