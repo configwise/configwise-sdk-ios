@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ConfigWiseSDK - DownloadingService</title>
-    <link rel="stylesheet" type="text/css" href="api-reference/all.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="all.css" media="all" />
 </head>
 <body>
     <header>
-        <a href="api-reference/">
+        <a href="">
             <strong>
                 ConfigWiseSDK
             </strong>
@@ -56,25 +56,25 @@
     <h3>
         <code>obtain​From​Local​Cache(url:​download​IfRequired:​block:​progress​Block:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">obtainFromLocalCache</span>(<span class="variable">url</span>: <span class="type">URL</span>, <span class="variable">downloadIfRequired</span>: <span class="type">Bool</span> = <span class="keyword">true</span>, <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Data</span>?, <span class="type">Error</span>?) -&gt; <span class="type">Void</span>, <span class="variable">progressBlock</span>: <a href="api-reference/ProgressBlock"><span class="type">ProgressBlock</span></a>? = <span class="keyword">nil</span>)</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">obtainFromLocalCache</span>(<span class="variable">url</span>: <span class="type">URL</span>, <span class="variable">downloadIfRequired</span>: <span class="type">Bool</span> = <span class="keyword">true</span>, <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Data</span>?, <span class="type">Error</span>?) -&gt; <span class="type">Void</span>, <span class="variable">progressBlock</span>: <a href="ProgressBlock"><span class="type">ProgressBlock</span></a>? = <span class="keyword">nil</span>)</code></pre></body></html>
 </div>
 <div role="article" class="function" id="downloadingservice.obtainfromlocalcache(urls:block:progressblock:)">
     <h3>
         <code>obtain​From​Local​Cache(urls:​block:​progress​Block:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">obtainFromLocalCache</span>(<span class="variable">urls</span>: [<span class="type">URL</span>], <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> ([<span class="type">URL</span>: (<span class="variable">data</span>: <span class="type">Data</span>?, <span class="variable">error</span>: <span class="type">Error</span>?)]) -&gt; <span class="type">Void</span>, <span class="variable">progressBlock</span>: <a href="api-reference/ProgressBlock"><span class="type">ProgressBlock</span></a>? = <span class="keyword">nil</span>)</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">obtainFromLocalCache</span>(<span class="variable">urls</span>: [<span class="type">URL</span>], <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> ([<span class="type">URL</span>: (<span class="variable">data</span>: <span class="type">Data</span>?, <span class="variable">error</span>: <span class="type">Error</span>?)]) -&gt; <span class="type">Void</span>, <span class="variable">progressBlock</span>: <a href="ProgressBlock"><span class="type">ProgressBlock</span></a>? = <span class="keyword">nil</span>)</code></pre></body></html>
 </div>
 <div role="article" class="function" id="downloadingservice.addtolocalcache(url:block:progressblock:)">
     <h3>
         <code>add​ToLocal​Cache(url:​block:​progress​Block:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">addToLocalCache</span>(<span class="variable">url</span>: <span class="type">URL</span>, <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Data</span>?, <span class="type">Error</span>?) -&gt; <span class="type">Void</span>, <span class="variable">progressBlock</span>: <a href="api-reference/ProgressBlock"><span class="type">ProgressBlock</span></a>? = <span class="keyword">nil</span>)</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">addToLocalCache</span>(<span class="variable">url</span>: <span class="type">URL</span>, <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Data</span>?, <span class="type">Error</span>?) -&gt; <span class="type">Void</span>, <span class="variable">progressBlock</span>: <a href="ProgressBlock"><span class="type">ProgressBlock</span></a>? = <span class="keyword">nil</span>)</code></pre></body></html>
 </div>
 <div role="article" class="function" id="downloadingservice.addtolocalcache(urls:block:progressblock:)">
     <h3>
         <code>add​ToLocal​Cache(urls:​block:​progress​Block:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">addToLocalCache</span>(<span class="variable">urls</span>: [<span class="type">URL</span>], <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> ([<span class="type">URL</span>: (<span class="variable">data</span>: <span class="type">Data</span>?, <span class="variable">error</span>: <span class="type">Error</span>?)]) -&gt; <span class="type">Void</span>, <span class="variable">progressBlock</span>: <a href="api-reference/ProgressBlock"><span class="type">ProgressBlock</span></a>? = <span class="keyword">nil</span>)</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">addToLocalCache</span>(<span class="variable">urls</span>: [<span class="type">URL</span>], <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> ([<span class="type">URL</span>: (<span class="variable">data</span>: <span class="type">Data</span>?, <span class="variable">error</span>: <span class="type">Error</span>?)]) -&gt; <span class="type">Void</span>, <span class="variable">progressBlock</span>: <a href="ProgressBlock"><span class="type">ProgressBlock</span></a>? = <span class="keyword">nil</span>)</code></pre></body></html>
 </div>
 <div role="article" class="function" id="downloadingservice.removefromlocalcache(url:)">
     <h3>
@@ -139,7 +139,7 @@
 
     <footer>
         <p>
-    Generated on <time datetime="2020-10-27T06:55:26+0100">27 October 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-10-27T06:58:04+0100">27 October 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>
