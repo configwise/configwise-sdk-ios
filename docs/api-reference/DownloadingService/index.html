@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConfigWiseSDK - DownloadingService</title>
+    <link rel="stylesheet" type="text/css" href="api-reference/all.css" media="all" />
+</head>
+<body>
+    <header>
+        <a href="api-reference/">
+            <strong>
+                ConfigWiseSDK
+            </strong>
+            <span>Documentation</span>
+        </a>
+        <sup>Beta</sup>
+    </header>
+
+    <!--
+    <form class="search">
+        <input type="search" placeholder="Search" />
+    </form>
+    -->
+
+    <nav>
+        <div class="wrapper">
+            <h2>On This Page</h2>
+            <ol><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#downloadingservice.sharedinstance">shared​Instance</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#downloadingservice.obtainfromlocalcache(url:downloadifrequired:block:progressblock:)">obtain​From​Local​Cache(url:​download​IfRequired:​block:​progress​Block:​)</a></li><li class="function"><a href="#downloadingservice.obtainfromlocalcache(urls:block:progressblock:)">obtain​From​Local​Cache(urls:​block:​progress​Block:​)</a></li><li class="function"><a href="#downloadingservice.addtolocalcache(url:block:progressblock:)">add​ToLocal​Cache(url:​block:​progress​Block:​)</a></li><li class="function"><a href="#downloadingservice.addtolocalcache(urls:block:progressblock:)">add​ToLocal​Cache(urls:​block:​progress​Block:​)</a></li><li class="function"><a href="#downloadingservice.removefromlocalcache(url:)">remove​From​Local​Cache(url:​)</a></li><li class="function"><a href="#downloadingservice.removefromlocalcache(urls:)">remove​From​Local​Cache(urls:​)</a></li><li class="function"><a href="#downloadingservice.getlocallycachedfileurl(of:)">get​Locally​Cached​File​Url(of:​)</a></li><li class="function"><a href="#downloadingservice.isexistsinlocalcache(url:)">is​Exists​InLocal​Cache(url:​)</a></li><li class="function"><a href="#downloadingservice.writetolocalcache(filepath:data:)">write​ToLocal​Cache(file​Path:​data:​)</a></li><li class="function"><a href="#downloadingservice.removefromlocalcache(filepath:)">remove​From​Local​Cache(file​Path:​)</a></li><li class="function"><a href="#downloadingservice.upload(_:as:block:)">upload(_:​as:​block:​)</a></li><li class="function"><a href="#downloadingservice.isfileexistsonserver(filekey:block:)">is​File​Exists​OnServer(file​Key:​block:​)</a></li><li class="function"><a href="#downloadingservice.deletefilefromserver(filekey:block:)">delete​File​From​Server(file​Key:​block:​)</a></li></ul></li></ol>
+        </div>
+    </nav>
+
+    <main>
+        <article>
+            <h1>
+    <small>Class</small>
+    <code class="name">Downloading​Service</code>
+</h1>
+
+<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="type">DownloadingService</span></code></pre></body></html>
+
+    <section id="properties">
+        <h2>Properties</h2>
+
+        <div role="article" class="variable" id="downloadingservice.sharedinstance">
+    <h3>
+        <code>shared​Instance</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">sharedInstance</span></code></pre></body></html>
+</div>
+    </section>
+    <section id="methods">
+        <h2>Methods</h2>
+
+        <div role="article" class="function" id="downloadingservice.obtainfromlocalcache(url:downloadifrequired:block:progressblock:)">
+    <h3>
+        <code>obtain​From​Local​Cache(url:​download​IfRequired:​block:​progress​Block:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">obtainFromLocalCache</span>(<span class="variable">url</span>: <span class="type">URL</span>, <span class="variable">downloadIfRequired</span>: <span class="type">Bool</span> = <span class="keyword">true</span>, <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Data</span>?, <span class="type">Error</span>?) -&gt; <span class="type">Void</span>, <span class="variable">progressBlock</span>: <a href="api-reference/ProgressBlock"><span class="type">ProgressBlock</span></a>? = <span class="keyword">nil</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="downloadingservice.obtainfromlocalcache(urls:block:progressblock:)">
+    <h3>
+        <code>obtain​From​Local​Cache(urls:​block:​progress​Block:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">obtainFromLocalCache</span>(<span class="variable">urls</span>: [<span class="type">URL</span>], <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> ([<span class="type">URL</span>: (<span class="variable">data</span>: <span class="type">Data</span>?, <span class="variable">error</span>: <span class="type">Error</span>?)]) -&gt; <span class="type">Void</span>, <span class="variable">progressBlock</span>: <a href="api-reference/ProgressBlock"><span class="type">ProgressBlock</span></a>? = <span class="keyword">nil</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="downloadingservice.addtolocalcache(url:block:progressblock:)">
+    <h3>
+        <code>add​ToLocal​Cache(url:​block:​progress​Block:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">addToLocalCache</span>(<span class="variable">url</span>: <span class="type">URL</span>, <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Data</span>?, <span class="type">Error</span>?) -&gt; <span class="type">Void</span>, <span class="variable">progressBlock</span>: <a href="api-reference/ProgressBlock"><span class="type">ProgressBlock</span></a>? = <span class="keyword">nil</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="downloadingservice.addtolocalcache(urls:block:progressblock:)">
+    <h3>
+        <code>add​ToLocal​Cache(urls:​block:​progress​Block:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">addToLocalCache</span>(<span class="variable">urls</span>: [<span class="type">URL</span>], <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> ([<span class="type">URL</span>: (<span class="variable">data</span>: <span class="type">Data</span>?, <span class="variable">error</span>: <span class="type">Error</span>?)]) -&gt; <span class="type">Void</span>, <span class="variable">progressBlock</span>: <a href="api-reference/ProgressBlock"><span class="type">ProgressBlock</span></a>? = <span class="keyword">nil</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="downloadingservice.removefromlocalcache(url:)">
+    <h3>
+        <code>remove​From​Local​Cache(url:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">removeFromLocalCache</span>(<span class="variable">url</span>: <span class="type">URL</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="downloadingservice.removefromlocalcache(urls:)">
+    <h3>
+        <code>remove​From​Local​Cache(urls:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">removeFromLocalCache</span>(<span class="variable">urls</span>: [<span class="type">URL</span>])</code></pre></body></html>
+</div>
+<div role="article" class="function" id="downloadingservice.getlocallycachedfileurl(of:)">
+    <h3>
+        <code>get​Locally​Cached​File​Url(of:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getLocallyCachedFileUrl</span>(<span class="variable">of</span> <span class="variable">url</span>: <span class="type">URL</span>) -&gt; <span class="type">URL</span></code></pre></body></html>
+</div>
+<div role="article" class="function" id="downloadingservice.isexistsinlocalcache(url:)">
+    <h3>
+        <code>is​Exists​InLocal​Cache(url:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">isExistsInLocalCache</span>(<span class="variable">url</span>: <span class="type">URL</span>) -&gt; <span class="type">Bool</span></code></pre></body></html>
+</div>
+<div role="article" class="function" id="downloadingservice.writetolocalcache(filepath:data:)">
+    <h3>
+        <code>write​ToLocal​Cache(file​Path:​data:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">writeToLocalCache</span>(<span class="variable">filePath</span>: <span class="type">String</span>, <span class="variable">data</span>: <span class="type">Data</span>) <span class="keyword">throws</span> -&gt; <span class="type">URL</span></code></pre></body></html>
+</div>
+<div role="article" class="function" id="downloadingservice.removefromlocalcache(filepath:)">
+    <h3>
+        <code>remove​From​Local​Cache(file​Path:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">removeFromLocalCache</span>(<span class="variable">filePath</span>: <span class="type">String</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="downloadingservice.upload(_:as:block:)">
+    <h3>
+        <code>upload(_:​as:​block:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">upload</span>(<span class="keyword">_</span> <span class="variable">fileUrl</span>: <span class="type">URL</span>, <span class="variable">as</span> <span class="variable">fileKey</span>: <span class="type">String</span>, <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Error</span>?) -&gt; <span class="type">Void</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="downloadingservice.isfileexistsonserver(filekey:block:)">
+    <h3>
+        <code>is​File​Exists​OnServer(file​Key:​block:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">isFileExistsOnServer</span>(<span class="variable">fileKey</span>: <span class="type">String</span>, <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Bool</span>, <span class="type">Error</span>?) -&gt; <span class="type">Void</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="downloadingservice.deletefilefromserver(filekey:block:)">
+    <h3>
+        <code>delete​File​From​Server(file​Key:​block:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">deleteFileFromServer</span>(<span class="variable">fileKey</span>: <span class="type">String</span>, <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Error</span>?) -&gt; <span class="type">Void</span>)</code></pre></body></html>
+</div>
+    </section>
+
+
+
+        </article>
+    </main>
+
+    <footer>
+        <p>
+    Generated on <time datetime="2020-10-27T06:55:26+0100">27 October 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+</p>
+    </footer>
+</body>
+</html>

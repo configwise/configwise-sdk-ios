@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConfigWiseSDK - ConceptService</title>
+    <link rel="stylesheet" type="text/css" href="api-reference/all.css" media="all" />
+</head>
+<body>
+    <header>
+        <a href="api-reference/">
+            <strong>
+                ConfigWiseSDK
+            </strong>
+            <span>Documentation</span>
+        </a>
+        <sup>Beta</sup>
+    </header>
+
+    <!--
+    <form class="search">
+        <input type="search" placeholder="Search" />
+    </form>
+    -->
+
+    <nav>
+        <div class="wrapper">
+            <h2>On This Page</h2>
+            <ol><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#conceptservice.sharedinstance">shared​Instance</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#conceptservice.spawnconcept(userid:name:)">spawn​Concept(user​Id:​name:​)</a></li><li class="function"><a href="#conceptservice.spawnconceptitem(componentid:position:rotation:)">spawn​Concept​Item(component​Id:​position:​rotation:​)</a></li><li class="function"><a href="#conceptservice.spawnassignedmaterial(tag:materialid:)">spawn​Assigned​Material(tag:​material​Id:​)</a></li><li class="function"><a href="#conceptservice.clone(concept:)">clone(concept:​)</a></li><li class="function"><a href="#conceptservice.clone(conceptitem:)">clone(concept​Item:​)</a></li><li class="function"><a href="#conceptservice.clone(assignedmaterial:)">clone(assigned​Material:​)</a></li><li class="function"><a href="#conceptservice.delete(concept:)">delete(concept:​)</a></li><li class="function"><a href="#conceptservice.delete(conceptitem:)">delete(concept​Item:​)</a></li><li class="function"><a href="#conceptservice.delete(assignedmaterial:)">delete(assigned​Material:​)</a></li><li class="function"><a href="#conceptservice.getallconceptsbyuserid(userid:block:)">get​All​Concepts​ByUser​Id(user​Id:​block:​)</a></li></ul></li></ol>
+        </div>
+    </nav>
+
+    <main>
+        <article>
+            <h1>
+    <small>Class</small>
+    <code class="name">Concept​Service</code>
+</h1>
+
+<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="type">ConceptService</span></code></pre></body></html>
+
+    <section id="properties">
+        <h2>Properties</h2>
+
+        <div role="article" class="variable" id="conceptservice.sharedinstance">
+    <h3>
+        <code>shared​Instance</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">sharedInstance</span></code></pre></body></html>
+</div>
+    </section>
+    <section id="methods">
+        <h2>Methods</h2>
+
+        <div role="article" class="function" id="conceptservice.spawnconcept(userid:name:)">
+    <h3>
+        <code>spawn​Concept(user​Id:​name:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">spawnConcept</span>(<span class="variable">userId</span>: <span class="type">String</span>, <span class="variable">name</span>: <span class="type">String</span>) -&gt; <a href="api-reference/ConceptEntity"><span class="type">ConceptEntity</span></a></code></pre></body></html>
+</div>
+<div role="article" class="function" id="conceptservice.spawnconceptitem(componentid:position:rotation:)">
+    <h3>
+        <code>spawn​Concept​Item(component​Id:​position:​rotation:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">spawnConceptItem</span>(<span class="variable">componentId</span>: <span class="type">String</span>, <span class="variable">position</span>: <span class="type">SCNVector3</span>, <span class="variable">rotation</span>: <span class="type">SCNVector4</span>) -&gt; <a href="api-reference/ConceptItemEntity"><span class="type">ConceptItemEntity</span></a></code></pre></body></html>
+</div>
+<div role="article" class="function" id="conceptservice.spawnassignedmaterial(tag:materialid:)">
+    <h3>
+        <code>spawn​Assigned​Material(tag:​material​Id:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">spawnAssignedMaterial</span>(<span class="variable">tag</span>: <span class="type">String</span>, <span class="variable">materialId</span>: <span class="type">String</span>?) -&gt; <a href="api-reference/AssignedMaterialEntity"><span class="type">AssignedMaterialEntity</span></a></code></pre></body></html>
+</div>
+<div role="article" class="function" id="conceptservice.clone(concept:)">
+    <h3>
+        <code>clone(concept:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">clone</span>(<span class="variable">concept</span>: <a href="api-reference/ConceptEntity"><span class="type">ConceptEntity</span></a>) -&gt; <a href="api-reference/ConceptEntity"><span class="type">ConceptEntity</span></a></code></pre></body></html>
+</div>
+<div role="article" class="function" id="conceptservice.clone(conceptitem:)">
+    <h3>
+        <code>clone(concept​Item:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">clone</span>(<span class="variable">conceptItem</span>: <a href="api-reference/ConceptItemEntity"><span class="type">ConceptItemEntity</span></a>) -&gt; <a href="api-reference/ConceptItemEntity"><span class="type">ConceptItemEntity</span></a></code></pre></body></html>
+</div>
+<div role="article" class="function" id="conceptservice.clone(assignedmaterial:)">
+    <h3>
+        <code>clone(assigned​Material:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">clone</span>(<span class="variable">assignedMaterial</span>: <a href="api-reference/AssignedMaterialEntity"><span class="type">AssignedMaterialEntity</span></a>) -&gt; <a href="api-reference/AssignedMaterialEntity"><span class="type">AssignedMaterialEntity</span></a></code></pre></body></html>
+</div>
+<div role="article" class="function" id="conceptservice.delete(concept:)">
+    <h3>
+        <code>delete(concept:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">delete</span>(<span class="variable">concept</span>: <a href="api-reference/ConceptEntity"><span class="type">ConceptEntity</span></a>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="conceptservice.delete(conceptitem:)">
+    <h3>
+        <code>delete(concept​Item:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">delete</span>(<span class="variable">conceptItem</span>: <a href="api-reference/ConceptItemEntity"><span class="type">ConceptItemEntity</span></a>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="conceptservice.delete(assignedmaterial:)">
+    <h3>
+        <code>delete(assigned​Material:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">delete</span>(<span class="variable">assignedMaterial</span>: <a href="api-reference/AssignedMaterialEntity"><span class="type">AssignedMaterialEntity</span></a>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="conceptservice.getallconceptsbyuserid(userid:block:)">
+    <h3>
+        <code>get​All​Concepts​ByUser​Id(user​Id:​block:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getAllConceptsByUserId</span>(<span class="variable">userId</span>: <span class="type">String</span>, <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> ([<a href="api-reference/ConceptEntity"><span class="type">ConceptEntity</span></a>], <span class="type">Error</span>?) -&gt; <span class="type">Void</span>)</code></pre></body></html>
+</div>
+    </section>
+
+
+
+        </article>
+    </main>
+
+    <footer>
+        <p>
+    Generated on <time datetime="2020-10-27T06:55:29+0100">27 October 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+</p>
+    </footer>
+</body>
+</html>

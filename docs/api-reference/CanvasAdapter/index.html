@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConfigWiseSDK - CanvasAdapter</title>
+    <link rel="stylesheet" type="text/css" href="api-reference/all.css" media="all" />
+</head>
+<body>
+    <header>
+        <a href="api-reference/">
+            <strong>
+                ConfigWiseSDK
+            </strong>
+            <span>Documentation</span>
+        </a>
+        <sup>Beta</sup>
+    </header>
+
+    <!--
+    <form class="search">
+        <input type="search" placeholder="Search" />
+    </form>
+    -->
+
+    <nav>
+        <div class="wrapper">
+            <h2>On This Page</h2>
+            <ol><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#canvasadapter.init()">init()</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#canvasadapter.managementdelegate">management​Delegate</a></li><li class="variable"><a href="#canvasadapter.sceneview">scene​View</a></li><li class="variable"><a href="#canvasadapter.isempty">is​Empty</a></li><li class="variable"><a href="#canvasadapter.glowcolor">glow​Color</a></li><li class="variable"><a href="#canvasadapter.contentnode">content​Node</a></li><li class="variable"><a href="#canvasadapter.modelhighlightingmode">model​Highlighting​Mode</a></li><li class="variable"><a href="#canvasadapter.cameracontrolenabled">camera​Control​Enabled</a></li><li class="variable"><a href="#canvasadapter.resetcamerapropertiesonfocustocenter">reset​Camera​Properties​OnFocus​ToCenter</a></li><li class="variable"><a href="#canvasadapter.modelselectionenabled">model​Selection​Enabled</a></li><li class="variable"><a href="#canvasadapter.groundenabled">ground​Enabled</a></li><li class="variable"><a href="#canvasadapter.groundcolor">ground​Color</a></li><li class="variable"><a href="#canvasadapter.sceneenvironment">scene​Environment</a></li><li class="variable"><a href="#canvasadapter.selectedmodelnode">selected​Model​Node</a></li><li class="variable"><a href="#canvasadapter.snappingsenabled">snappings​Enabled</a></li><li class="variable"><a href="#canvasadapter.overlappingofmodelsallowed">overlapping​OfModels​Allowed</a></li><li class="variable"><a href="#canvasadapter.showsizes">show​Sizes</a></li><li class="variable"><a href="#canvasadapter.gesturesenabled">gestures​Enabled</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#canvasadapter.refresh()">refresh()</a></li><li class="function"><a href="#canvasadapter.handlepangesture(recognizer:)">handle​Pan​Gesture(recognizer:​)</a></li><li class="function"><a href="#canvasadapter.handlepinchgesture(recognizer:)">handle​Pinch​Gesture(recognizer:​)</a></li><li class="function"><a href="#canvasadapter.handlerotationgesture(recognizer:)">handle​Rotation​Gesture(recognizer:​)</a></li><li class="function"><a href="#canvasadapter.handlesingletapgesture(recognizer:)">handle​Single​Tap​Gesture(recognizer:​)</a></li><li class="function"><a href="#canvasadapter.handledoubletapgesture(recognizer:)">handle​Double​Tap​Gesture(recognizer:​)</a></li><li class="function"><a href="#canvasadapter.handlelongpressgesture(recognizer:)">handle​Long​Press​Gesture(recognizer:​)</a></li><li class="function"><a href="#canvasadapter.camerarotate(xradians:yradians:)">camera​Rotate(xRadians:​yRadians:​)</a></li><li class="function"><a href="#canvasadapter.focustocenter(animate:resetcamerazoom:resetcameraorientation:)">focus​ToCenter(animate:​reset​Camera​Zoom:​reset​Camera​Orientation:​)</a></li><li class="function"><a href="#canvasadapter.assignscenelightingenvironment(from:block:)">assign​Scene​Lighting​Environment(from:​block:​)</a></li><li class="function"><a href="#canvasadapter.resetselection()">reset​Selection()</a></li><li class="function"><a href="#canvasadapter.selectmodelbyid(id:)">select​Model​ById(id:​)</a></li><li class="function"><a href="#canvasadapter.addmodel(modelnode:position:rotation:selectmodel:closetoposition:notifymanagementdelegate:)">add​Model(model​Node:​position:​rotation:​select​Model:​close​ToPosition:​notify​Management​Delegate:​)</a></li><li class="function"><a href="#canvasadapter.removemodelby(id:)">remove​Model​By(id:​)</a></li><li class="function"><a href="#canvasadapter.removemodels()">remove​Models()</a></li><li class="function"><a href="#canvasadapter.assignmaterialtomodel(modelid:nodenamesornodeids:materialid:material:)">assign​Material​ToModel(model​Id:​node​Names​OrNode​Ids:​material​Id:​material:​)</a></li><li class="function"><a href="#canvasadapter.replacepreviouslyassignedmaterial(materialid:material:)">replace​Previously​Assigned​Material(material​Id:​material:​)</a></li></ul></li></ol>
+        </div>
+    </nav>
+
+    <main>
+        <article>
+            <h1>
+    <small>Class</small>
+    <code class="name">Canvas​Adapter</code>
+</h1>
+
+<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="type">CanvasAdapter</span></code></pre></body></html>
+
+    <section id="initializers">
+        <h2>Initializers</h2>
+
+        <div role="article" class="initializer" id="canvasadapter.init()">
+    <h3>
+        <code>init()</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>()</code></pre></body></html>
+</div>
+    </section>
+    <section id="properties">
+        <h2>Properties</h2>
+
+        <div role="article" class="variable" id="canvasadapter.managementdelegate">
+    <h3>
+        <code>management​Delegate</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">managementDelegate</span>: <a href="api-reference/CanvasManagementDelegate"><span class="type">CanvasManagementDelegate</span></a>?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.sceneview">
+    <h3>
+        <code>scene​View</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">sceneView</span>: <span class="type">SCNView</span>?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.isempty">
+    <h3>
+        <code>is​Empty</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">isEmpty</span>: <span class="type">Bool</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.glowcolor">
+    <h3>
+        <code>glow​Color</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">glowColor</span>: <span class="type">CIColor</span> = <span class="variable">CIColor</span>.<span class="type">blue</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.contentnode">
+    <h3>
+        <code>content​Node</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">contentNode</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.modelhighlightingmode">
+    <h3>
+        <code>model​Highlighting​Mode</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">modelHighlightingMode</span>: <a href="api-reference/ModelHighlightingMode"><span class="type">ModelHighlightingMode</span></a> = .<span class="variable">glow</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.cameracontrolenabled">
+    <h3>
+        <code>camera​Control​Enabled</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">cameraControlEnabled</span> = <span class="keyword">false</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.resetcamerapropertiesonfocustocenter">
+    <h3>
+        <code>reset​Camera​Properties​OnFocus​ToCenter</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">resetCameraPropertiesOnFocusToCenter</span> = <span class="keyword">false</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.modelselectionenabled">
+    <h3>
+        <code>model​Selection​Enabled</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">modelSelectionEnabled</span> = <span class="keyword">false</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.groundenabled">
+    <h3>
+        <code>ground​Enabled</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">groundEnabled</span> = <span class="keyword">false</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.groundcolor">
+    <h3>
+        <code>ground​Color</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">groundColor</span>: <span class="type">UIColor</span>?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.sceneenvironment">
+    <h3>
+        <code>scene​Environment</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">sceneEnvironment</span>: <a href="api-reference/SceneEnvironment"><span class="type">SceneEnvironment</span></a> = .<span class="variable">basicLight</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.selectedmodelnode">
+    <h3>
+        <code>selected​Model​Node</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">selectedModelNode</span>: <a href="api-reference/ModelNode"><span class="type">ModelNode</span></a>?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.snappingsenabled">
+    <h3>
+        <code>snappings​Enabled</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">snappingsEnabled</span> = <span class="keyword">true</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.overlappingofmodelsallowed">
+    <h3>
+        <code>overlapping​OfModels​Allowed</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">overlappingOfModelsAllowed</span> = <span class="keyword">false</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.showsizes">
+    <h3>
+        <code>show​Sizes</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">showSizes</span> = <span class="keyword">false</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="canvasadapter.gesturesenabled">
+    <h3>
+        <code>gestures​Enabled</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">gesturesEnabled</span> = <span class="keyword">false</span></code></pre></body></html>
+</div>
+    </section>
+    <section id="methods">
+        <h2>Methods</h2>
+
+        <div role="article" class="function" id="canvasadapter.refresh()">
+    <h3>
+        <code>refresh()</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">refresh</span>()</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.handlepangesture(recognizer:)">
+    <h3>
+        <code>handle​Pan​Gesture(recognizer:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="attribute">@</span><span class="attribute">objc</span> <span class="keyword">public</span> <span class="keyword">func</span> <span class="function">handlePanGesture</span>(<span class="variable">recognizer</span>: <span class="type">UIPanGestureRecognizer</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.handlepinchgesture(recognizer:)">
+    <h3>
+        <code>handle​Pinch​Gesture(recognizer:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="attribute">@</span><span class="attribute">objc</span> <span class="keyword">public</span> <span class="keyword">func</span> <span class="function">handlePinchGesture</span>(<span class="variable">recognizer</span>: <span class="type">UIPinchGestureRecognizer</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.handlerotationgesture(recognizer:)">
+    <h3>
+        <code>handle​Rotation​Gesture(recognizer:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="attribute">@</span><span class="attribute">objc</span> <span class="keyword">public</span> <span class="keyword">func</span> <span class="function">handleRotationGesture</span>(<span class="variable">recognizer</span>: <span class="type">UIRotationGestureRecognizer</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.handlesingletapgesture(recognizer:)">
+    <h3>
+        <code>handle​Single​Tap​Gesture(recognizer:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="attribute">@</span><span class="attribute">objc</span> <span class="keyword">public</span> <span class="keyword">func</span> <span class="function">handleSingleTapGesture</span>(<span class="variable">recognizer</span>: <span class="type">UITapGestureRecognizer</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.handledoubletapgesture(recognizer:)">
+    <h3>
+        <code>handle​Double​Tap​Gesture(recognizer:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="attribute">@</span><span class="attribute">objc</span> <span class="keyword">public</span> <span class="keyword">func</span> <span class="function">handleDoubleTapGesture</span>(<span class="variable">recognizer</span>: <span class="type">UITapGestureRecognizer</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.handlelongpressgesture(recognizer:)">
+    <h3>
+        <code>handle​Long​Press​Gesture(recognizer:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="attribute">@</span><span class="attribute">objc</span> <span class="keyword">public</span> <span class="keyword">func</span> <span class="function">handleLongPressGesture</span>(<span class="variable">recognizer</span>: <span class="type">UILongPressGestureRecognizer</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.camerarotate(xradians:yradians:)">
+    <h3>
+        <code>camera​Rotate(xRadians:​yRadians:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">cameraRotate</span>(<span class="variable">xRadians</span>: <span class="type">Float</span>, <span class="variable">yRadians</span>: <span class="type">Float</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.focustocenter(animate:resetcamerazoom:resetcameraorientation:)">
+    <h3>
+        <code>focus​ToCenter(animate:​reset​Camera​Zoom:​reset​Camera​Orientation:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">focusToCenter</span>(<span class="variable">animate</span>: <span class="type">Bool</span> = <span class="keyword">true</span>, <span class="variable">resetCameraZoom</span>: <span class="type">Bool</span> = <span class="keyword">false</span>, <span class="variable">resetCameraOrientation</span>: <span class="type">Bool</span> = <span class="keyword">false</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.assignscenelightingenvironment(from:block:)">
+    <h3>
+        <code>assign​Scene​Lighting​Environment(from:​block:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">assignSceneLightingEnvironment</span>(<span class="variable">from</span> <span class="variable">sceneEntity</span>: <a href="api-reference/SceneEntity"><span class="type">SceneEntity</span></a>?, <span class="variable">block</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Error</span>?) -&gt; <span class="type">Void</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.resetselection()">
+    <h3>
+        <code>reset​Selection()</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">resetSelection</span>()</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.selectmodelbyid(id:)">
+    <h3>
+        <code>select​Model​ById(id:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">selectModelById</span>(<span class="variable">id</span>: <span class="type">String</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.addmodel(modelnode:position:rotation:selectmodel:closetoposition:notifymanagementdelegate:)">
+    <h3>
+        <code>add​Model(model​Node:​position:​rotation:​select​Model:​close​ToPosition:​notify​Management​Delegate:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">addModel</span>(<span class="variable">modelNode</span>: <a href="api-reference/ModelNode"><span class="type">ModelNode</span></a>, <span class="variable">position</span>: <span class="type">SCNVector3</span>? = <span class="keyword">nil</span>, <span class="variable">rotation</span>: <span class="type">SCNVector4</span>? = <span class="keyword">nil</span>, <span class="variable">selectModel</span>: <span class="type">Bool</span> = <span class="keyword">false</span>, <span class="variable">closeToPosition</span>: <span class="type">SCNVector3</span>? = <span class="keyword">nil</span>, <span class="variable">notifyManagementDelegate</span>: <span class="type">Bool</span> = <span class="keyword">true</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.removemodelby(id:)">
+    <h3>
+        <code>remove​Model​By(id:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">removeModelBy</span>(<span class="variable">id</span>: <span class="type">String</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.removemodels()">
+    <h3>
+        <code>remove​Models()</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">removeModels</span>()</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.assignmaterialtomodel(modelid:nodenamesornodeids:materialid:material:)">
+    <h3>
+        <code>assign​Material​ToModel(model​Id:​node​Names​OrNode​Ids:​material​Id:​material:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">assignMaterialToModel</span>(<span class="variable">modelId</span>: <span class="type">String</span>, <span class="variable">nodeNamesOrNodeIds</span>: [<a href="api-reference/NodeNameOrNodeId"><span class="type">NodeNameOrNodeId</span></a>], <span class="variable">materialId</span>: <span class="type">String</span>?, <span class="variable">material</span>: <span class="type">SCNMaterial</span>?)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="canvasadapter.replacepreviouslyassignedmaterial(materialid:material:)">
+    <h3>
+        <code>replace​Previously​Assigned​Material(material​Id:​material:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">replacePreviouslyAssignedMaterial</span>(<span class="variable">materialId</span>: <span class="type">String</span>, <span class="variable">material</span>: <span class="type">SCNMaterial</span>?)</code></pre></body></html>
+</div>
+    </section>
+
+
+
+        </article>
+    </main>
+
+    <footer>
+        <p>
+    Generated on <time datetime="2020-10-27T06:55:29+0100">27 October 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+</p>
+    </footer>
+</body>
+</html>
