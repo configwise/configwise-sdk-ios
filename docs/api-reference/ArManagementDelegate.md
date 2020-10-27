@@ -6,7 +6,7 @@ public protocol ArManagementDelegate: AdapterManagementDelegate
 
 ## Inheritance
 
-[`AdapterManagementDelegate`](configwise-sdk-ios/AdapterManagementDelegate)
+[`AdapterManagementDelegate`](configwise-sdk-ios/api-reference/AdapterManagementDelegate)
 
 ## Requirements
 

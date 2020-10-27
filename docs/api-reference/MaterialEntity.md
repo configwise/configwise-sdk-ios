@@ -6,7 +6,7 @@ public class MaterialEntity: CatalogAwareEntity, PFSubclassing
 
 ## Inheritance
 
-[`CatalogAwareEntity`](configwise-sdk-ios/CatalogAwareEntity), `PFSubclassing`
+[`CatalogAwareEntity`](configwise-sdk-ios/api-reference/CatalogAwareEntity), `PFSubclassing`
 
 ## Properties
 

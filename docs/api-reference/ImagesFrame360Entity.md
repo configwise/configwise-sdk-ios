@@ -6,7 +6,7 @@ public class ImagesFrame360Entity: EmbeddedEntity
 
 ## Inheritance
 
-[`EmbeddedEntity`](configwise-sdk-ios/EmbeddedEntity)
+[`EmbeddedEntity`](configwise-sdk-ios/api-reference/EmbeddedEntity)
 
 ## Properties
 

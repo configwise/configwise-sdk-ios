@@ -6,7 +6,7 @@ public class CombinationItemEntity: EmbeddedEntity
 
 ## Inheritance
 
-[`EmbeddedEntity`](configwise-sdk-ios/EmbeddedEntity)
+[`EmbeddedEntity`](configwise-sdk-ios/api-reference/EmbeddedEntity)
 
 ## Properties
 
