@@ -46,7 +46,7 @@ final class AppEnvironment: ObservableObject {
         ConfigWiseSDK.initialize([
             .variant: self.mode,
             .companyAuthToken: "YOUR_COMPANY_AUTH_TOKEN",
-            .debugLogging: true,
+            .debugLogging: false,
             .debug3d: false
         ])
 
