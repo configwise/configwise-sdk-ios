@@ -8,7 +8,7 @@ PODS:
   - CocoaLumberjack/Core (3.7.0)
   - CocoaLumberjack/Swift (3.7.0):
     - CocoaLumberjack/Core
-  - ConfigWiseSDK (1.3.6):
+  - ConfigWiseSDK (1.3.7):
     - Alamofire
     - AssetImportKit
     - CocoaLumberjack/Swift
@@ -50,7 +50,7 @@ SPEC CHECKSUMS:
   Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
   Bolts-Swift: afbbaf8c8186e7f769be4afa656949c14087ba44
   CocoaLumberjack: e8955b9d337ac307103b0a34fd141c32f27e53c5
-  ConfigWiseSDK: e33323bea0a936b39d9ca56b889d118afbaaa3dc
+  ConfigWiseSDK: 2c18ad2699d1db36ccbec3dc2fa63ba7b21a7e85
   Parse: e40fdb9c7d665823b7fe9865949cac9a53eb2ce7
   ParseLiveQuery: 366b5876aa20074ea7fea52446376e102447b5df
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
