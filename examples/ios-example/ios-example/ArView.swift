@@ -18,7 +18,7 @@ struct ArView: View {
     
     @ObservedObject private var observableState = ObservableState()
     
-    private let arAdapter: ArAdapter = ArAdapter()
+    @State private var arAdapter: ArAdapter?
     
     private var initialComponent: ComponentEntity
     
@@ -57,27 +57,78 @@ struct ArView: View {
         
         return ZStack {
             ArSceneView(
-                onInitView: { (view: ARSCNView) in
-                    self.arAdapter.managementDelegate = self
-                    self.arAdapter.sceneView = view
-                    self.arAdapter.modelHighlightingMode = .glow
-                    self.arAdapter.glowColor = .blue
-                    self.arAdapter.gesturesEnabled = true
-                    self.arAdapter.movementEnabled = true
-                    self.arAdapter.rotationEnabled = true
-                    self.arAdapter.scalingEnabled = true
-                    self.arAdapter.snappingsEnabled = true
-                    self.arAdapter.overlappingOfModelsAllowed = true
+                onInitView: { view, arAdapter in
+                    DispatchQueue.main.async {
+                        self.arAdapter = arAdapter
+                    }
                 },
-                onUpdateView: { (view: ARSCNView) in
+                
+                onArShowHelpMessage: { type, message in
+                    DispatchQueue.main.async {
+                        self.helpMessage = message
+                    }
+                },
+                
+                onArHideHelpMessage: {
+                    DispatchQueue.main.async {
+                        self.helpMessage = nil
+                    }
+                },
+                
+                onArSessionError: { error, message in
+                    DispatchQueue.main.async {
+                        self.criticalErrorMessage = !message.isEmpty ? message : error.localizedDescription
+                    }
+                },
+                
+                onArSessionStarted: { restarted in
+                },
+                
+                onArSessionPaused: {
+                },
+                
+                onArUnsupported: { message in
+                    DispatchQueue.main.async {
+                        self.criticalErrorMessage = message
+                    }
+                },
+                
+                onArFirstPlaneDetected: { simdWorldPosition in
+                    self.addModel(of: self.initialComponent, to: simdWorldPosition)
+                },
+                
+                onArModelAdded: { modelId, componentId, error in
+                    if let error = error {
+                        DispatchQueue.main.async {
+                            self.errorMessage = error.localizedDescription
+                        }
+                        return
+                    }
+                },
+                
+                onModelPositionChanged: { modelId, componentId, position, rotation in
+                },
+                
+                onModelSelected: { modelId, componentId in
+                    let selectedModel = self.arAdapter?.selectedModelNode
+                    let selectedComponent = self.appEnvironment.getComponentById(componentId)
+                    
+                    DispatchQueue.main.async {
+                        self.observableState.selectedModel = selectedModel
+                        self.observableState.selectedComponent = selectedComponent
+                    }
+                },
+                
+                onModelDeleted: { modelId, componentId in
+                },
+                
+                onSelectionReset: {
+                    DispatchQueue.main.async {
+                        self.observableState.selectedModel = nil
+                        self.observableState.selectedComponent = nil
+                    }
                 }
             )
-            .onAppear {
-                self.arAdapter.runArSession()
-            }
-            .onDisappear {
-                self.arAdapter.pauseArSession()
-            }
             
             if self.helpMessage != nil {
                 VStack {
@@ -125,10 +176,10 @@ struct ArView: View {
     private var toolbar: some View {
         let showSizesBinding = Binding<Bool>(
             get: {
-                self.arAdapter.showSizes
+                self.arAdapter?.showSizes ?? false
             },
             set: {
-                self.arAdapter.showSizes = $0
+                self.arAdapter?.showSizes = $0
             }
         )
         
@@ -164,7 +215,7 @@ struct ArView: View {
             // 'Delete' button
             Button(action: {
                 if let modelId = self.observableState.selectedModel?.id {
-                    self.arAdapter.removeModelBy(id: modelId)
+                    self.arAdapter?.removeModelBy(id: modelId)
                 }
             }) {
                 Image(systemName: "trash")
@@ -198,7 +249,7 @@ struct ArView: View {
         VStack {
             List(self.appEnvironment.components.value ?? []) { component in
                 ComponentListItemView(component, selectAction: {
-                    self.arAdapter.resetSelection()
+                    self.arAdapter?.resetSelection()
                     self.addModel(of: component)
                     self.showAddComponentDialog = false
                 })
@@ -220,7 +271,7 @@ struct ArView: View {
 
 extension ArView {
     
-    private func addModel(of component: ComponentEntity, to simdWorldPosition: float3? = nil) {
+    private func addModel(of component: ComponentEntity, to simdWorldPosition: simd_float3? = nil) {
         self.isLoading = true
         self.loadingProgress = 0
         ModelLoaderService.sharedInstance.loadModelBy(component: component, block: { model, error in
@@ -239,70 +290,10 @@ extension ArView {
                 return
             }
             
-            self.arAdapter.addModel(modelNode: model, simdWorldPosition: simdWorldPosition, selectModel: true)
+            self.arAdapter?.addModel(modelNode: model, simdWorldPosition: simdWorldPosition, selectModel: true)
         }, progressBlock: { status, completed in
             self.loadingProgress = Int(completed * 100)
         })
-    }
-}
-
-// MARK: - AR
-
-extension ArView: ArManagementDelegate {
-    
-    func onArShowHelpMessage(type: ArHelpMessageType?, message: String) {
-        self.helpMessage = message
-    }
-    
-    func onArHideHelpMessage() {
-        self.helpMessage = nil
-    }
-    
-    func onArSessionError(error: Error, message: String) {
-        self.criticalErrorMessage = !message.isEmpty ? message : error.localizedDescription
-    }
-    
-    func onArSessionInterrupted(message: String) {
-    }
-    
-    func onArSessionInterruptionEnded(message: String) {
-    }
-    
-    func onArSessionStarted(restarted: Bool) {
-    }
-    
-    func onArSessionPaused() {
-    }
-    
-    func onArUnsupported(message: String) {
-        self.criticalErrorMessage = message
-    }
-    
-    func onArPlaneDetected(simdWorldPosition: float3) {
-        self.addModel(of: self.initialComponent, to: simdWorldPosition)
-    }
-    
-    func onArModelAdded(modelId: String, componentId: String, error: Error?) {
-        if let error = error {
-            self.errorMessage = error.localizedDescription
-            return
-        }
-    }
-    
-    func onModelPositionChanged(modelId: String, componentId: String, position: SCNVector3, rotation: SCNVector4) {
-    }
-    
-    func onModelSelected(modelId: String, componentId: String) {
-        self.observableState.selectedModel = self.arAdapter.selectedModelNode
-        self.observableState.selectedComponent = self.appEnvironment.getComponentById(componentId)
-    }
-    
-    func onModelDeleted(modelId: String, componentId: String) {
-    }
-    
-    func onSelectionReset() {
-        self.observableState.selectedModel = nil
-        self.observableState.selectedComponent = nil
     }
 }
 

@@ -92,6 +92,8 @@ Set your `COMPANY_AUTH_TOKEN` in the `ios-example/AppEnvironment.swift` file (se
             ConfigWiseSDK.initialize([
                 .variant: self.mode,
                 .companyAuthToken: "YOUR_COMPANY_AUTH_TOKEN",
+                .dbAccessPeriod: 1 * 60 * 60, // (sec) 1 hr
+                .lightEstimateEnabled: true,
                 .debugLogging: true,
                 .debug3d: false
             ])
@@ -142,6 +144,12 @@ Before using ConfigWiseSDK in your code, you need to initialize it first. Here i
         .companyAuthToken: "abcdef...12345",           // (optional) COMPANY_AUTH_TOKEN - this token required only in B2C mode, 
                                                        // skip it if you use B2B variant of initialization.
                                                        // You can obtain auth token in CBO > Company profile (see details above).
+                                                       
+        .dbAccessPeriod: 1 * 60 * 60,                  // (optional) 1 hr (3600 sec) by default - number of seconds, period while 
+                                                       // app uses locally cached DB data (instead to request it from server).
+        
+        .lightEstimateEnabled: true,                   // (optional, true by default) If true then Light stimate mode is enabled in 
+                                                       // the AR session (light estimate works based on real environment light sources).
         
         .debugLogging: false,                          // (optional) false by default.
                                                        // true - prints DEBUG, INFO, WARNING and ERROR messages in the log output

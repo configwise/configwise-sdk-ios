@@ -46,6 +46,8 @@ final class AppEnvironment: ObservableObject {
         ConfigWiseSDK.initialize([
             .variant: self.mode,
             .companyAuthToken: "YOUR_COMPANY_AUTH_TOKEN",
+            .dbAccessPeriod: 1 * 60 * 60, // (sec) 1 hr
+            .lightEstimateEnabled: true,
             .debugLogging: false,
             .debug3d: false
         ])
