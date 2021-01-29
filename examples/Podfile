@@ -22,22 +22,29 @@ workspace 'examples'
 target 'ios-example' do
     project 'ios-example/ios-example.xcodeproj'
 
-    pod 'ConfigWiseSDK', '1.3.9'
+    pod 'ConfigWiseSDK', '1.3.10'
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
-      # Forces the minimum to be 12.0 as that's our last deployment target, and new xcode build tools
-      # give warnings in Xcode 12
-      if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 12.0
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
-      end
+        # Forces the minimum to be 12.0 as that's our last deployment target, and new xcode build tools
+        # give warnings in Xcode 12
+        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 12.0
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+        end
 
-      # Let's disable lint validation of double quotes in .h files.
-      # In Xcode 12 this setting is enabled by default => so, we get compilation errors
-      # in Pods which have not been migrated to Xcode 12 yet.
-      config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
+        # Let's disable lint validation of double quotes in .h files.
+        # In Xcode 12 this setting is enabled by default => so, we get compilation errors
+        # in Pods which have not been migrated to Xcode 12 yet.
+        config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
+
+        # Here, we exclude 'arm64' architecture if we make build for Simulator.
+        # It's required because known issues in Xcode 12 (if we try to publish ConfigWiseSDK).
+        # See details here:
+        #   - https://stackoverflow.com/questions/63607158/xcode-12-building-for-ios-simulator-but-linking-in-object-file-built-for-ios
+        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+        config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
     end
   end
 end

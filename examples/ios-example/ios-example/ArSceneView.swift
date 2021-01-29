@@ -47,16 +47,37 @@ struct ArSceneView: UIViewRepresentable {
         
         let arAdapter = context.coordinator.arAdapter
         
-        arAdapter.managementDelegate = context.coordinator
-        arAdapter.sceneView = view
-        arAdapter.modelHighlightingMode = .glow
-        arAdapter.glowColor = .blue
-        arAdapter.gesturesEnabled = true
-        arAdapter.movementEnabled = true
-        arAdapter.rotationEnabled = true
-        arAdapter.scalingEnabled = true
-        arAdapter.snappingsEnabled = true
-        arAdapter.overlappingOfModelsAllowed = true
+        arAdapter.managementDelegate = context.coordinator // initialize delegate (ArManagementDelegate
+                                                           // protocol) to handle callbacks from ArAdapter
+        
+        arAdapter.sceneView = view                         // set sceneView in adapter (what used in UI)
+        
+        arAdapter.modelHighlightingMode = .glow            // type of highlighting of selected models in the scene
+                                                           // the following values are supported: .glow, .levitation
+                                                           // single tap (on shown 3D object in the scene) selects
+                                                           // the model in the scene
+        
+        arAdapter.glowColor = .blue                        // color of highlighting glow effect
+        
+        arAdapter.gesturesEnabled = true                   // enable or disable gestures to manage models in the scene
+        
+        arAdapter.movementEnabled = true                   // enable or disable movements of models in the scene
+                                                           // (one and two fingers pan gesture is used to move 3D objects)
+        
+        arAdapter.rotationEnabled = true                   // enable or disable rotation of 3D objects in the scene
+                                                           // (rotate gesture is used for that)
+        
+        arAdapter.scalingEnabled = true                    // enable or disable scaling of shown 3D objects
+                                                           // (pinch gesture is used for that)
+        
+        arAdapter.snappingsEnabled = true                  // enable or disable snappings features in the scene
+                                                           // double tap (on shown snapping area) moves and connects
+                                                           // selected model to snapping area.
+        
+        arAdapter.overlappingOfModelsAllowed = true        // enable or disable ability to move models to
+                                                           // positions where other models already placed.
+                                                           // if false then ArAdapter doesn't allow to put
+                                                           // 3D objects in the overlapped positions.
         
         onInitView(view, arAdapter)
         

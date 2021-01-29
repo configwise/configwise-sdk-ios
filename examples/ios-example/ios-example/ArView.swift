@@ -63,40 +63,57 @@ struct ArView: View {
                     }
                 },
                 
+                // This callback function is executed by ArAdapter when needed to show help message
+                // (for better UX experience in your application).
                 onArShowHelpMessage: { type, message in
                     DispatchQueue.main.async {
                         self.helpMessage = message
                     }
                 },
                 
+                // Executed if help message must be hidden (for better UX experience).
                 onArHideHelpMessage: {
                     DispatchQueue.main.async {
                         self.helpMessage = nil
                     }
                 },
                 
+                // This function executed if any AR error occurred.
                 onArSessionError: { error, message in
                     DispatchQueue.main.async {
                         self.criticalErrorMessage = !message.isEmpty ? message : error.localizedDescription
                     }
                 },
                 
+                // Executed after AR session started.
                 onArSessionStarted: { restarted in
                 },
                 
+                // Write your code here if you want to handle event when AR session paused.
                 onArSessionPaused: {
                 },
                 
+                // Executed if your device (iPhone / iPad) doesn't support augmented reality
                 onArUnsupported: { message in
                     DispatchQueue.main.async {
                         self.criticalErrorMessage = message
                     }
                 },
                 
+                // Executed if AR horizontal plane detected in your room.
+                // Usually after AR session starts, user scans room environment (through back camera)
+                // by moving phone around the room.
+                // First ArAdapter detects AR anchors in the room. Then ArAdapter trying to bind anchors
+                // to detect (to create) horizontal planes where we can put our 3D models in the scene.
+                // So, after plane detected, ArAdapter informs us about it by callback execution of the current function.
+                // Well, on this step we can load and add our 3D model to position of detected plane.
                 onArFirstPlaneDetected: { simdWorldPosition in
                     self.addModel(of: self.initialComponent, to: simdWorldPosition)
                 },
                 
+                // Executed if model has been added to AR scene.
+                // If model successfully added then 'error' parameter is nil.
+                // If failed to add model then 'error' is non nil.
                 onArModelAdded: { modelId, componentId, error in
                     if let error = error {
                         DispatchQueue.main.async {
@@ -106,9 +123,12 @@ struct ArView: View {
                     }
                 },
                 
+                // Executed after 3D model has been moved and/or rotated in the AR scene.
+                // Eg: if user moved or rotated selected 3D object using gestures.
                 onModelPositionChanged: { modelId, componentId, position, rotation in
                 },
                 
+                // This function is executed by ArAdapter if user selected a model in the scene (by tapping on it).
                 onModelSelected: { modelId, componentId in
                     let selectedModel = self.arAdapter?.selectedModelNode
                     let selectedComponent = self.appEnvironment.getComponentById(componentId)
@@ -119,9 +139,11 @@ struct ArView: View {
                     }
                 },
                 
+                // Executed if model has been deleted from AR scene.
                 onModelDeleted: { modelId, componentId in
                 },
                 
+                // Executed if user selection has been reset on previously selected model.
                 onSelectionReset: {
                     DispatchQueue.main.async {
                         self.observableState.selectedModel = nil

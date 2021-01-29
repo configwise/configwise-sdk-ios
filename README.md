@@ -70,7 +70,7 @@ Examples of code are also distributed here. It is good point to quick start - to
 
 Examples project requires:
 
-1. Xcode v11.3.1
+1. Xcode 12.X
 2. Swift 5
 3. SwiftUI
 4. [ConfigWise account](https://manage.configwise.io)
@@ -141,12 +141,14 @@ Before using ConfigWiseSDK in your code, you need to initialize it first. Here i
         
         .variant: SdkVariant.B2C,                      // (mandatory) .B2B | .B2C - see details about these modes above.
         
-        .companyAuthToken: "abcdef...12345",           // (optional) COMPANY_AUTH_TOKEN - this token required only in B2C mode, 
+        .companyAuthToken: "abcdef...12345",           // (optional) YOUR_COMPANY_AUTH_TOKEN - this token required only in B2C mode, 
                                                        // skip it if you use B2B variant of initialization.
                                                        // You can obtain auth token in CBO > Company profile (see details above).
                                                        
         .dbAccessPeriod: 1 * 60 * 60,                  // (optional) 1 hr (3600 sec) by default - number of seconds, period while 
                                                        // app uses locally cached DB data (instead to request it from server).
+                                                       // NOTICE: if you wish to disable DB data caching (to always request data 
+                                                       //         from server), set 0 here. 
         
         .lightEstimateEnabled: true,                   // (optional, true by default) If true then Light stimate mode is enabled in 
                                                        // the AR session (light estimate works based on real environment light sources).
@@ -163,21 +165,6 @@ Before using ConfigWiseSDK in your code, you need to initialize it first. Here i
                                                        //        planes, geometries, number of fps, etc).
                                                        // false - no extra DEBUG visualisations shown in the scenes.
                                                        //         Use it in Release build of your application.
-        
-        .localCachingOfModelsConvertedByAssimp: false  // (experimental, optional) false by default.
-                                                       // ConfigWiseSDK (iOS) can load different formats of 3D files on runtime
-                                                       // (eg: fbx, dae, gltf, glb, etc). On runtime SDK automatically converts 
-                                                       // these files to Apple .scn format (compatible with SceneKit, ARKit).
-                                                       // If your uploaded 3D files includes complecated geometries, materials, lights, reflection settings, etc.
-                                                       // Then runtime conversion intensively uses your CPU, memory and your battery on runtime (what might be 
-                                                       // critical for mobile apps, especially battery usage). 
-                                                       // Well, if you set this flag to 'true' then SDK uses local caching of converted .scn files.
-                                                       // This means, if you try to load (previously requested file), then conversion step will be skipped.
-                                                       // In this case SDK looks for cached .scn (previously converted) version of your 3D file and returns it.
-                                                       // If you set this flag to 'false' - then SDK always repeats conversion to .scn, even if you request previously 
-                                                       // opened 3D file (no caching of converted files in this case).
-                                                       // NOTICE: this feature is experimental at this moment. Currently, we recommend to set this flag to 'false'.
-                                                       //         This feature will get stable in further ConfigWoseSDK releases.
     ])
 
 In SwiftUI based projects, we recommend to initialize ConfigWiseSDK in the constructor of class what you inject as `environmentObject` then.
@@ -277,7 +264,7 @@ See example of this flow in the constructor of [AppEnvironment.swift](examples/i
         // Let's initialize ConfigWiseSDK here
         ConfigWiseSDK.initialize([
             .variant: self.mode,
-            .companyAuthToken: "f3f7c77157b64b0cb8f84e3112c5cdb1",
+            .companyAuthToken: "abcdef...12345",
             .debugLogging: true,
             .debug3d: false
         ])
@@ -426,7 +413,7 @@ Now, we are ready to retrieve (obtain) catalog from ConfigWise backend service.
 
 ConfigWiseSDK (iOS) provides service classes to query (to obtain) these kinds of data from backend.
 
-All DAO (data access object) service classes automatically store obtained entities, queries, data in the local cache.
+All DAO service classes (data access object) automatically store obtained entities, queries, data in the local cache.
 This means, SDK supports offline mode as well (eg: if network connection is temporary unavailable then SDK returns cached 
 versions of previously obtained entities).
 Local DAO cache is also used to increase performance of fetching of data.
@@ -531,7 +518,7 @@ You no need to worry about caching management - it's already implemented underho
 ## ArAdapter (augmented reality adapter)
 
 ConfigWiseSDK makes your live easy - you no need to write tons of code to manage models in the SceneKit / ARKit directly.
-Instead, you can use our amazing `ArAdapter` (or `CanvasAdapter`) of ConfigWiseSDK.
+Instead, you can use our `ArAdapter` (or `CanvasAdapter`) of ConfigWiseSDK.
 
 - `ArAdapter` - use this adapter to implement augmented reality experience in your application.
 This adapter is based and totally compatible with Apple ARKit underhood.
@@ -541,9 +528,9 @@ This adapter is based and compatible with Apple SceneKit underhood.
 
 Here, we focus on `ArAdapter`.
 
-### Initialize ArAdapter
+### Setup ArAdapter
 
-Instantiate `ArAdapter` instance in your view controller. See [ArView.swift](examples/ios-example/ios-example/ArView.swift) as an example:
+See [ArView.swift](examples/ios-example/ios-example/ArView.swift) as an example:
 
     import ConfigWiseSDK
     
@@ -551,9 +538,22 @@ Instantiate `ArAdapter` instance in your view controller. See [ArView.swift](exa
     
         . . .
         
-        private let arAdapter: ArAdapter = ArAdapter()
+        @State private var arAdapter: ArAdapter?
         
         . . .
+
+
+        var body: some View {
+    
+            . . .
+        
+            return ZStack {
+                ArSceneView(
+                    onInitView: { view, arAdapter in
+                        DispatchQueue.main.async {
+                            self.arAdapter = arAdapter
+                        }
+                    },
 
 Let's create SwiftUI compatible `ArSceneView` wrapper. It's required to integrate UIKit based `ARSCNView` of ARKit with SwiftUI based code.
 See [ArSceneView.swift](examples/ios-example/ios-example/ArSceneView.swift) as an example:
@@ -564,22 +564,151 @@ See [ArSceneView.swift](examples/ios-example/ios-example/ArSceneView.swift) as a
     
     struct ArSceneView: UIViewRepresentable {
     
-        var onInitView = { (view: ARSCNView) in }
+        var onInitView = { (view: ARSCNView, arAdapter: ArAdapter) in }
         
-        var onUpdateView = { (view: ARSCNView) in }
+        var onArShowHelpMessage: (ArHelpMessageType?, String) -> Void
         
-        func makeUIView(context: UIViewRepresentableContext<Self>) -> ARSCNView {
+        var onArHideHelpMessage: () -> Void
+        
+        var onArSessionError: (Error, String) -> Void
+        
+        var onArSessionStarted: (Bool) -> Void
+        
+        var onArSessionPaused: () -> Void
+        
+        var onArUnsupported: (String) -> Void
+        
+        var onArFirstPlaneDetected: (simd_float3) -> Void
+        
+        var onArModelAdded: (String, String, Error?) -> Void
+        
+        var onModelPositionChanged: (String, String, SCNVector3, SCNVector4) -> Void
+        
+        var onModelSelected: (String, String) -> Void
+        
+        var onModelDeleted: (String, String) -> Void
+        
+        var onSelectionReset: () -> Void
+        
+        func makeCoordinator() -> ArSceneView.Coordinator {
+            return Coordinator(representable: self, arAdapter: ArAdapter())
+        }
+        
+        func makeUIView(context: Context) -> ARSCNView {
             let view = ARSCNView()
-            self.onInitView(view)
+            
+            let arAdapter = context.coordinator.arAdapter
+            
+            arAdapter.managementDelegate = context.coordinator // initialize delegate (ArManagementDelegate
+                                                               // protocol) to handle callbacks from ArAdapter
+            
+            arAdapter.sceneView = view                         // set sceneView in adapter (what used in UI)
+            
+            arAdapter.modelHighlightingMode = .glow            // type of highlighting of selected models in the scene
+                                                               // the following values are supported: .glow, .levitation
+                                                               // single tap (on shown 3D object in the scene) selects
+                                                               // the model in the scene
+            
+            arAdapter.glowColor = .blue                        // color of highlighting glow effect
+            
+            arAdapter.gesturesEnabled = true                   // enable or disable gestures to manage models in the scene
+            
+            arAdapter.movementEnabled = true                   // enable or disable movements of models in the scene
+                                                               // (one and two fingers pan gesture is used to move 3D objects)
+            
+            arAdapter.rotationEnabled = true                   // enable or disable rotation of 3D objects in the scene
+                                                               // (rotate gesture is used for that)
+            
+            arAdapter.scalingEnabled = true                    // enable or disable scaling of shown 3D objects
+                                                               // (pinch gesture is used for that)
+            
+            arAdapter.snappingsEnabled = true                  // enable or disable snappings features in the scene
+                                                               // double tap (on shown snapping area) moves and connects
+                                                               // selected model to snapping area.
+            
+            arAdapter.overlappingOfModelsAllowed = true        // enable or disable ability to move models to
+                                                               // positions where other models already placed.
+                                                               // if false then ArAdapter doesn't allow to put
+                                                               // 3D objects in the overlapped positions.
+            
+            onInitView(view, arAdapter)
+            
+            arAdapter.runArSession()
+            
             return view
         }
         
-        func updateUIView(_ view: ARSCNView, context: UIViewRepresentableContext<Self>) {
-            self.onUpdateView(view)
+        func updateUIView(_ uiView: ARSCNView, context: Context) {
+        }
+        
+        static func dismantleUIView(_ uiView: ARSCNView, coordinator: ArSceneView.Coordinator) {
+            coordinator.arAdapter.pauseArSession()
+        }
+        
+        final class Coordinator: ArManagementDelegate {
+            
+            var arAdapter: ArAdapter
+        
+            private let representable: ArSceneView
+            
+            init(representable: ArSceneView, arAdapter: ArAdapter) {
+                self.representable = representable
+                self.arAdapter = arAdapter
+            }
+            
+            func onArShowHelpMessage(type: ArHelpMessageType?, message: String) {
+                self.representable.onArShowHelpMessage(type, message)
+            }
+            
+            func onArHideHelpMessage() {
+                self.representable.onArHideHelpMessage()
+            }
+            
+            func onArSessionError(error: Error, message: String) {
+                self.representable.onArSessionError(error, message)
+            }
+            
+            func onArSessionStarted(restarted: Bool) {
+                self.representable.onArSessionStarted(restarted)
+            }
+            
+            func onArSessionPaused() {
+                self.representable.onArSessionPaused()
+            }
+            
+            func onArUnsupported(message: String) {
+                self.representable.onArUnsupported(message)
+            }
+            
+            func onArFirstPlaneDetected(simdWorldPosition: simd_float3) {
+                self.representable.onArFirstPlaneDetected(simdWorldPosition)
+            }
+            
+            func onArModelAdded(modelId: String, componentId: String, error: Error?) {
+                self.representable.onArModelAdded(modelId, componentId, error)
+            }
+            
+            func onModelPositionChanged(modelId: String, componentId: String, position: SCNVector3, rotation: SCNVector4) {
+                self.representable.onModelPositionChanged(modelId, componentId, position, rotation)
+            }
+            
+            func onModelSelected(modelId: String, componentId: String) {
+                self.representable.onModelSelected(modelId, componentId)
+            }
+            
+            func onModelDeleted(modelId: String, componentId: String) {
+                self.representable.onModelDeleted(modelId, componentId)
+            }
+            
+            func onSelectionReset() {
+                self.representable.onSelectionReset()
+            }
         }
     } 
 
-Let's add our `ArSceneView` wrapper in to `ArView` and let's initialize `ArAdapter` after `ArSceneView` added to UI.
+### Lifecycle of ArAdapter
+
+Let's add our `ArSceneView` wrapper in to `ArView`.
 See [ArView.swift](examples/ios-example/ios-example/ArView.swift) as an example:
 
     var body: some View {
@@ -588,214 +717,107 @@ See [ArView.swift](examples/ios-example/ios-example/ArView.swift) as an example:
         
         return ZStack {
             ArSceneView(
-                onInitView: { (view: ARSCNView) in
-                    self.arAdapter.managementDelegate = self            // initialize delegate (ArManagementDelegate 
-                                                                        // protocol) to handle callbacks from ArAdapter
-                    
-                    self.arAdapter.sceneView = view                     // set sceneView in adapter (what used in UI)
-                     
-                    self.arAdapter.modelHighlightingMode = .glow        // type of highlighting of selected models in the scene
-                                                                        // the following values are supported: .glow, .levitation
-                                                                        // single tap (on shown 3D object in the scene) selects 
-                                                                        // the model in the scene
-                    
-                    self.arAdapter.glowColor = .blue                    // color of highlighting glow effect
-                    
-                    self.arAdapter.gesturesEnabled = true               // enable or disable gestures to manage models in the scene 
-                    
-                    self.arAdapter.movementEnabled = true               // enable or disable movements of models in the scene
-                                                                        // (one and two fingers pan gesture is used to move 3D objects)
-                    
-                    self.arAdapter.rotationEnabled = true               // enable or disable rotation of 3D objects in the scene 
-                                                                        // (rotate gesture is used for that)
-                    
-                    self.arAdapter.scalingEnabled = true                // enable or disable scaling of shown 3D objects
-                                                                        // (pinch gesture is used for that)
-                                                                        
-                    self.arAdapter.snappingsEnabled = true              // enable or disable snappings features in the scene
-                                                                        // double tap (on shown snapping area) moves and connects 
-                                                                        // selected model to snapping area.
-                                                                        
-                    self.arAdapter.overlappingOfModelsAllowed = true    // enable or disable ability to move models to 
-                                                                        // positions where other models already placed.
-                                                                        // if false then ArAdapter doesn't allow to put 
-                                                                        // 3D objects in the overlapped positions. 
+                onInitView: { view, arAdapter in
+                    DispatchQueue.main.async {
+                        self.arAdapter = arAdapter
+                    }
                 },
-                onUpdateView: { (view: ARSCNView) in
+                
+                // This callback function is executed by ArAdapter when needed to show help message
+                // (for better UX experience in your application).
+                onArShowHelpMessage: { type, message in
+                    DispatchQueue.main.async {
+                        self.helpMessage = message
+                    }
+                },
+                
+                // Executed if help message must be hidden (for better UX experience).
+                onArHideHelpMessage: {
+                    DispatchQueue.main.async {
+                        self.helpMessage = nil
+                    }
+                },
+                
+                // This function executed if any AR error occurred.
+                onArSessionError: { error, message in
+                    DispatchQueue.main.async {
+                        self.criticalErrorMessage = !message.isEmpty ? message : error.localizedDescription
+                    }
+                },
+                
+                // Executed after AR session started.
+                onArSessionStarted: { restarted in
+                },
+                
+                // Write your code here if you want to handle event when AR session paused.
+                onArSessionPaused: {
+                },
+                
+                // Executed if your device (iPhone / iPad) doesn't support augmented reality
+                onArUnsupported: { message in
+                    DispatchQueue.main.async {
+                        self.criticalErrorMessage = message
+                    }
+                },
+                
+                // Executed if AR horizontal plane detected in your room.
+                // Usually after AR session starts, user scans room environment (through back camera)
+                // by moving phone around the room.
+                // First ArAdapter detects AR anchors in the room. Then ArAdapter trying to bind anchors
+                // to detect (to create) horizontal planes where we can put our 3D models in the scene.
+                // So, after plane detected, ArAdapter informs us about it by callback execution of the current function.
+                // Well, on this step we can load and add our 3D model to position of detected plane.
+                onArFirstPlaneDetected: { simdWorldPosition in
+                    self.addModel(of: self.initialComponent, to: simdWorldPosition)
+                },
+                
+                // Executed if model has been added to AR scene.
+                // If model successfully added then 'error' parameter is nil.
+                // If failed to add model then 'error' is non nil.
+                onArModelAdded: { modelId, componentId, error in
+                    if let error = error {
+                        DispatchQueue.main.async {
+                            self.errorMessage = error.localizedDescription
+                        }
+                        return
+                    }
+                },
+                
+                // Executed after 3D model has been moved and/or rotated in the AR scene.
+                // Eg: if user moved or rotated selected 3D object using gestures.
+                onModelPositionChanged: { modelId, componentId, position, rotation in
+                },
+                
+                // This function is executed by ArAdapter if user selected a model in the scene (by tapping on it).
+                onModelSelected: { modelId, componentId in
+                    let selectedModel = self.arAdapter?.selectedModelNode
+                    let selectedComponent = self.appEnvironment.getComponentById(componentId)
+                    
+                    DispatchQueue.main.async {
+                        self.observableState.selectedModel = selectedModel
+                        self.observableState.selectedComponent = selectedComponent
+                    }
+                },
+                
+                // Executed if model has been deleted from AR scene.
+                onModelDeleted: { modelId, componentId in
+                },
+                
+                // Executed if user selection has been reset on previously selected model.
+                onSelectionReset: {
+                    DispatchQueue.main.async {
+                        self.observableState.selectedModel = nil
+                        self.observableState.selectedComponent = nil
+                    }
                 }
             )
-            .onAppear {
-                self.arAdapter.runArSession()     // run (continue) AR session if ArSceneView appear.
-            }
-            .onDisappear {
-                self.arAdapter.pauseArSession()   // if ArSceneView disappear then we have to pause our AR session.
-            }
             
             . . .
-
-### Lifecycle of ArAdapter
-
-Augmented reality experience is provided through AR session. There are 2 general steps to guarantee right work of AR session:
-
-- We need to run (continue) AR session if our scene view appears. Use `ArAdapter.runArSession()` function for that (see example of code above).
-- We need to pause our AR session if our scene view disappears. Use `ArAdapter.pauseArSession()` function for that (see example of code above).
-
-`ArManagementDelegate` protocol implementation. See [ArView.swift](examples/ios-example/ios-example/ArView.swift) as an example:
-
-    // MARK: - AR
-    
-    extension ArView: ArManagementDelegate {
-        
-        // This callback function is executed by ArAdapter when needed to show help message 
-        // (for better UX experience in your application).
-        func onArShowHelpMessage(type: ArHelpMessageType?, message: String) {
-            self.helpMessage = message
-        }
-        
-        // Executed if help message must be hidden (for better UX experience).
-        func onArHideHelpMessage() {
-            self.helpMessage = nil
-        }
-        
-        // This function executed if any AR error occurred.
-        func onArSessionError(error: Error, message: String) {
-            self.criticalErrorMessage = !message.isEmpty ? message : error.localizedDescription
-        }
-        
-        // Executed if AR session interrupted.
-        func onArSessionInterrupted(message: String) {
-        }
-        
-        // This function executed if inetrruption of AR session ended.
-        func onArSessionInterruptionEnded(message: String) {
-        }
-        
-        // Executed after AR session started.
-        func onArSessionStarted(restarted: Bool) {
-        }
-        
-        // Write your code here if you want to handle event when AR session paused.
-        func onArSessionPaused() {
-        }
-        
-        // Executed if your device (iPhone / iPad) doesn't support augmented reality
-        func onArUnsupported(message: String) {
-            self.criticalErrorMessage = message
-        }
-        
-        // Executed if AR horizontal plane detected in your room.
-        // Usually after AR session starts, user scans room environment (through back camera)
-        // by moving phone around the room.
-        // First ArAdapter detects AR anchors in the room. Then ArAdapter trying to bind anchors 
-        // to detect (to create) horizontal planes where we can put our 3D models in the scene.
-        // So, after plane detected, ArAdapter informs us about it by callback execution of the current function.
-        // Well, on this step we can load and add our 3D model to position of detected plane.
-        func onArPlaneDetected(simdWorldPosition: float3) {
-            self.addModel(of: self.initialComponent, to: simdWorldPosition)
-        }
-        
-        // Executed if model has been added to AR scene.
-        // If model successfully added then 'error' parameter is nil.
-        // If failed to add model then 'error' is non nil.
-        func onArModelAdded(modelId: String, componentId: String, error: Error?) {
-            if let error = error {
-                self.errorMessage = error.localizedDescription
-                return
-            }
-        }
-        
-        // Executed after 3D model has been moved and/or rotated in the AR scene.
-        // Eg: if user moved or rotated selected 3D object using gestures.
-        func onModelPositionChanged(modelId: String, componentId: String, position: SCNVector3, rotation: SCNVector4) {
-        }
-        
-        // This function is executed by ArAdapter if user selected a model in the scene (by tapping on it).
-        func onModelSelected(modelId: String, componentId: String) {
-            self.observableState.selectedModel = self.arAdapter.selectedModelNode
-            self.observableState.selectedComponent = self.appEnvironment.getComponentById(componentId)
-        }
-        
-        // Executed if model has been deleted from AR scene. 
-        func onModelDeleted(modelId: String, componentId: String) {
-        }
-        
-        // Executed if user selection has been reset on previously selected model.
-        func onSelectionReset() {
-            self.observableState.selectedModel = nil
-            self.observableState.selectedComponent = nil
-        }
-    }
 
 
 # Supported 3D file formats
 
-We recommend, to use the following 3D formats (because good balance between runtime compatibility and popularity in 3D modeling apps):
-
-- .glb - iOS version of our SDK can load Google SceneForm, ARCore compatible formats.
-Android version of our SDK also requires this format on runtime. This means - it's good reason to upload one 3D model file 
-per catalog component (in the CBO). Instead of to upload two 3D model files per each component:
-
-    - .scn (.usd, .usdz) per iOS
-    - .glb (.gltf) per Android. 
-
-- If any runtime issues with uploaded .glb under iOS platform, then additionally attach Apple compatible 3D file to your catalog component (through CBO).
+iOS ConfigWiseSDK supports Apple Scene (.scn), USD and zipped USD formats only. We recommend to use .usdz.
 
     - .scn
-    - .usd (.usdz)   
-
-- If you have no Google or Apple compatible 3D files, then attach other (original) 3D file formats to catalog component. We recommend, to use:
-
-    - .fbx
-
-Here is full list of all supported 3D file formats loaded by ConfigWiseSDK (iOS) on runtime:
-
-**iOS, MacOS** - Apple 3D formats (compatible with SceneKit, ARKit) - no conversion on runtime (when 3D models loaded):
-
-- .scn
-- .usd (.usdz)
-
-**Android** - Google SceneForm, ARCore compatible formats - runtime conversion is executed:
-
-- .glb (gltf binary)
-- .gltf
-
-**Other** supported formats - runtime conversion is executed:
-
- - .fbx
- - .dae
- - .obj
- - .md3
- - .zgl
- - .xgl
- - .wrl
- - .stl
- - .smd
- - .raw
- - .q3s
- - .q3o
- - .ply
- - .mesh
- - .off
- - .nff
- - .m3sd
- - .md5anim
- - .md5mesh
- - .md2
- - .irr
- - .ifc
- - .dxf
- - .cob
- - .bvh
- - .b3d
- - .ac
- - .blend
- - .hmp
- - .3ds
- - .3d
- - .x
- - .ter
- - .max
- - .ms3d
- - .mdl
- - .ase
- 
+    - .usd (.usdz)
