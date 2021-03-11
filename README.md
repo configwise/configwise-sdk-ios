@@ -570,7 +570,9 @@ See [ArSceneView.swift](examples/ios-example/ios-example/ArSceneView.swift) as a
         
         var onArHideHelpMessage: () -> Void
         
-        var onArSessionError: (Error, String) -> Void
+        var onAdapterError: (Error) -> Void
+    
+        var onAdapterErrorCritical: (Error) -> Void
         
         var onArSessionStarted: (Bool) -> Void
         
@@ -580,13 +582,13 @@ See [ArSceneView.swift](examples/ios-example/ios-example/ArSceneView.swift) as a
         
         var onArFirstPlaneDetected: (simd_float3) -> Void
         
-        var onArModelAdded: (String, String, Error?) -> Void
+        var onModelAdded: (String, String, Error?) -> Void
+
+        var onModelDeleted: (String, String) -> Void
         
         var onModelPositionChanged: (String, String, SCNVector3, SCNVector4) -> Void
         
         var onModelSelected: (String, String) -> Void
-        
-        var onModelDeleted: (String, String) -> Void
         
         var onSelectionReset: () -> Void
         
@@ -664,8 +666,12 @@ See [ArSceneView.swift](examples/ios-example/ios-example/ArSceneView.swift) as a
                 self.representable.onArHideHelpMessage()
             }
             
-            func onArSessionError(error: Error, message: String) {
-                self.representable.onArSessionError(error, message)
+            func onAdapterError(error: Error) {
+                self.representable.onAdapterError(error)
+            }
+            
+            func onAdapterErrorCritical(error: Error) {
+                self.representable.onAdapterErrorCritical(error)
             }
             
             func onArSessionStarted(restarted: Bool) {
@@ -684,8 +690,12 @@ See [ArSceneView.swift](examples/ios-example/ios-example/ArSceneView.swift) as a
                 self.representable.onArFirstPlaneDetected(simdWorldPosition)
             }
             
-            func onArModelAdded(modelId: String, componentId: String, error: Error?) {
-                self.representable.onArModelAdded(modelId, componentId, error)
+            func onModelAdded(modelId: String, componentId: String, error: Error?) {
+                self.representable.onModelAdded(modelId, componentId, error)
+            }
+
+            func onModelDeleted(modelId: String, componentId: String) {
+                self.representable.onModelDeleted(modelId, componentId)
             }
             
             func onModelPositionChanged(modelId: String, componentId: String, position: SCNVector3, rotation: SCNVector4) {
@@ -694,10 +704,6 @@ See [ArSceneView.swift](examples/ios-example/ios-example/ArSceneView.swift) as a
             
             func onModelSelected(modelId: String, componentId: String) {
                 self.representable.onModelSelected(modelId, componentId)
-            }
-            
-            func onModelDeleted(modelId: String, componentId: String) {
-                self.representable.onModelDeleted(modelId, componentId)
             }
             
             func onSelectionReset() {
@@ -738,10 +744,17 @@ See [ArView.swift](examples/ios-example/ios-example/ArView.swift) as an example:
                     }
                 },
                 
-                // This function executed if any AR error occurred.
-                onArSessionError: { error, message in
+                // This function executed if non critical AR error occurred.
+                onAdapterError: { error in
                     DispatchQueue.main.async {
-                        self.criticalErrorMessage = !message.isEmpty ? message : error.localizedDescription
+                        self.errorMessage = error.localizedDescription
+                    }
+                },
+                
+                // This function executed if critical AR error occurred.
+                onAdapterErrorCritical: { error in
+                    DispatchQueue.main.async {
+                        self.criticalErrorMessage = error.localizedDescription
                     }
                 },
                 
@@ -774,13 +787,17 @@ See [ArView.swift](examples/ios-example/ios-example/ArView.swift) as an example:
                 // Executed if model has been added to AR scene.
                 // If model successfully added then 'error' parameter is nil.
                 // If failed to add model then 'error' is non nil.
-                onArModelAdded: { modelId, componentId, error in
+                onModelAdded: { modelId, componentId, error in
                     if let error = error {
                         DispatchQueue.main.async {
                             self.errorMessage = error.localizedDescription
                         }
                         return
                     }
+                },
+
+                // Executed if model has been deleted from AR scene.
+                    onModelDeleted: { modelId, componentId in
                 },
                 
                 // Executed after 3D model has been moved and/or rotated in the AR scene.
@@ -797,10 +814,6 @@ See [ArView.swift](examples/ios-example/ios-example/ArView.swift) as an example:
                         self.observableState.selectedModel = selectedModel
                         self.observableState.selectedComponent = selectedComponent
                     }
-                },
-                
-                // Executed if model has been deleted from AR scene.
-                onModelDeleted: { modelId, componentId in
                 },
                 
                 // Executed if user selection has been reset on previously selected model.

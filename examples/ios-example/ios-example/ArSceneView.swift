@@ -18,7 +18,9 @@ struct ArSceneView: UIViewRepresentable {
     
     var onArHideHelpMessage: () -> Void
     
-    var onArSessionError: (Error, String) -> Void
+    var onAdapterError: (Error) -> Void
+    
+    var onAdapterErrorCritical: (Error) -> Void
     
     var onArSessionStarted: (Bool) -> Void
     
@@ -28,13 +30,13 @@ struct ArSceneView: UIViewRepresentable {
     
     var onArFirstPlaneDetected: (simd_float3) -> Void
     
-    var onArModelAdded: (String, String, Error?) -> Void
+    var onModelAdded: (String, String, Error?) -> Void
+
+    var onModelDeleted: (String, String) -> Void
     
     var onModelPositionChanged: (String, String, SCNVector3, SCNVector4) -> Void
     
     var onModelSelected: (String, String) -> Void
-    
-    var onModelDeleted: (String, String) -> Void
     
     var onSelectionReset: () -> Void
     
@@ -112,8 +114,12 @@ struct ArSceneView: UIViewRepresentable {
             self.representable.onArHideHelpMessage()
         }
         
-        func onArSessionError(error: Error, message: String) {
-            self.representable.onArSessionError(error, message)
+        func onAdapterError(error: Error) {
+            self.representable.onAdapterError(error)
+        }
+        
+        func onAdapterErrorCritical(error: Error) {
+            self.representable.onAdapterErrorCritical(error)
         }
         
         func onArSessionStarted(restarted: Bool) {
@@ -132,8 +138,12 @@ struct ArSceneView: UIViewRepresentable {
             self.representable.onArFirstPlaneDetected(simdWorldPosition)
         }
         
-        func onArModelAdded(modelId: String, componentId: String, error: Error?) {
-            self.representable.onArModelAdded(modelId, componentId, error)
+        func onModelAdded(modelId: String, componentId: String, error: Error?) {
+            self.representable.onModelAdded(modelId, componentId, error)
+        }
+        
+        func onModelDeleted(modelId: String, componentId: String) {
+            self.representable.onModelDeleted(modelId, componentId)
         }
         
         func onModelPositionChanged(modelId: String, componentId: String, position: SCNVector3, rotation: SCNVector4) {
@@ -142,10 +152,6 @@ struct ArSceneView: UIViewRepresentable {
         
         func onModelSelected(modelId: String, componentId: String) {
             self.representable.onModelSelected(modelId, componentId)
-        }
-        
-        func onModelDeleted(modelId: String, componentId: String) {
-            self.representable.onModelDeleted(modelId, componentId)
         }
         
         func onSelectionReset() {

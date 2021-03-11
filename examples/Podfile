@@ -22,7 +22,7 @@ workspace 'examples'
 target 'ios-example' do
     project 'ios-example/ios-example.xcodeproj'
 
-    pod 'ConfigWiseSDK', '1.3.10'
+    pod 'ConfigWiseSDK', '1.4.1'
 end
 
 post_install do |installer|

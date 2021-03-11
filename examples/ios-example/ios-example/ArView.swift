@@ -78,10 +78,17 @@ struct ArView: View {
                     }
                 },
                 
-                // This function executed if any AR error occurred.
-                onArSessionError: { error, message in
+                // This function executed if non critical AR error occurred.
+                onAdapterError: { error in
                     DispatchQueue.main.async {
-                        self.criticalErrorMessage = !message.isEmpty ? message : error.localizedDescription
+                        self.errorMessage = error.localizedDescription
+                    }
+                },
+                
+                // This function executed if critical AR error occurred.
+                onAdapterErrorCritical: { error in
+                    DispatchQueue.main.async {
+                        self.criticalErrorMessage = error.localizedDescription
                     }
                 },
                 
@@ -114,13 +121,17 @@ struct ArView: View {
                 // Executed if model has been added to AR scene.
                 // If model successfully added then 'error' parameter is nil.
                 // If failed to add model then 'error' is non nil.
-                onArModelAdded: { modelId, componentId, error in
+                onModelAdded: { modelId, componentId, error in
                     if let error = error {
                         DispatchQueue.main.async {
                             self.errorMessage = error.localizedDescription
                         }
                         return
                     }
+                },
+
+                // Executed if model has been deleted from AR scene.
+                onModelDeleted: { modelId, componentId in
                 },
                 
                 // Executed after 3D model has been moved and/or rotated in the AR scene.
@@ -130,17 +141,13 @@ struct ArView: View {
                 
                 // This function is executed by ArAdapter if user selected a model in the scene (by tapping on it).
                 onModelSelected: { modelId, componentId in
-                    let selectedModel = self.arAdapter?.selectedModelNode
+                    let selectedModel = self.arAdapter?.selectedModel
                     let selectedComponent = self.appEnvironment.getComponentById(componentId)
                     
                     DispatchQueue.main.async {
                         self.observableState.selectedModel = selectedModel
                         self.observableState.selectedComponent = selectedComponent
                     }
-                },
-                
-                // Executed if model has been deleted from AR scene.
-                onModelDeleted: { modelId, componentId in
                 },
                 
                 // Executed if user selection has been reset on previously selected model.
