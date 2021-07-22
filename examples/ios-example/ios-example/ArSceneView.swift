@@ -157,5 +157,11 @@ struct ArSceneView: UIViewRepresentable {
         func onSelectionReset() {
             self.representable.onSelectionReset()
         }
+        
+        func onAnchorModelModelSelected(modelId: String, anchorObjectId: String) {
+        }
+        
+        func onAnchorModelModelDeselected(modelId: String, anchorObjectId: String) {
+        }
     }
 }

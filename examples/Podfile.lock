@@ -1,29 +1,29 @@
 PODS:
-  - Alamofire (5.4.1)
+  - Alamofire (5.4.3)
   - Bolts-Swift (1.5.0)
   - Bolts/Tasks (1.9.1)
-  - CocoaLumberjack/Core (3.7.0)
-  - CocoaLumberjack/Swift (3.7.0):
+  - CocoaLumberjack/Core (3.7.2)
+  - CocoaLumberjack/Swift (3.7.2):
     - CocoaLumberjack/Core
-  - ConfigWiseSDK (1.4.1):
+  - ConfigWiseSDK (1.5.2):
     - Alamofire
     - CocoaLumberjack/Swift
     - Parse
     - ParseLiveQuery
-    - Zip
-  - Parse (1.19.1):
-    - Parse/Core (= 1.19.1)
-  - Parse/Core (1.19.1):
+    - ZIPFoundation
+  - Parse (1.19.2):
+    - Parse/Core (= 1.19.2)
+  - Parse/Core (1.19.2):
     - Bolts/Tasks (= 1.9.1)
   - ParseLiveQuery (2.8.0):
     - Bolts-Swift (~> 1.5.0)
     - Parse (~> 1.19.0)
     - Starscream (~> 4.0.4)
   - Starscream (4.0.4)
-  - Zip (2.1.1)
+  - ZIPFoundation (0.9.12)
 
 DEPENDENCIES:
-  - ConfigWiseSDK (= 1.4.1)
+  - ConfigWiseSDK (= 1.5.2)
 
 SPEC REPOS:
   trunk:
@@ -35,19 +35,19 @@ SPEC REPOS:
     - Parse
     - ParseLiveQuery
     - Starscream
-    - Zip
+    - ZIPFoundation
 
 SPEC CHECKSUMS:
-  Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
+  Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
   Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
   Bolts-Swift: afbbaf8c8186e7f769be4afa656949c14087ba44
-  CocoaLumberjack: e8955b9d337ac307103b0a34fd141c32f27e53c5
-  ConfigWiseSDK: 360e84d7edfa7c6371e337181f8ee808cb1e0cac
-  Parse: e40fdb9c7d665823b7fe9865949cac9a53eb2ce7
+  CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
+  ConfigWiseSDK: 9b1abf5b9cddef81979947357370141ee694135a
+  Parse: 081fb8755c3000fd11df817eec235def233d0af3
   ParseLiveQuery: 366b5876aa20074ea7fea52446376e102447b5df
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
-  Zip: 414f59909701fda9a84ab774ebe0f5449b1082cc
+  ZIPFoundation: e27423c004a5a1410c15933407747374e7c6cb6e
 
-PODFILE CHECKSUM: a525ecb338dca2580d57b1c9645cc1bd1967bfda
+PODFILE CHECKSUM: 107a98365254c38192267c5c009105fc95585364
 
 COCOAPODS: 1.10.1

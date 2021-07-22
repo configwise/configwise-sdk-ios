@@ -92,27 +92,10 @@ extension AppEnvironment {
     private func initObservers() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(self.onUnsupportedAppVersion),
-            name: ConfigWiseSDK.unsupportedAppVersionNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
             selector: #selector(self.onSignOut),
             name: ConfigWiseSDK.signOutNotification,
             object: nil
         )
-    }
-    
-    @objc func onUnsupportedAppVersion(notification: NSNotification) {
-        // Publishing changes from background threads is not allowed (otherwise runtime crash issue occurs).
-        // Make sure to publish values from the main thread (via operators like receive(on:)) on model updates.
-        DispatchQueue.main.async {
-            self.company = .failed("Unsupported ConfigWiseSDK version. Please update it.")
-            self.catalog = .notRequested
-            self.components = .notRequested
-            self.navigation = .signIn
-        }
     }
 
     @objc func onSignOut(notification: NSNotification) {
