@@ -12,7 +12,7 @@ import ConfigWiseSDK
 
 struct ArSceneView: UIViewRepresentable {
     
-    var onInitView = { (view: ARSCNView, arAdapter: ArAdapter) in }
+    @Binding var arAdapter: ArAdapter?
     
     var onArShowHelpMessage: (ArHelpMessageType?, String) -> Void
     
@@ -81,9 +81,9 @@ struct ArSceneView: UIViewRepresentable {
                                                            // if false then ArAdapter doesn't allow to put
                                                            // 3D objects in the overlapped positions.
         
-        onInitView(view, arAdapter)
-        
-        arAdapter.runArSession()
+        DispatchQueue.main.async {
+            self.arAdapter = arAdapter
+        }
         
         return view
     }
@@ -92,7 +92,6 @@ struct ArSceneView: UIViewRepresentable {
     }
     
     static func dismantleUIView(_ uiView: ARSCNView, coordinator: ArSceneView.Coordinator) {
-        coordinator.arAdapter.pauseArSession()
     }
     
     final class Coordinator: ArManagementDelegate {

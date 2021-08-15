@@ -57,11 +57,7 @@ struct ArView: View {
         
         return ZStack {
             ArSceneView(
-                onInitView: { view, arAdapter in
-                    DispatchQueue.main.async {
-                        self.arAdapter = arAdapter
-                    }
-                },
+                arAdapter: $arAdapter,
                 
                 // This callback function is executed by ArAdapter when needed to show help message
                 // (for better UX experience in your application).
@@ -158,6 +154,19 @@ struct ArView: View {
                     }
                 }
             )
+            .onAppear {
+                func run() {
+                    if let arAdapter = self.arAdapter {
+                        arAdapter.runArSession()
+                        return
+                    }
+                    delay(0.5) { run() }
+                }
+                run()
+            }
+            .onDisappear {
+                self.arAdapter?.pauseArSession()
+            }
             
             if self.helpMessage != nil {
                 VStack {
