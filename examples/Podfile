@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '12.0'
+platform :ios, '14.5'
 
 # TODO [smuravev] There is known issue if we run project on real device iOS v13.3.1 and above
 #                 and only used 'personal team' (free apple development program) in 'Signing & Capabilities' settings
@@ -22,16 +22,16 @@ workspace 'examples'
 target 'ios-example' do
     project 'ios-example/ios-example.xcodeproj'
 
-    pod 'ConfigWiseSDK', '1.5.3'
+    pod 'ConfigWiseSDK', '1.5.4'
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
-        # Forces the minimum to be 12.0 as that's our last deployment target, and new xcode build tools
+        # Forces the minimum to be 14.5 as that's our last deployment target, and new xcode build tools
         # give warnings in Xcode 12
-        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 12.0
-          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 14.5
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.5'
         end
 
         # Let's disable lint validation of double quotes in .h files.

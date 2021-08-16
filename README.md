@@ -22,11 +22,11 @@ ConfigWiseSDK framework is distributed under [Apache-2.0](LICENSE) license.
 
 ConfigWiseSDK requires the following minimal requirements:
 
-1. Real iPhone (iPad) with installed iOS v12.0 and above.
+1. Real iPhone (iPad) with installed iOS v14.5 and above.
 **NOTICE:** Unfortunately, AR (augmented reality) doesn't work on simulator.
 So, if you plan to use `ArAdapter` of ConfigWiseSDK then make sure you run / debug your project on real iPhone (iPad). 
-2. Xcode v11.X
-3. Cocoapods v1.9.X and above
+2. Xcode v12.X
+3. Cocoapods v1.10.X and above
 4. Swift 4.2 and above (we recommend to use Swift 5)
 5. If you run your project on real device with installed iOS v13.3.1 and above and if you use FREE 'personal team' as a apple development program,
 then please upgrade your apple plan to use paid 'personal team', otherwise it's known apple issue if you run your app on real iPhone (iPad).
