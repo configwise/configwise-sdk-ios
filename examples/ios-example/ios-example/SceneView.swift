@@ -11,18 +11,29 @@ import SceneKit
 import ConfigWiseSDK
 
 struct SceneView: UIViewRepresentable {
-
-    var onInitView = { (view: SCNView) in }
     
-    var onUpdateView = { (view: SCNView) in }
+    @Binding var canvasAdapter: CanvasAdapter?
     
     func makeUIView(context: UIViewRepresentableContext<Self>) -> SCNView {
-        let view = SCNView()
-        self.onInitView(view)
-        return view
+        let sceneView = SCNView()
+        
+        let canvasAdapter = CanvasAdapter()
+        canvasAdapter.sceneView = sceneView
+        canvasAdapter.gesturesEnabled = true
+        canvasAdapter.cameraControlEnabled = true
+        canvasAdapter.modelSelectionEnabled = false
+        canvasAdapter.anchorObjectModelSelectionEnabled = false
+        canvasAdapter.groundEnabled = false
+        canvasAdapter.overlappingOfModelsAllowed = false
+        canvasAdapter.resetCameraPropertiesOnFocusToCenter = true
+        
+        DispatchQueue.main.async {
+            self.canvasAdapter = canvasAdapter
+        }
+        
+        return sceneView
     }
     
     func updateUIView(_ view: SCNView, context: UIViewRepresentableContext<Self>) {
-        self.onUpdateView(view)
     }
 }

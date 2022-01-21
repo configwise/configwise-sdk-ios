@@ -22,7 +22,7 @@ workspace 'examples'
 target 'ios-example' do
     project 'ios-example/ios-example.xcodeproj'
 
-    pod 'ConfigWiseSDK', '1.5.4'
+    pod 'ConfigWiseSDK', '1.6.0'
 end
 
 post_install do |installer|
@@ -38,13 +38,6 @@ post_install do |installer|
         # In Xcode 12 this setting is enabled by default => so, we get compilation errors
         # in Pods which have not been migrated to Xcode 12 yet.
         config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
-
-        # Here, we exclude 'arm64' architecture if we make build for Simulator.
-        # It's required because known issues in Xcode 12 (if we try to publish ConfigWiseSDK).
-        # See details here:
-        #   - https://stackoverflow.com/questions/63607158/xcode-12-building-for-ios-simulator-but-linking-in-object-file-built-for-ios
-        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
-        config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
     end
   end
 end

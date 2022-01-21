@@ -22,10 +22,6 @@ struct ArView: View {
     
     private var initialComponent: ComponentEntity
     
-    @State private var isLoading = false
-    
-    @State private var loadingProgress: Int?
-    
     @State private var criticalErrorMessage: String?
     
     @State private var errorMessage: String?
@@ -58,6 +54,21 @@ struct ArView: View {
         return ZStack {
             ArSceneView(
                 arAdapter: $arAdapter,
+                
+                // This callback function executed when HUD changes visibility (enabled or disabled).
+                onHudEnabled: { enabled in
+                    guard let arAdapter = self.arAdapter else { return }
+                    
+                    if enabled {
+                        arAdapter.modelMovementEnabled = false
+                        arAdapter.modelRotationEnabled = false
+                        arAdapter.modelScalingEnabled = false
+                    } else {
+                        arAdapter.modelMovementEnabled = true
+                        arAdapter.modelRotationEnabled = true
+                        arAdapter.modelScalingEnabled = true
+                    }
+                },
                 
                 // This callback function is executed by ArAdapter when needed to show help message
                 // (for better UX experience in your application).
@@ -111,7 +122,7 @@ struct ArView: View {
                 // So, after plane detected, ArAdapter informs us about it by callback execution of the current function.
                 // Well, on this step we can load and add our 3D model to position of detected plane.
                 onArFirstPlaneDetected: { simdWorldPosition in
-                    self.addModel(of: self.initialComponent, to: simdWorldPosition)
+                    self.addModel(from: self.initialComponent, to: simdWorldPosition)
                 },
                 
                 // Executed if model has been added to AR scene.
@@ -148,6 +159,8 @@ struct ArView: View {
                 
                 // Executed if user selection has been reset on previously selected model.
                 onSelectionReset: {
+                    self.arAdapter?.hudEnabled = true
+                    
                     DispatchQueue.main.async {
                         self.observableState.selectedModel = nil
                         self.observableState.selectedComponent = nil
@@ -164,9 +177,6 @@ struct ArView: View {
                 }
                 run()
             }
-            .onDisappear {
-                self.arAdapter?.pauseArSession()
-            }
             
             if self.helpMessage != nil {
                 VStack {
@@ -174,21 +184,6 @@ struct ArView: View {
                         .modifier(HelpMessageTextStyle())
                 }
                 .background(Color(red: 230.0 / 255.0, green: 243.0 / 255.0, blue: 255.0 / 255.0, opacity: 0.7))
-            }
-            
-            if self.isLoading {
-                VStack {
-                    VStack {
-                        Text("Loading \(self.loadingProgress != nil ? "\(self.loadingProgress!)%" : "...")")
-
-                        ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
-                            indicator.style = .large
-                            indicator.hidesWhenStopped = false
-                        }
-                    }
-                    .padding()
-                }
-                .modifier(LoadingViewStyle())
             }
         }
         .alert(isPresented: isErrorMessageBinding) {
@@ -288,7 +283,7 @@ struct ArView: View {
             List(self.appEnvironment.components.value ?? []) { component in
                 ComponentListItemView(component, selectAction: {
                     self.arAdapter?.resetSelection()
-                    self.addModel(of: component)
+                    self.addModel(from: component)
                     self.showAddComponentDialog = false
                 })
             }
@@ -309,29 +304,19 @@ struct ArView: View {
 
 extension ArView {
     
-    private func addModel(of component: ComponentEntity, to simdWorldPosition: simd_float3? = nil) {
-        self.isLoading = true
-        self.loadingProgress = 0
-        ModelLoaderService.sharedInstance.loadModelBy(component: component, block: { model, error in
-            self.loadingProgress = 100
-            delay(0.3) {
-                self.isLoading = false
-                self.loadingProgress = nil
-            }
-
-            if let error = error {
-                self.errorMessage = error.localizedDescription
-                return
-            }
-            guard let model = model else {
-                self.errorMessage = "Loaded model is nil"
-                return
-            }
-            
-            self.arAdapter?.addModel(modelNode: model, simdWorldPosition: simdWorldPosition, selectModel: true)
-        }, progressBlock: { status, completed in
-            self.loadingProgress = Int(completed * 100)
-        })
+    private func addModel(
+        from component: ComponentEntity,
+        to simdWorldTransform: simd_float4x4? = nil
+    ) {
+        guard let arAdapter = self.arAdapter else { return }
+        
+        let componentModel = ComponentModelNode(component: component)
+        if simdWorldTransform != nil {
+            arAdapter.addModel(modelNode: componentModel, simdWorldTransform: simdWorldTransform!, selectModel: true)
+        } else {
+            arAdapter.hudEnabled = true
+            arAdapter.hud.hudModel = componentModel
+        }
     }
 }
 

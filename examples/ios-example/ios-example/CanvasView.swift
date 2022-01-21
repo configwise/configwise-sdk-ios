@@ -14,71 +14,64 @@ struct CanvasView: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    private let canvasAdapter = CanvasAdapter()
+    @State private var canvasAdapter: CanvasAdapter?
     
-    @ObservedObject private var observableState: ObservableState
-
+    @State private var componentModel: ComponentModelNode?
+    
     init(_ component: ComponentEntity) {
-        self.observableState = ObservableState(component)
+        self.componentModel = ComponentModelNode(component: component)
     }
     
     var body: some View {
         let componentDataFailed = Binding<Bool>(
             get: {
-                self.observableState.isFailed
+                self.componentModel?.loadableState.isFailed ?? false
             },
             set: { _ = $0 }
         )
         
-        let selectedSceneEnvironmentBinding = Binding<SceneEnvironment>(
+        let selectedSceneEnvironmentBinding = Binding<SceneEnvironment?>(
             get: {
-                self.canvasAdapter.sceneEnvironment
+                self.canvasAdapter?.sceneEnvironment
             },
             set: {
-                self.canvasAdapter.sceneEnvironment = $0
+                if let value = $0 {
+                    self.canvasAdapter?.sceneEnvironment = value
+                }
             }
         )
         
         let showSizesBinding = Binding<Bool>(
             get: {
-                self.canvasAdapter.showSizes
+                self.canvasAdapter?.showSizes ?? false
             },
             set: {
-                self.canvasAdapter.showSizes = $0
+                self.canvasAdapter?.showSizes = $0
             }
         )
         
         return ZStack {
-            SceneView(
-                onInitView: { (view: SCNView) in
-                    self.canvasAdapter.sceneView = view
-                    self.canvasAdapter.gesturesEnabled = true
-                    self.canvasAdapter.cameraControlEnabled = true
-                    self.canvasAdapter.groundEnabled = false
-                    self.canvasAdapter.resetCameraPropertiesOnFocusToCenter = true
-                },
-                onUpdateView: { (view: SCNView) in
-                }
-            )
-            .onAppear {
-                self.observableState.loadModel()
-            }
-            .onReceive(self.observableState.$modelNodeLoadable, perform: { modelNodeLoadable in
-                if modelNodeLoadable.isLoaded, let model = modelNodeLoadable.value {
-                    self.canvasAdapter.addModel(modelNode: model)
-                    self.canvasAdapter.focusToCenter(animate: false, resetCameraZoom: true, resetCameraOrientation: true)
-                }
-            })
-            
-            if self.observableState.isLoading {
-                VStack {
-                    VStack {
-                        Text("Loading \(self.observableState.loadingProgress != nil ? "\(self.observableState.loadingProgress!)%" : "...")")
-
-                        ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
-                            indicator.style = .large
-                            indicator.hidesWhenStopped = false
+            SceneView(canvasAdapter: $canvasAdapter)
+                .onAppear {
+                    func loadModel() {
+                        guard let canvasAdapter = self.canvasAdapter else {
+                            delay(0.5) { loadModel() }
+                            return
                         }
+                        
+                        guard let componentModel = self.componentModel else { return }
+                        
+                        canvasAdapter.addModel(modelNode: componentModel) {
+                            canvasAdapter.focusToCenter(animate: false, resetCameraZoom: true, resetCameraOrientation: true)
+                        }
+                    }
+                }
+            
+            if self.componentModel?.loadableState.isLoading ?? false {
+                VStack {
+                    ActivityIndicator(isAnimating: true) { (indicator: UIActivityIndicatorView) in
+                        indicator.style = .large
+                        indicator.hidesWhenStopped = false
                     }
                     .padding()
                 }
@@ -88,7 +81,7 @@ struct CanvasView: View {
         .alert(isPresented: componentDataFailed) {
             Alert(
                 title: Text("ERROR"),
-                message: Text(self.observableState.error?.localizedDescription ?? "Unable to load component data."),
+                message: Text(self.componentModel?.loadableState.error?.localizedDescription ?? "Unable to load component data."),
                 dismissButton: .default(Text("OK")) {
                     self.presentationMode.wrappedValue.dismiss()
                 }
@@ -98,9 +91,7 @@ struct CanvasView: View {
             trailing: HStack {
                 // 'Open product link' button
                 Button(action: {
-                    guard let component = self.observableState.component else {
-                        return
-                    }
+                    guard let component = self.componentModel?.component else { return }
                     
                     ComponentService.sharedInstance.obtainProductUrlByComponentOfCurrentCompany(component: component) { productUrl, error in
                         if let error = error {
@@ -120,7 +111,8 @@ struct CanvasView: View {
                         .aspectRatio(contentMode: .fit)
                 }
                 .frame(width: 30, height: 30, alignment: .center)
-                .disabled(!self.observableState.isLoaded || self.observableState.component?.productLinkUrl == nil)
+                .disabled(!(self.componentModel?.loadableState.isLoaded ?? false)
+                            || self.componentModel?.component.productLinkUrl == nil)
 
                 Spacer()
                 
@@ -138,90 +130,6 @@ struct CanvasView: View {
                 Toggle(isOn: showSizesBinding) { Text("") }
             }
         )
-    }
-}
-
-private class ObservableState: ObservableObject {
-    
-    @Published var componentLoadable: Loadable<ComponentEntity> = .notRequested
-    
-    @Published var modelNodeLoadable: Loadable<ModelNode> = .notRequested
-    
-    @Published var loadingProgress: Int?
-    
-    var model: ModelNode? {
-        modelNodeLoadable.value
-    }
-    
-    var component: ComponentEntity? {
-        componentLoadable.value
-    }
-    
-    var isLoading: Bool {
-        componentLoadable.isLoading || modelNodeLoadable.isLoading
-    }
-    
-    var isLoaded: Bool {
-        componentLoadable.isLoaded && modelNodeLoadable.isLoaded
-    }
-    
-    var isFailed: Bool {
-        componentLoadable.isFailed || modelNodeLoadable.isFailed
-    }
-    
-    var error: Error? {
-        componentLoadable.error ?? modelNodeLoadable.error
-    }
-    
-    init(_ component: ComponentEntity) {
-        self.componentLoadable = .isLoading(last: component)
-        guard let componentId = component.objectId else {
-            self.componentLoadable = .failed("Invalid component - no identifier found.")
-            return
-        }
-        ComponentService.sharedInstance.obtainComponentById(id: componentId) { component, error in
-            if let error = error {
-                self.componentLoadable = .failed(error)
-                return
-            }
-            guard let component = component else {
-                self.componentLoadable = .failed("Fetched component is nil.")
-                return
-            }
-            self.componentLoadable = .loaded(component)
-        }
-    }
-    
-    func loadModel() {
-        self.modelNodeLoadable = .isLoading(last: self.modelNodeLoadable.value)
-
-        guard !componentLoadable.isFailed else {
-            self.modelNodeLoadable = .failed(componentLoadable.error!)
-            return
-        }
-        guard let component = self.componentLoadable.value else {
-            self.modelNodeLoadable = .failed("Unable to load model due component is nil.")
-            return
-        }
-
-        self.loadingProgress = 0
-        ModelLoaderService.sharedInstance.loadModelBy(component: component, block: { [weak self] model, error in
-            self?.loadingProgress = 100
-            delay(0.3) { self?.loadingProgress = nil }
-            
-            if let error = error {
-                self?.modelNodeLoadable = .failed(error)
-                return
-            }
-            guard let model = model else {
-                self?.modelNodeLoadable = .failed("Loaded model is nil")
-                return
-            }
-
-            self?.modelNodeLoadable = .loaded(model)
-        }, progressBlock: { [weak self] status, completed in
-            self?.loadingProgress = Int(completed * 100)
-        })
     }
 }
 

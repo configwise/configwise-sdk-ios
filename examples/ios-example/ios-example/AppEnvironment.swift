@@ -44,12 +44,12 @@ final class AppEnvironment: ObservableObject {
     init() {
         // Let's initialize ConfigWiseSDK here
         ConfigWiseSDK.initialize([
-            .variant: self.mode,
-            .companyAuthToken: "YOUR_COMPANY_AUTH_TOKEN",
-            .dbAccessPeriod: 1 * 60 * 60, // (sec) 1 hr
-            .lightEstimateEnabled: true,
-            .debugLogging: false,
-            .debug3d: false
+            .variant(self.mode),
+            .companyAuthToken("YOUR_COMPANY_AUTH_TOKEN"),
+            .dbAccessPeriod(1.0 * 60 * 60), // (sec) 1 hr
+            .lightEstimateEnabled(true),
+            .logLevel(.debug),
+            .debug3d(false)
         ])
 
         self.navigation = .signIn

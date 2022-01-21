@@ -14,62 +14,47 @@ struct ArSceneView: UIViewRepresentable {
     
     @Binding var arAdapter: ArAdapter?
     
-    var onArShowHelpMessage: (ArHelpMessageType?, String) -> Void
+    var onArSessionStarted: () -> Void
     
-    var onArHideHelpMessage: () -> Void
+    var onHudEnabled: (Bool) -> Void
     
-    var onAdapterError: (Error) -> Void
+    var onPlaneOn: (ARPlaneAnchor.Alignment, simd_float4x4) -> Void
     
-    var onAdapterErrorCritical: (Error) -> Void
+    var onPlaneOff: (simd_float4x4) -> Void
     
-    var onArSessionStarted: (Bool) -> Void
-    
-    var onArSessionPaused: () -> Void
-    
-    var onArUnsupported: (String) -> Void
-    
-    var onArFirstPlaneDetected: (simd_float3) -> Void
-    
-    var onModelAdded: (String, String, Error?) -> Void
+    var onModelAdded: (ComponentModelNode) -> Void
 
-    var onModelDeleted: (String, String) -> Void
+    var onModelDeleted: (ComponentModelNode) -> Void
     
-    var onModelPositionChanged: (String, String, SCNVector3, SCNVector4) -> Void
+    var onModelTransformChanged: (ComponentModelNode) -> Void
     
-    var onModelSelected: (String, String) -> Void
+    var onModelSelected: (ComponentModelNode) -> Void
     
     var onSelectionReset: () -> Void
     
+    var onAdapterMessage: (ConfigWiseSDK.LogLevel, String) -> Void
+    
     func makeCoordinator() -> ArSceneView.Coordinator {
-        return Coordinator(representable: self, arAdapter: ArAdapter())
+        return Coordinator(representable: self)
     }
     
     func makeUIView(context: Context) -> ARSCNView {
-        let view = ARSCNView()
+        let sceneView = ARSCNView()
         
-        let arAdapter = context.coordinator.arAdapter
+        let arAdapter = ArAdapter(sceneView: sceneView)
         
         arAdapter.managementDelegate = context.coordinator // initialize delegate (ArManagementDelegate
                                                            // protocol) to handle callbacks from ArAdapter
         
-        arAdapter.sceneView = view                         // set sceneView in adapter (what used in UI)
+        arAdapter.modelSelectionEnabled = true
         
-        arAdapter.modelHighlightingMode = .glow            // type of highlighting of selected models in the scene
-                                                           // the following values are supported: .glow, .levitation
-                                                           // single tap (on shown 3D object in the scene) selects
-                                                           // the model in the scene
-        
-        arAdapter.glowColor = .blue                        // color of highlighting glow effect
-        
-        arAdapter.gesturesEnabled = true                   // enable or disable gestures to manage models in the scene
-        
-        arAdapter.movementEnabled = true                   // enable or disable movements of models in the scene
+        arAdapter.modelMovementEnabled = true              // enable or disable movements of models in the scene
                                                            // (one and two fingers pan gesture is used to move 3D objects)
         
-        arAdapter.rotationEnabled = true                   // enable or disable rotation of 3D objects in the scene
+        arAdapter.modelRotationEnabled = true              // enable or disable rotation of 3D objects in the scene
                                                            // (rotate gesture is used for that)
         
-        arAdapter.scalingEnabled = true                    // enable or disable scaling of shown 3D objects
+        arAdapter.modelScalingEnabled = true               // enable or disable scaling of shown 3D objects
                                                            // (pinch gesture is used for that)
         
         arAdapter.snappingsEnabled = true                  // enable or disable snappings features in the scene
@@ -81,11 +66,19 @@ struct ArSceneView: UIViewRepresentable {
                                                            // if false then ArAdapter doesn't allow to put
                                                            // 3D objects in the overlapped positions.
         
+        arAdapter.glowColor = .blue                        // color of highlighting glow effect
+        
+        arAdapter.hud.primaryColor = #colorLiteral(red: 0.1874456704, green: 0.2679388523, blue: 1, alpha: 1)
+        arAdapter.hud.fillColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+        arAdapter.hudEnabled = true
+        
+        arAdapter.useInfinitPlaneDetection = true
+        
         DispatchQueue.main.async {
             self.arAdapter = arAdapter
         }
         
-        return view
+        return sceneView
     }
     
     func updateUIView(_ uiView: ARSCNView, context: Context) {
@@ -96,71 +89,56 @@ struct ArSceneView: UIViewRepresentable {
     
     final class Coordinator: ArManagementDelegate {
         
-        var arAdapter: ArAdapter
-    
         private let representable: ArSceneView
         
-        init(representable: ArSceneView, arAdapter: ArAdapter) {
+        init(representable: ArSceneView) {
             self.representable = representable
-            self.arAdapter = arAdapter
         }
         
-        func onArShowHelpMessage(type: ArHelpMessageType?, message: String) {
-            self.representable.onArShowHelpMessage(type, message)
+        func onArSessionStarted() {
+            self.representable.onArSessionStarted()
         }
         
-        func onArHideHelpMessage() {
-            self.representable.onArHideHelpMessage()
+        func onHudEnabled(enabled: Bool) {
+            self.representable.onHudEnabled(enabled)
         }
         
-        func onAdapterError(error: Error) {
-            self.representable.onAdapterError(error)
+        func onPlaneOn(alignment: ARPlaneAnchor.Alignment, lastWorldTransform: simd_float4x4) {
+            self.representable.onPlaneOn(alignment, lastWorldTransform)
         }
         
-        func onAdapterErrorCritical(error: Error) {
-            self.representable.onAdapterErrorCritical(error)
+        func onPlaneOff(lastWorldTransform: simd_float4x4) {
+            self.representable.onPlaneOff(lastWorldTransform)
         }
         
-        func onArSessionStarted(restarted: Bool) {
-            self.representable.onArSessionStarted(restarted)
+        func onModelAdded(model: ComponentModelNode) {
+            self.representable.onModelAdded(model)
         }
         
-        func onArSessionPaused() {
-            self.representable.onArSessionPaused()
+        func onModelDeleted(model: ComponentModelNode) {
+            self.representable.onModelDeleted(model)
         }
         
-        func onArUnsupported(message: String) {
-            self.representable.onArUnsupported(message)
+        func onModelTransformChanged(model: ComponentModelNode) {
+            self.representable.onModelTransformChanged(model)
         }
         
-        func onArFirstPlaneDetected(simdWorldPosition: simd_float3) {
-            self.representable.onArFirstPlaneDetected(simdWorldPosition)
-        }
-        
-        func onModelAdded(modelId: String, componentId: String, error: Error?) {
-            self.representable.onModelAdded(modelId, componentId, error)
-        }
-        
-        func onModelDeleted(modelId: String, componentId: String) {
-            self.representable.onModelDeleted(modelId, componentId)
-        }
-        
-        func onModelPositionChanged(modelId: String, componentId: String, position: SCNVector3, rotation: SCNVector4) {
-            self.representable.onModelPositionChanged(modelId, componentId, position, rotation)
-        }
-        
-        func onModelSelected(modelId: String, componentId: String) {
-            self.representable.onModelSelected(modelId, componentId)
+        func onModelSelected(model: ComponentModelNode) {
+            self.representable.onModelSelected(model)
         }
         
         func onSelectionReset() {
             self.representable.onSelectionReset()
         }
         
-        func onAnchorModelModelSelected(modelId: String, anchorObjectId: String) {
+        func onAnchorObjectModelSelected(model: AnchorObjectModelNode) {
         }
         
-        func onAnchorModelModelDeselected(modelId: String, anchorObjectId: String) {
+        func onAnchorObjectModelDeselected(model: AnchorObjectModelNode) {
+        }
+        
+        func onAdapterMessage(logLevel: ConfigWiseSDK.LogLevel, message: String) {
+            self.representable.onAdapterMessage(logLevel, message)
         }
     }
 }
