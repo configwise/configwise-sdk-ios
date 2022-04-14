@@ -1,0 +1,11 @@
+framework module ConfigWiseSDK {
+  umbrella header "ConfigWiseSDK.h"
+
+  export *
+  module * { export * }
+}
+
+module ConfigWiseSDK.Swift {
+    header "ConfigWiseSDK-Swift.h"
+    requires objc
+}

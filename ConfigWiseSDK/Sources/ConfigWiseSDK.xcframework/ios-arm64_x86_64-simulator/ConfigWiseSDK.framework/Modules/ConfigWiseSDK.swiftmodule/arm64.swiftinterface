@@ -1,0 +1,1496 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.5.2 (swiftlang-1300.0.47.5 clang-1300.0.29.30)
+// swift-module-flags: -target arm64-apple-ios14.5-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name ConfigWiseSDK
+import ARKit
+import Alamofire
+import CocoaLumberjack
+@_exported import ConfigWiseSDK
+import CoreData
+import Foundation
+import Parse
+import ParseLiveQuery
+import SceneKit
+import Swift
+import UIKit
+import ZIPFoundation
+import _Concurrency
+import simd
+@objc @_inheritsConvenienceInitializers public class UserEntity : Parse.PFUser {
+  public var fullName: Swift.String {
+    get
+  }
+  public var company: ConfigWiseSDK.CompanyEntity? {
+    get
+  }
+  @objc override dynamic public init(className newClassName: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class CompanyEntity : Parse.PFObject, Parse.PFSubclassing {
+  public var name: Swift.String {
+    get
+  }
+  public var logoFilePath: Swift.String? {
+    get
+  }
+  public func getLogoFileData(block: @escaping (Foundation.Data?, Swift.Error?) -> Swift.Void)
+  public var watermarkFilePath: Swift.String? {
+    get
+  }
+  public func getWatermarkFileData(block: @escaping (Foundation.Data?, Swift.Error?) -> Swift.Void)
+  public enum WatermarkPosition : Swift.String {
+    case center
+    case bottomLeft
+    case bottomRight
+    case none
+    public init?(rawValue: Swift.String)
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public var watermarkPosition: ConfigWiseSDK.CompanyEntity.WatermarkPosition {
+    get
+  }
+  public var watermarkWidthFactor: Swift.Float {
+    get
+  }
+  public var watermarkAlpha: Swift.Float {
+    get
+  }
+  public var watermarkPoweredbyPosition: ConfigWiseSDK.CompanyEntity.WatermarkPosition {
+    get
+  }
+  public var watermarkPoweredbyWidthFactor: Swift.Float {
+    get
+  }
+  public var watermarkPoweredbyAlpha: Swift.Float {
+    get
+  }
+  public var conceptAbility: Swift.Bool {
+    get
+  }
+  public var orderAbility: Swift.Bool {
+    get
+  }
+  public var extraProductUrlParams: Swift.String {
+    get
+  }
+  public var liveChatAbility: Swift.Bool {
+    get
+  }
+  @objc public static func parseClassName() -> Swift.String
+  @objc override dynamic public init(className newClassName: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class AppListItemEntity : ConfigWiseSDK.CatalogAwareEntity, Parse.PFSubclassing {
+  public var parent: ConfigWiseSDK.AppListItemEntity? {
+    get
+    set
+  }
+  public var component: ConfigWiseSDK.ComponentEntity? {
+    get
+    set
+  }
+  public var type: ConfigWiseSDK.AppListItemEntity.AppListItemType {
+    get
+    set
+  }
+  public var label: Swift.String {
+    get
+    set
+  }
+  public var desc: Swift.String {
+    get
+    set
+  }
+  public var imagePath: Swift.String? {
+    get
+    set
+  }
+  public var enabled: Swift.Bool {
+    get
+    set
+  }
+  public var showPreview: Swift.Bool {
+    get
+    set
+  }
+  public var textColor: UIKit.UIColor? {
+    get
+    set
+  }
+  public var index: Swift.Int {
+    get
+    set
+  }
+  public var automaticDownloadingVariances: Swift.Bool {
+    get
+    set
+  }
+  public var isOverlayImage: Swift.Bool {
+    get
+  }
+  public var isNavigationItem: Swift.Bool {
+    get
+  }
+  public var isMainProduct: Swift.Bool {
+    get
+  }
+  public func isImageExist() -> Swift.Bool
+  public func obtainImageData(block: @escaping (Foundation.Data?, Swift.Error?) -> Swift.Void)
+  public enum AppListItemType : Swift.String {
+    case overlayImage
+    case navigationItem
+    case mainProduct
+    public init?(rawValue: Swift.String)
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  @objc public static func parseClassName() -> Swift.String
+  public class func spawn(_ other: ConfigWiseSDK.AppListItemEntity) -> ConfigWiseSDK.AppListItemEntity
+  @objc override dynamic public init(className newClassName: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class ModelMeasuringUnitEntity : Parse.PFObject, Parse.PFSubclassing {
+  public var name: Swift.String {
+    get
+  }
+  public var factor: Swift.Double {
+    get
+  }
+  @objc public static func parseClassName() -> Swift.String
+  @objc override dynamic public init(className newClassName: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class CombinationEntity : ConfigWiseSDK.EmbeddedEntity {
+  public var name: Swift.String {
+    get
+  }
+  public var combinationItems: [ConfigWiseSDK.CombinationItemEntity] {
+    get
+  }
+  public func isCombinationItemsExist() -> Swift.Bool
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class EmbeddedEntity : ObjectiveC.NSObject {
+  public var dictionary: [Swift.String : Any]
+  convenience public init(fromDictionary: [Swift.String : Any])
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class AppListItemService : ConfigWiseSDK.DaoAwareService {
+  public static let sharedInstance: ConfigWiseSDK.AppListItemService
+  public func obtainProductsOnlyByCurrentCatalog(offset: Swift.Int? = nil, max: Swift.Int? = nil, block: @escaping ([ConfigWiseSDK.AppListItemEntity], Swift.Error?) -> Swift.Void)
+  public func obtainAppListItemsByCurrentCatalog(parent: ConfigWiseSDK.AppListItemEntity? = nil, offset: Swift.Int? = nil, max: Swift.Int? = nil, block: @escaping ([ConfigWiseSDK.AppListItemEntity], Swift.Error?) -> Swift.Void)
+  public func obtainAppListItemById(id: Swift.String, block: @escaping (ConfigWiseSDK.AppListItemEntity?, Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class AnchorObjectService : ConfigWiseSDK.DaoAwareService {
+  public static let sharedInstance: ConfigWiseSDK.AnchorObjectService
+  public func obtainAnchorObjectById(id: Swift.String, block: @escaping (ConfigWiseSDK.AnchorObjectEntity?, Swift.Error?) -> Swift.Void)
+  public func obtainAllAnchorObjectsByIds(ids: [Swift.String], offset: Swift.Int? = nil, max: Swift.Int? = nil, block: @escaping ([ConfigWiseSDK.AnchorObjectEntity], Swift.Error?) -> Swift.Void)
+  public func obtainAllAnchorObjectsByCurrentCatalog(offset: Swift.Int? = nil, max: Swift.Int? = nil, block: @escaping ([ConfigWiseSDK.AnchorObjectEntity], Swift.Error?) -> Swift.Void)
+  public func obtainAllAnchorObjectsByCatalog(catalog: ConfigWiseSDK.CatalogEntity, offset: Swift.Int? = nil, max: Swift.Int? = nil, block: @escaping ([ConfigWiseSDK.AnchorObjectEntity], Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+extension SceneKit.SCNScene {
+  public func assignLightingEnvironment(from sceneEntity: ConfigWiseSDK.SceneEntity?, block: @escaping (SceneKit.SCNMaterialProperty?, Swift.Error?) -> Swift.Void)
+}
+extension ConfigWiseSDK.ConceptEntity {
+  public var groundColor: UIKit.UIColor? {
+    get
+    set
+  }
+  public func isComponentExists(_ component: ConfigWiseSDK.ComponentEntity) -> Swift.Bool
+  public func obtainComponents(block: @escaping ([ConfigWiseSDK.ComponentEntity], Swift.Error?) -> Swift.Void)
+  public func isMaterialAssigned(materialId: Swift.String) -> Swift.Bool
+}
+@objc @_inheritsConvenienceInitializers public class SceneEntity : ConfigWiseSDK.CatalogAwareEntity, Parse.PFSubclassing {
+  public var lightingEnvironment: ConfigWiseSDK.ScnMaterialPropertyEntity? {
+    get
+    set
+  }
+  @objc public static func parseClassName() -> Swift.String
+  @objc override dynamic public init(className newClassName: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+extension ConfigWiseSDK.SceneEntity {
+  public var rgbHexCodes: [Swift.String : Swift.String] {
+    get
+  }
+  public var uiColors: [Swift.String : UIKit.UIColor] {
+    get
+  }
+  public var textureFilePaths: [Swift.String : Swift.String] {
+    get
+  }
+  public func getTextureDatas(block: @escaping ([Swift.String : Foundation.Data]) -> Swift.Void)
+  public func getTextureImages(block: @escaping ([Swift.String : UIKit.UIImage]) -> Swift.Void)
+  public func getPaletteImage(block: @escaping (UIKit.UIImage?) -> Swift.Void)
+  public func getScnLightingEnvironment(block: @escaping (SceneKit.SCNMaterialProperty) -> Swift.Void)
+}
+extension ConfigWiseSDK.ConceptItemEntity {
+  @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<ConfigWiseSDK.ConceptItemEntity>
+  @objc @NSManaged dynamic public var id: Swift.String {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var component_id: Swift.String {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var positionX: Swift.Float {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var positionY: Swift.Float {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var positionZ: Swift.Float {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var rotationW: Swift.Float {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var rotationX: Swift.Float {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var rotationY: Swift.Float {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var rotationZ: Swift.Float {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var assignedMaterials: Foundation.NSSet? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var concept: ConfigWiseSDK.ConceptEntity? {
+    @objc get
+    @objc set
+  }
+}
+extension ConfigWiseSDK.ConceptItemEntity {
+  @objc(addAssignedMaterialsObject:) @NSManaged dynamic public func addToAssignedMaterials(_ value: ConfigWiseSDK.AssignedMaterialEntity)
+  @objc(removeAssignedMaterialsObject:) @NSManaged dynamic public func removeFromAssignedMaterials(_ value: ConfigWiseSDK.AssignedMaterialEntity)
+  @objc(addAssignedMaterials:) @NSManaged dynamic public func addToAssignedMaterials(_ values: Foundation.NSSet)
+  @objc(removeAssignedMaterials:) @NSManaged dynamic public func removeFromAssignedMaterials(_ values: Foundation.NSSet)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SnappingNode : SceneKit.SCNNode {
+  @_Concurrency.MainActor(unsafe) public var snappingModel: ConfigWiseSDK.ComponentModelNode?
+  @_Concurrency.MainActor(unsafe) public var connectToModel: ConfigWiseSDK.ComponentModelNode?
+  @objc override dynamic public init()
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder aDecoder: Foundation.NSCoder)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc(AssignedMaterialEntity) public class AssignedMaterialEntity : CoreData.NSManagedObject {
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class CatalogService : ConfigWiseSDK.DaoAwareService {
+  public static let sharedInstance: ConfigWiseSDK.CatalogService
+  public func obtainCatalogByCurrentCompany(block: @escaping (ConfigWiseSDK.CatalogEntity?, Swift.Error?) -> Swift.Void)
+  public func obtainCatalogByCompany(company: ConfigWiseSDK.CompanyEntity, block: @escaping (ConfigWiseSDK.CatalogEntity?, Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+@objc public class ArAdapter : ObjectiveC.NSObject {
+  weak public var managementDelegate: ConfigWiseSDK.ArManagementDelegate?
+  final public let sceneView: ARKit.ARSCNView
+  public var glowColor: CoreImage.CIColor {
+    get
+    set
+  }
+  public var modelNodes: [ConfigWiseSDK.ComponentModelNode] {
+    get
+  }
+  public var selectedModel: ConfigWiseSDK.ComponentModelNode? {
+    get
+  }
+  public var snappingsEnabled: Swift.Bool {
+    get
+    set
+  }
+  public var overlappingOfModelsAllowed: Swift.Bool
+  public var showSizes: Swift.Bool {
+    get
+    set
+  }
+  public var modelSelectionEnabled: Swift.Bool
+  public var modelMovementEnabled: Swift.Bool
+  public var modelRotationEnabled: Swift.Bool
+  public var modelScalingEnabled: Swift.Bool
+  public init(sceneView: ARKit.ARSCNView)
+  @objc deinit
+  final public let hud: ConfigWiseSDK.HudNode
+  public var hudEnabled: Swift.Bool {
+    get
+    set
+  }
+  public var useInfinitPlaneDetection: Swift.Bool
+}
+extension ConfigWiseSDK.ArAdapter {
+  @objc dynamic public func handlePanGesture(recognizer: UIKit.UIPanGestureRecognizer)
+  @objc dynamic public func handlePinchGesture(recognizer: UIKit.UIPinchGestureRecognizer)
+  @objc dynamic public func handleRotationGesture(recognizer: UIKit.UIRotationGestureRecognizer)
+  @objc dynamic public func handleSingleTapGesture(recognizer: UIKit.UITapGestureRecognizer)
+  @objc dynamic public func handleDoubleTapGesture(recognizer: UIKit.UITapGestureRecognizer)
+}
+extension ConfigWiseSDK.ArAdapter {
+  public func runArSession()
+}
+extension ConfigWiseSDK.ArAdapter : ARKit.ARSessionDelegate {
+  @objc dynamic public func session(_ session: ARKit.ARSession, didUpdate frame: ARKit.ARFrame)
+}
+extension ConfigWiseSDK.ArAdapter : ARKit.ARSessionObserver {
+  @objc dynamic public func session(_ session: ARKit.ARSession, didFailWithError error: Swift.Error)
+  @objc dynamic public func session(_ session: ARKit.ARSession, cameraDidChangeTrackingState camera: ARKit.ARCamera)
+}
+extension ConfigWiseSDK.ArAdapter : ARKit.ARSCNViewDelegate {
+}
+extension ConfigWiseSDK.ArAdapter : SceneKit.SCNSceneRendererDelegate {
+  @objc dynamic public func renderer(_ renderer: SceneKit.SCNSceneRenderer, updateAtTime time: Foundation.TimeInterval)
+}
+extension ConfigWiseSDK.ArAdapter {
+  public func resetSelection()
+  public func selectModelById(id: Swift.String)
+  public func addModel(modelNode: ConfigWiseSDK.ComponentModelNode, simdWorldTransform: simd.simd_float4x4, selectModel: Swift.Bool = false, completion: (() -> Swift.Void)? = nil)
+  public func removeModelBy(id: Swift.String)
+  public func removeModels()
+}
+extension ConfigWiseSDK.ArAdapter {
+  public func assignMaterialToModel(modelId: Swift.String, nodeNamesOrNodeIds: [ConfigWiseSDK.NodeNameOrNodeId], materialId: Swift.String?, material: SceneKit.SCNMaterial?)
+}
+extension SceneKit.SCNVector3 {
+  public init(_ vec: SpriteKit.vector_float3)
+  public func negate() -> SceneKit.SCNVector3
+  public func length() -> Swift.Float
+  public mutating func setLength(_ length: Swift.Float)
+  public func normalized() -> SceneKit.SCNVector3
+  public mutating func normalize()
+  public func friendlyString() -> Swift.String
+  public func distance(_ vector: SceneKit.SCNVector3) -> Swift.Float
+  public func dot(_ vector: SceneKit.SCNVector3) -> Swift.Float
+  public func cross(_ vector: SceneKit.SCNVector3) -> SceneKit.SCNVector3
+  public func lerp(vector: SceneKit.SCNVector3, t: Swift.Float) -> SceneKit.SCNVector3
+  public func truncatingRemainder(dividingBy: Swift.Float) -> SceneKit.SCNVector3
+}
+public let SCNVector3One: SceneKit.SCNVector3
+public func round(val: SceneKit.SCNVector3) -> SceneKit.SCNVector3
+public func + (left: SceneKit.SCNVector3, right: SceneKit.SCNVector3) -> SceneKit.SCNVector3
+public func += (left: inout SceneKit.SCNVector3, right: SceneKit.SCNVector3)
+public func - (left: SceneKit.SCNVector3, right: SceneKit.SCNVector3) -> SceneKit.SCNVector3
+public func -= (left: inout SceneKit.SCNVector3, right: SceneKit.SCNVector3)
+public func * (left: SceneKit.SCNVector3, right: SceneKit.SCNVector3) -> SceneKit.SCNVector3
+public func *= (left: inout SceneKit.SCNVector3, right: SceneKit.SCNVector3)
+public func * (vector: SceneKit.SCNVector3, scalar: Swift.Float) -> SceneKit.SCNVector3
+public func *= (vector: inout SceneKit.SCNVector3, scalar: Swift.Float)
+public func / (left: SceneKit.SCNVector3, right: SceneKit.SCNVector3) -> SceneKit.SCNVector3
+public func /= (left: inout SceneKit.SCNVector3, right: SceneKit.SCNVector3)
+public func / (vector: SceneKit.SCNVector3, scalar: Swift.Float) -> SceneKit.SCNVector3
+public func /= (vector: inout SceneKit.SCNVector3, scalar: Swift.Float)
+public func SCNVector3Negate(_ vector: SceneKit.SCNVector3) -> SceneKit.SCNVector3
+public func SCNVector3Length(_ vector: SceneKit.SCNVector3) -> Swift.Float
+public func SCNVector3Distance(_ vectorStart: SceneKit.SCNVector3, _ vectorEnd: SceneKit.SCNVector3) -> Swift.Float
+public func SCNVector3Normalize(_ vector: SceneKit.SCNVector3) -> SceneKit.SCNVector3
+public func SCNVector3Dot(_ left: SceneKit.SCNVector3, _ right: SceneKit.SCNVector3) -> Swift.Float
+public func SCNVector3Cross(_ left: SceneKit.SCNVector3, _ right: SceneKit.SCNVector3) -> SceneKit.SCNVector3
+public func SCNVector3Lerp(vectorStart: SceneKit.SCNVector3, vectorEnd: SceneKit.SCNVector3, t: Swift.Float) -> SceneKit.SCNVector3
+public func SCNVector3Project(vectorToProject: SceneKit.SCNVector3, projectionVector: SceneKit.SCNVector3) -> SceneKit.SCNVector3
+public func SCNVector3Uniform(_ value: Swift.Float) -> SceneKit.SCNVector3
+public func SCNVector3Uniform(_ value: CoreGraphics.CGFloat) -> SceneKit.SCNVector3
+@objc @_inheritsConvenienceInitializers public class RoleEntity : Parse.PFRole {
+  public enum SupportedRole : Swift.String {
+    case roleSystemAdmin
+    case roleSystemSales
+    case roleSystemFinance
+    case roleCompanyManager
+    case roleCompanyEmployee
+    case roleCompanyAuthToken
+    public init?(rawValue: Swift.String)
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  @objc override dynamic public init(name: Swift.String)
+  @objc override dynamic public init(name: Swift.String, acl: Parse.PFACL?)
+  @objc override dynamic public init(className newClassName: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class ScnMaterialPropertiesEntity : ConfigWiseSDK.EmbeddedEntity {
+  public var shininess: CoreGraphics.CGFloat {
+    get
+  }
+  public var fresnelExponent: CoreGraphics.CGFloat {
+    get
+  }
+  public var locksAmbientWithDiffuse: Swift.Bool {
+    get
+  }
+  public var transparency: CoreGraphics.CGFloat {
+    get
+  }
+  public var transparencyMode: SceneKit.SCNTransparencyMode {
+    get
+  }
+  public var blendMode: SceneKit.SCNBlendMode {
+    get
+  }
+  public var lightingModel: SceneKit.SCNMaterial.LightingModel {
+    get
+  }
+  public var diffuse: ConfigWiseSDK.ScnMaterialPropertyEntity? {
+    get
+  }
+  public var metalness: ConfigWiseSDK.ScnMaterialPropertyEntity? {
+    get
+  }
+  public var roughness: ConfigWiseSDK.ScnMaterialPropertyEntity? {
+    get
+  }
+  public var normal: ConfigWiseSDK.ScnMaterialPropertyEntity? {
+    get
+  }
+  public var displacement: ConfigWiseSDK.ScnMaterialPropertyEntity? {
+    get
+  }
+  public var selfIllumination: ConfigWiseSDK.ScnMaterialPropertyEntity? {
+    get
+  }
+  public var ambientOcclusion: ConfigWiseSDK.ScnMaterialPropertyEntity? {
+    get
+  }
+  public var ambient: ConfigWiseSDK.ScnMaterialPropertyEntity? {
+    get
+  }
+  public var specular: ConfigWiseSDK.ScnMaterialPropertyEntity? {
+    get
+  }
+  public var reflective: ConfigWiseSDK.ScnMaterialPropertyEntity? {
+    get
+  }
+  public var multiply: ConfigWiseSDK.ScnMaterialPropertyEntity? {
+    get
+  }
+  public var transparent: ConfigWiseSDK.ScnMaterialPropertyEntity? {
+    get
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+extension SceneKit.SCNTransparencyMode {
+  public static func fromString(_ value: Swift.String) -> SceneKit.SCNTransparencyMode?
+  public func toString() -> Swift.String
+}
+extension SceneKit.SCNBlendMode {
+  public static func fromString(_ value: Swift.String) -> SceneKit.SCNBlendMode?
+  public func toString() -> Swift.String
+}
+extension SceneKit.SCNMaterial.LightingModel {
+  public static func fromString(_ value: Swift.String) -> SceneKit.SCNMaterial.LightingModel?
+  public func toString() -> Swift.String
+}
+extension SceneKit.SCNVector4 {
+  public func negate() -> SceneKit.SCNVector4
+  public func dot(vector: SceneKit.SCNVector4) -> Swift.Float
+  public func lerp(vector: SceneKit.SCNVector4, t: Swift.Float) -> SceneKit.SCNVector4
+  public func truncatingRemainder(dividingBy: Swift.Float) -> SceneKit.SCNVector4
+}
+public func round(val: SceneKit.SCNVector4) -> SceneKit.SCNVector4
+public func + (left: SceneKit.SCNVector4, right: SceneKit.SCNVector4) -> SceneKit.SCNVector4
+public func += (left: inout SceneKit.SCNVector4, right: SceneKit.SCNVector4)
+public func - (left: SceneKit.SCNVector4, right: SceneKit.SCNVector4) -> SceneKit.SCNVector4
+public func -= (left: inout SceneKit.SCNVector4, right: SceneKit.SCNVector4)
+public func * (left: SceneKit.SCNVector4, right: SceneKit.SCNVector4) -> SceneKit.SCNVector4
+public func *= (left: inout SceneKit.SCNVector4, right: SceneKit.SCNVector4)
+public func * (vector: SceneKit.SCNVector4, scalar: Swift.Float) -> SceneKit.SCNVector4
+public func *= (vector: inout SceneKit.SCNVector4, scalar: Swift.Float)
+public func / (left: SceneKit.SCNVector4, right: SceneKit.SCNVector4) -> SceneKit.SCNVector4
+public func /= (left: inout SceneKit.SCNVector4, right: SceneKit.SCNVector4)
+public func / (vector: SceneKit.SCNVector4, scalar: Swift.Float) -> SceneKit.SCNVector4
+public func /= (vector: inout SceneKit.SCNVector4, scalar: Swift.Float)
+public func SCNVector4Negate(_ vector: SceneKit.SCNVector4) -> SceneKit.SCNVector4
+public func SCNVector4Dot(_ left: SceneKit.SCNVector4, _ right: SceneKit.SCNVector4) -> Swift.Float
+public func SCNVector4Lerp(vectorStart: SceneKit.SCNVector4, vectorEnd: SceneKit.SCNVector4, t: Swift.Float) -> SceneKit.SCNVector4
+public func SCNVector4Project(vectorToProject: SceneKit.SCNVector4, projectionVector: SceneKit.SCNVector4) -> SceneKit.SCNVector4
+extension UIKit.UIColor {
+  convenience public init(rgbaString: Swift.String)
+  public var rgbaString: Swift.String {
+    get
+  }
+}
+extension CoreGraphics.CGRect {
+  public var mid: CoreGraphics.CGPoint {
+    get
+  }
+}
+extension Parse.PFObject {
+  open var __updatedAt: Foundation.NSDate? {
+    get
+  }
+  open var __createdAt: Foundation.NSDate? {
+    get
+  }
+  @objc override dynamic open var hash: Swift.Int {
+    @objc get
+  }
+  @objc override dynamic open func isEqual(_ object: Any?) -> Swift.Bool
+}
+extension Parse.PFObject : Swift.Identifiable {
+  public typealias ID = Swift.String?
+  public var id: Parse.PFObject.ID {
+    get
+  }
+}
+public protocol AdapterManagementDelegate : AnyObject {
+  func onAdapterMessage(logLevel: ConfigWiseSDK.CWSDK.LogLevel, message: Swift.String)
+  func onModelAdded(model: ConfigWiseSDK.ComponentModelNode)
+  func onModelDeleted(model: ConfigWiseSDK.ComponentModelNode)
+  func onModelTransformChanged(model: ConfigWiseSDK.ComponentModelNode)
+  func onModelSelected(model: ConfigWiseSDK.ComponentModelNode)
+  func onSelectionReset()
+  func onAnchorObjectModelSelected(model: ConfigWiseSDK.AnchorObjectModelNode)
+  func onAnchorObjectModelDeselected(model: ConfigWiseSDK.AnchorObjectModelNode)
+}
+public enum CanvasSettingsType {
+  case groundSettings
+  public static func == (a: ConfigWiseSDK.CanvasSettingsType, b: ConfigWiseSDK.CanvasSettingsType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public protocol CanvasManagementDelegate : ConfigWiseSDK.AdapterManagementDelegate {
+  func onCanvasSettings(_ type: ConfigWiseSDK.CanvasSettingsType)
+}
+public protocol ArManagementDelegate : ConfigWiseSDK.AdapterManagementDelegate {
+  func onArSessionStarted()
+  func onHudEnabled(enabled: Swift.Bool)
+  func onPlaneOn(alignment: ARKit.ARPlaneAnchor.Alignment, lastWorldTransform: simd.simd_float4x4)
+  func onPlaneOff(lastWorldTransform: simd.simd_float4x4)
+}
+extension Swift.String {
+  public func escape() -> Swift.String?
+  public func unescape() -> Swift.String?
+  public func localized(_ bundle: Foundation.Bundle? = nil) -> Swift.String
+  public func localized(_ bundle: Foundation.Bundle? = nil, params: Swift.CVarArg...) -> Swift.String
+}
+extension Swift.String : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class SceneService : ConfigWiseSDK.DaoAwareService {
+  public static let sharedInstance: ConfigWiseSDK.SceneService
+  public func obtainSceneById(id: Swift.String, block: @escaping (ConfigWiseSDK.SceneEntity?, Swift.Error?) -> Swift.Void)
+  public func obtainSceneByCurrentCatalog(block: @escaping (ConfigWiseSDK.SceneEntity?, Swift.Error?) -> Swift.Void)
+  public func obtainSceneByCatalog(catalog: ConfigWiseSDK.CatalogEntity, block: @escaping (ConfigWiseSDK.SceneEntity?, Swift.Error?) -> Swift.Void)
+  public func obtainAllScenesByCatalog(catalog: ConfigWiseSDK.CatalogEntity, offset: Swift.Int? = nil, max: Swift.Int? = nil, block: @escaping ([ConfigWiseSDK.SceneEntity], Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class ScnMaterialPropertyEntity : ConfigWiseSDK.EmbeddedEntity {
+  public var rgbHexCode: Swift.String? {
+    get
+  }
+  public var textureFilePath: Swift.String? {
+    get
+  }
+  public var intensity: Swift.Float {
+    get
+  }
+  public var floatValue: Swift.Float {
+    get
+  }
+  public var maxAnisotropy: Swift.Float {
+    get
+  }
+  public var mappingChannel: Swift.Int {
+    get
+  }
+  public var wrapS: SceneKit.SCNWrapMode {
+    get
+  }
+  public var wrapT: SceneKit.SCNWrapMode {
+    get
+  }
+  public var minificationFilter: SceneKit.SCNFilterMode {
+    get
+  }
+  public var magnificationFilter: SceneKit.SCNFilterMode {
+    get
+  }
+  public var mipFilter: SceneKit.SCNFilterMode {
+    get
+  }
+  public var scaleX: Swift.Float {
+    get
+  }
+  public var scaleY: Swift.Float {
+    get
+  }
+  public var offsetX: Swift.Float {
+    get
+  }
+  public var offsetY: Swift.Float {
+    get
+  }
+  public var rotation: Swift.Float {
+    get
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+extension SceneKit.SCNWrapMode {
+  public static func fromString(_ value: Swift.String) -> SceneKit.SCNWrapMode?
+  public func toString() -> Swift.String
+}
+extension SceneKit.SCNFilterMode {
+  public static func fromString(_ value: Swift.String) -> SceneKit.SCNFilterMode?
+  public func toString() -> Swift.String
+}
+@objc @_inheritsConvenienceInitializers public class AnchorObjectConnectionEntity : ConfigWiseSDK.EmbeddedEntity {
+  public var _name: Swift.String
+  public var anchorObjectId: Swift.String {
+    get
+    set
+  }
+  public var offsetPosition: SceneKit.SCNVector3 {
+    get
+    set
+  }
+  public var offsetOrientation: SceneKit.SCNQuaternion {
+    get
+    set
+  }
+  public var scale: SceneKit.SCNVector3 {
+    get
+    set
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+public enum ProgressStatus {
+  case loading
+  case downloading
+  case caching
+  case thumbnailing
+  case processing
+  case done
+  public static func == (a: ConfigWiseSDK.ProgressStatus, b: ConfigWiseSDK.ProgressStatus) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public typealias ProgressBlock = (ConfigWiseSDK.ProgressStatus, Swift.Double) -> Swift.Void
+@_hasMissingDesignatedInitializers public class DownloadingService {
+  public static let sharedInstance: ConfigWiseSDK.DownloadingService
+  public func cleanLocalCache()
+  public func obtainFileFromLocalCache(fileKey: Swift.String, downloadIfRequired: Swift.Bool = true, block: @escaping (Foundation.URL?, Swift.Error?) -> Swift.Void, progressBlock: ConfigWiseSDK.ProgressBlock? = nil)
+  public func obtainFilesFromLocalCache(fileKeys: [Swift.String], block: @escaping ([Swift.String : (data: Foundation.URL?, error: Swift.Error?)]) -> Swift.Void, progressBlock: ConfigWiseSDK.ProgressBlock? = nil)
+  public func obtainDataFromLocalCache(fileKey: Swift.String, downloadIfRequired: Swift.Bool = true, block: @escaping (Foundation.Data?, Swift.Error?) -> Swift.Void, progressBlock: ConfigWiseSDK.ProgressBlock? = nil)
+  public func obtainDatasFromLocalCache(fileKeys: [Swift.String], block: @escaping ([Swift.String : (data: Foundation.Data?, error: Swift.Error?)]) -> Swift.Void, progressBlock: ConfigWiseSDK.ProgressBlock? = nil)
+  public func removeFromLocalCache(fileKey: Swift.String)
+  public func removeFromLocalCache(fileKeys: [Swift.String])
+  public func getLocallyCachedFileUrl(fileKey: Swift.String) -> Foundation.URL
+  public func isExistsInLocalCache(fileKey: Swift.String) -> Swift.Bool
+  public func addToLocalCache(fileKey: Swift.String, data: Foundation.Data) throws -> Foundation.URL
+  public func upload(_ fileUrl: Foundation.URL, as fileKey: Swift.String, block: @escaping (Swift.Error?) -> Swift.Void)
+  public func isFileExistsOnServer(fileKey: Swift.String, block: @escaping (Swift.Bool, Swift.Error?) -> Swift.Void)
+  public func deleteFileFromServer(fileKey: Swift.String, block: @escaping (Swift.Error?) -> Swift.Void)
+  public func getDownloadingUrl(fileKey: Swift.String, block: @escaping (Foundation.URL?, Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class ModelMeasuringUnitService : ConfigWiseSDK.DaoAwareService {
+  public static let sharedInstance: ConfigWiseSDK.ModelMeasuringUnitService
+  public func obtainModelMeasuringUnitById(id: Swift.String, block: @escaping (ConfigWiseSDK.ModelMeasuringUnitEntity?, Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class AuthService : ConfigWiseSDK.DaoAwareService {
+  public static let sharedInstance: ConfigWiseSDK.AuthService
+  public func signIn(email: Swift.String? = nil, password: Swift.String? = nil, block: @escaping (ConfigWiseSDK.UserEntity?, Swift.Error?) -> Swift.Void)
+  public func signOut(notify: Swift.Bool = true)
+  public func currentUser(block: @escaping (ConfigWiseSDK.UserEntity?) -> Swift.Void)
+  public func currentCompany(block: @escaping (ConfigWiseSDK.CompanyEntity?, Swift.Error?) -> Swift.Void)
+  public func isCurrentUserCompanyManager(block: @escaping (Swift.Bool) -> Swift.Void)
+  public func isCurrentUserCompanyEmployee(block: @escaping (Swift.Bool) -> Swift.Void)
+  public func isCurrentUserCompanyAuthToken(block: @escaping (Swift.Bool) -> Swift.Void)
+  public func resetPassword(email: Swift.String, block: @escaping (Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class CWSDK {
+  public static let fileLogger: CocoaLumberjack.DDFileLogger
+  public static var version: Swift.String {
+    get
+  }
+  public static var versionName: Swift.String?
+  public static var versionBuildNumber: Swift.String?
+  public static let signOutNotification: Foundation.NSNotification.Name
+  public static let conceptCreatedNotification: Foundation.NSNotification.Name
+  public static let conceptUpdatedNotification: Foundation.NSNotification.Name
+  public static let conceptDeletedNotification: Foundation.NSNotification.Name
+  public static let componentCreatedNotification: Foundation.NSNotification.Name
+  public static let componentUpdatedNotification: Foundation.NSNotification.Name
+  public static let componentDeletedNotification: Foundation.NSNotification.Name
+  public static let appListItemCreatedNotification: Foundation.NSNotification.Name
+  public static let appListItemUpdatedNotification: Foundation.NSNotification.Name
+  public static let appListItemDeletedNotification: Foundation.NSNotification.Name
+  public static let materialCreatedNotification: Foundation.NSNotification.Name
+  public static let materialUpdatedNotification: Foundation.NSNotification.Name
+  public static let materialDeletedNotification: Foundation.NSNotification.Name
+  public static let sceneCreatedNotification: Foundation.NSNotification.Name
+  public static let sceneUpdatedNotification: Foundation.NSNotification.Name
+  public static let sceneDeletedNotification: Foundation.NSNotification.Name
+  public static let anchorObjectCreatedNotification: Foundation.NSNotification.Name
+  public static let anchorObjectUpdatedNotification: Foundation.NSNotification.Name
+  public static let anchorObjectDeletedNotification: Foundation.NSNotification.Name
+  public class func isRootGroup(_ group: Swift.String) -> Swift.Bool
+  public class var isB2C: Swift.Bool {
+    get
+  }
+  public class var isB2B: Swift.Bool {
+    get
+  }
+  public class func initialize(_ options: [ConfigWiseSDK.SdkInitializeOption])
+  @objc public enum LogLevel : Swift.Int {
+    case critical
+    case error
+    case warning
+    case info
+    case debug
+    case trace
+    public func localizedDescription() -> Swift.String
+    public init?(rawValue: Swift.Int)
+    public typealias RawValue = Swift.Int
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  @objc deinit
+}
+public enum SdkInitializeOption {
+  case variant(ConfigWiseSDK.SdkVariant)
+  case companyAuthToken(Swift.String)
+  case dbAccessPeriod(Swift.Double)
+  case logLevel(ConfigWiseSDK.CWSDK.LogLevel)
+  case debug3d(Swift.Bool)
+  case lightEstimateEnabled(Swift.Bool)
+  case loading3dModelFileUrl(Foundation.URL)
+  case error3dModelFileUrl(Foundation.URL)
+}
+public enum SdkVariant {
+  case B2B
+  case B2C
+  public static func == (a: ConfigWiseSDK.SdkVariant, b: ConfigWiseSDK.SdkVariant) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension CocoaLumberjack.DDFileLogger {
+  public var logFileDataArray: [Foundation.Data] {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class ComponentService : ConfigWiseSDK.DaoAwareService {
+  public static let sharedInstance: ConfigWiseSDK.ComponentService
+  public func obtainComponentById(id: Swift.String, block: @escaping (ConfigWiseSDK.ComponentEntity?, Swift.Error?) -> Swift.Void)
+  public func obtainAllComponentsByIds(ids: [Swift.String], offset: Swift.Int? = nil, max: Swift.Int? = nil, block: @escaping ([ConfigWiseSDK.ComponentEntity], Swift.Error?) -> Swift.Void)
+  public func obtainAllComponentsByCurrentCatalog(offset: Swift.Int? = nil, max: Swift.Int? = nil, block: @escaping ([ConfigWiseSDK.ComponentEntity], Swift.Error?) -> Swift.Void)
+  public func obtainAllComponentsByCatalog(catalog: ConfigWiseSDK.CatalogEntity, offset: Swift.Int? = nil, max: Swift.Int? = nil, block: @escaping ([ConfigWiseSDK.ComponentEntity], Swift.Error?) -> Swift.Void)
+  public func obtainComponentByCurrentCatalogAndProductNr(productNr: Swift.String, block: @escaping (ConfigWiseSDK.ComponentEntity?, Swift.Error?) -> Swift.Void)
+  public func obtainComponentByCatalogAndProductNr(catalog: ConfigWiseSDK.CatalogEntity, productNr: Swift.String, block: @escaping (ConfigWiseSDK.ComponentEntity?, Swift.Error?) -> Swift.Void)
+  public func obtainProductUrlByComponentOfCurrentCompany(component: ConfigWiseSDK.ComponentEntity, block: @escaping (Foundation.URL?, Swift.Error?) -> Swift.Void)
+  public func obtainAllVariancesByComponent(component: ConfigWiseSDK.ComponentEntity, offset: Swift.Int? = nil, max: Swift.Int? = nil, block: @escaping ([ConfigWiseSDK.ComponentEntity], Swift.Error?) -> Swift.Void)
+  public func countVariancesByComponent(component: ConfigWiseSDK.ComponentEntity, block: @escaping (Swift.Int, Swift.Error?) -> Swift.Void)
+  public func getComponentThumbnailHome(component: ConfigWiseSDK.ComponentEntity, block: @escaping (Swift.String?, Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+extension ConfigWiseSDK.ComponentService {
+  public func obtainAllAnchorObjectDestinations(anchorObjectId: Swift.String, block: @escaping ([ConfigWiseSDK.AnchorObjectConnectionEntity], Swift.Error?) -> Swift.Void)
+}
+extension ConfigWiseSDK.AssignedMaterialEntity {
+  @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<ConfigWiseSDK.AssignedMaterialEntity>
+  @objc @NSManaged dynamic public var material_id: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var tag: Swift.String {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var conceptItem: ConfigWiseSDK.ConceptItemEntity? {
+    @objc get
+    @objc set
+  }
+}
+extension ConfigWiseSDK.ConceptItemEntity {
+  public func obtainComponent(block: @escaping (ConfigWiseSDK.ComponentEntity?, Swift.Error?) -> Swift.Void)
+  public func assignMaterial(tag: Swift.String, materialId: Swift.String?)
+  public func getAssignedMaterials(block: @escaping ([(tag: Swift.String, materialId: Swift.String?, scnMaterial: SceneKit.SCNMaterial?)], Swift.Error?) -> Swift.Void)
+  public func isMaterialAssigned(materialId: Swift.String) -> Swift.Bool
+}
+@_hasMissingDesignatedInitializers public class CoreDataService {
+  public static let sharedInstance: ConfigWiseSDK.CoreDataService
+  public var persistentContainer: CoreData.NSPersistentContainer {
+    get
+    set
+  }
+  public func saveContext()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class HudNode : SceneKit.SCNNode {
+  @_Concurrency.MainActor(unsafe) public var primaryColor: UIKit.UIColor {
+    get
+    set
+  }
+  @_Concurrency.MainActor(unsafe) public var fillColor: UIKit.UIColor {
+    get
+    set
+  }
+  @_Concurrency.MainActor(unsafe) public var hudModel: SceneKit.SCNNode? {
+    get
+    set
+  }
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class ModelNode : SceneKit.SCNNode, Swift.Identifiable {
+  @_Concurrency.MainActor(unsafe) final public let id: Swift.String
+  @_Concurrency.MainActor(unsafe) public var loadableState: ConfigWiseSDK.Loadable<[SceneKit.SCNNode]> {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public var isHighlighted: Swift.Bool {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public func highlight()
+  @_Concurrency.MainActor(unsafe) public func unhighlight()
+  @_Concurrency.MainActor(unsafe) public func load(completion: (() -> Swift.Void)? = nil)
+  @_Concurrency.MainActor(unsafe) public func unload(completion: (() -> Swift.Void)? = nil)
+  public typealias ID = Swift.String
+  @objc deinit
+}
+extension CoreGraphics.CGSize {
+  public init(_ point: CoreGraphics.CGPoint)
+  public func friendlyString() -> Swift.String
+}
+public func + (left: CoreGraphics.CGSize, right: CoreGraphics.CGSize) -> CoreGraphics.CGSize
+public func - (left: CoreGraphics.CGSize, right: CoreGraphics.CGSize) -> CoreGraphics.CGSize
+public func += (left: inout CoreGraphics.CGSize, right: CoreGraphics.CGSize)
+public func -= (left: inout CoreGraphics.CGSize, right: CoreGraphics.CGSize)
+public func / (left: CoreGraphics.CGSize, right: CoreGraphics.CGFloat) -> CoreGraphics.CGSize
+public func * (left: CoreGraphics.CGSize, right: CoreGraphics.CGFloat) -> CoreGraphics.CGSize
+public func /= (left: inout CoreGraphics.CGSize, right: CoreGraphics.CGFloat)
+public func *= (left: inout CoreGraphics.CGSize, right: CoreGraphics.CGFloat)
+@objc @_inheritsConvenienceInitializers public class TagToMaterialsEntity : ConfigWiseSDK.EmbeddedEntity {
+  public var tag: Swift.String {
+    get
+  }
+  public var materialIds: [Swift.String] {
+    get
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class MaterialService : ConfigWiseSDK.DaoAwareService {
+  public static let sharedInstance: ConfigWiseSDK.MaterialService
+  public func obtainMaterialById(id: Swift.String, block: @escaping (ConfigWiseSDK.MaterialEntity?, Swift.Error?) -> Swift.Void)
+  public func obtainAllMaterialsByIds(ids: [Swift.String], offset: Swift.Int? = nil, max: Swift.Int? = nil, block: @escaping ([ConfigWiseSDK.MaterialEntity], Swift.Error?) -> Swift.Void)
+  public func obtainAllMaterialsByCatalog(catalog: ConfigWiseSDK.CatalogEntity, offset: Swift.Int? = nil, max: Swift.Int? = nil, block: @escaping ([ConfigWiseSDK.MaterialEntity], Swift.Error?) -> Swift.Void)
+  public func obtainFirstMaterialsOfComponent(_ component: ConfigWiseSDK.ComponentEntity, block: @escaping ([(material: SceneKit.SCNMaterial, nodeNamesOrNodeIds: [ConfigWiseSDK.NodeNameOrNodeId])], Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+extension CoreGraphics.CGPoint {
+  public init(_ size: CoreGraphics.CGSize)
+  public init(_ vector: SceneKit.SCNVector3)
+  public func distanceTo(_ point: CoreGraphics.CGPoint) -> CoreGraphics.CGFloat
+  public func length() -> CoreGraphics.CGFloat
+  public func midpoint(_ point: CoreGraphics.CGPoint) -> CoreGraphics.CGPoint
+  public func friendlyString() -> Swift.String
+}
+public func + (left: CoreGraphics.CGPoint, right: CoreGraphics.CGPoint) -> CoreGraphics.CGPoint
+public func - (left: CoreGraphics.CGPoint, right: CoreGraphics.CGPoint) -> CoreGraphics.CGPoint
+public func += (left: inout CoreGraphics.CGPoint, right: CoreGraphics.CGPoint)
+public func -= (left: inout CoreGraphics.CGPoint, right: CoreGraphics.CGPoint)
+public func / (left: CoreGraphics.CGPoint, right: CoreGraphics.CGFloat) -> CoreGraphics.CGPoint
+public func * (left: CoreGraphics.CGPoint, right: CoreGraphics.CGFloat) -> CoreGraphics.CGPoint
+public func /= (left: inout CoreGraphics.CGPoint, right: CoreGraphics.CGFloat)
+public func *= (left: inout CoreGraphics.CGPoint, right: CoreGraphics.CGFloat)
+public protocol DaoAwareService {
+  var typeName: Swift.String { get }
+  static var typeName: Swift.String { get }
+}
+extension ConfigWiseSDK.DaoAwareService {
+  public var typeName: Swift.String {
+    get
+  }
+  public static var typeName: Swift.String {
+    get
+  }
+}
+extension ConfigWiseSDK.DaoAwareService {
+  public func saveOrUpdateEntity<ENTITY>(_ entity: ENTITY, block: @escaping (ENTITY, Swift.Error?) -> Swift.Void) where ENTITY : Parse.PFObject
+  public func deleteEntity<ENTITY>(_ entity: ENTITY, block: @escaping (ENTITY, Swift.Error?) -> Swift.Void) where ENTITY : Parse.PFObject
+}
+@objc @_inheritsConvenienceInitializers public class NodeToTagEntity : ConfigWiseSDK.EmbeddedEntity {
+  public var nodeId: Swift.String? {
+    get
+  }
+  public var nodeName: Swift.String {
+    get
+  }
+  public var tag: Swift.String {
+    get
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class CombinationItemEntity : ConfigWiseSDK.EmbeddedEntity {
+  public var tag: Swift.String {
+    get
+  }
+  public var materialId: Swift.String {
+    get
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc(ConceptEntity) public class ConceptEntity : CoreData.NSManagedObject {
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  @objc deinit
+}
+public typealias NodeNameOrNodeId = (nodeName: Swift.String, nodeId: Swift.String)
+@objc @_inheritsConvenienceInitializers public class ComponentEntity : ConfigWiseSDK.CatalogAwareEntity, Parse.PFSubclassing {
+  public var parent: ConfigWiseSDK.ComponentEntity? {
+    get
+    set
+  }
+  public var name: Swift.String {
+    get
+  }
+  public var appName: Swift.String {
+    get
+  }
+  public var genericName: Swift.String {
+    get
+  }
+  public var productNumber: Swift.String {
+    get
+  }
+  public var price: Swift.Double {
+    get
+  }
+  public var desc: Swift.String {
+    get
+  }
+  public var thumbnailFilePath: Swift.String? {
+    get
+  }
+  public func isThumbnailFileExist() -> Swift.Bool
+  public func getThumbnailFileData(block: @escaping (Foundation.Data?, Swift.Error?) -> Swift.Void)
+  public var scnModelFilePath: Swift.String? {
+    get
+  }
+  public func isScnModelFileExist() -> Swift.Bool
+  public var scnModelAssetFilePaths: [Swift.String] {
+    get
+  }
+  public func isScnModelAssetFilePathsExist() -> Swift.Bool
+  public var snappingAreas: [ConfigWiseSDK.SnappingAreaEntity] {
+    get
+  }
+  public func isSnappingAreasExist() -> Swift.Bool
+  public var anchorObjectConnections: [ConfigWiseSDK.AnchorObjectConnectionEntity] {
+    get
+    set
+  }
+  public func isAnchorObjectConnectionsExist() -> Swift.Bool
+  public var nodesToTags: [ConfigWiseSDK.NodeToTagEntity] {
+    get
+  }
+  public func isNodesToTagsExist() -> Swift.Bool
+  public func getNodeNamesOrNodeIdsByTag(_ tag: Swift.String) -> [ConfigWiseSDK.NodeNameOrNodeId]
+  public func getMaterialIdsByTag(_ tag: Swift.String) -> [Swift.String]
+  public var tagsToMaterials: [ConfigWiseSDK.TagToMaterialsEntity] {
+    get
+  }
+  public func isTagsToMaterialsExist() -> Swift.Bool
+  public func getTagsToMaterialsByMaterialId(_ materialId: Swift.String) -> [ConfigWiseSDK.TagToMaterialsEntity]
+  public func isMaterialAssigned(materialId: Swift.String) -> Swift.Bool
+  public var combinations: [ConfigWiseSDK.CombinationEntity] {
+    get
+  }
+  public func isCombinationsExist() -> Swift.Bool
+  public var variancesRelation: Parse.PFRelation<ConfigWiseSDK.ComponentEntity>? {
+    get
+  }
+  public var productLink: Swift.String {
+    get
+  }
+  public var productLinkUrl: Foundation.URL? {
+    get
+  }
+  public var fileSizes: [ConfigWiseSDK.FileSizeEntity] {
+    get
+  }
+  public var totalSize: Swift.Int {
+    get
+  }
+  public var images: ConfigWiseSDK.ImagesEntity {
+    get
+    set
+  }
+  @objc public static func parseClassName() -> Swift.String
+  @objc override dynamic public init(className newClassName: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class AnchorObjectModelNode : ConfigWiseSDK.ModelNode {
+  @_Concurrency.MainActor(unsafe) final public let anchorObject: ConfigWiseSDK.AnchorObjectEntity
+  @_Concurrency.MainActor(unsafe) public init(id: Swift.String? = nil, anchorObject: ConfigWiseSDK.AnchorObjectEntity)
+  @_Concurrency.MainActor(unsafe) override public func load(completion: (() -> Swift.Void)? = nil)
+  @objc deinit
+}
+public enum SceneEnvironment : Swift.String, Swift.CaseIterable {
+  case basicLight
+  case basicDark
+  case studio
+  public var rawValue: Swift.String {
+    get
+  }
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [ConfigWiseSDK.SceneEnvironment]
+  public typealias RawValue = Swift.String
+  public static var allCases: [ConfigWiseSDK.SceneEnvironment] {
+    get
+  }
+}
+public enum CanvasControlAction {
+  case cameraRotate
+  case cameraMove
+  case modelRotateX
+  case modelRotateY
+  case modelRotateZ
+  case modelRotateXY
+  case modelMove
+  case modelScale
+  public static func == (a: ConfigWiseSDK.CanvasControlAction, b: ConfigWiseSDK.CanvasControlAction) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public class CanvasAdapter {
+  weak public var managementDelegate: ConfigWiseSDK.CanvasManagementDelegate?
+  weak public var sceneView: SceneKit.SCNView? {
+    get
+    set
+  }
+  public var isEmpty: Swift.Bool {
+    get
+  }
+  public var glowColor: CoreImage.CIColor {
+    get
+    set
+  }
+  final public let contentNode: SceneKit.SCNNode
+  public var cameraControlEnabled: Swift.Bool
+  public var resetCameraPropertiesOnFocusToCenter: Swift.Bool
+  public var modelSelectionEnabled: Swift.Bool
+  public var modelScalingEnabled: Swift.Bool
+  public var anchorObjectModelSelectionEnabled: Swift.Bool
+  public var groundEnabled: Swift.Bool {
+    get
+    set
+  }
+  public var groundColor: UIKit.UIColor? {
+    get
+    set
+  }
+  public var sceneEnvironment: ConfigWiseSDK.SceneEnvironment {
+    get
+    set
+  }
+  public var selectedModel: ConfigWiseSDK.ComponentModelNode? {
+    get
+  }
+  public var anchorObjectModels: [ConfigWiseSDK.AnchorObjectModelNode] {
+    get
+  }
+  public var selectedAnchorObjectModel: ConfigWiseSDK.AnchorObjectModelNode? {
+    get
+  }
+  public var snappingsEnabled: Swift.Bool {
+    get
+    set
+  }
+  public var overlappingOfModelsAllowed: Swift.Bool
+  public var showSizes: Swift.Bool {
+    get
+    set
+  }
+  public var gesturesEnabled: Swift.Bool {
+    get
+    set
+  }
+  public var canvasControlAction: ConfigWiseSDK.CanvasControlAction?
+  public init()
+  @objc deinit
+  public func refresh()
+}
+extension ConfigWiseSDK.CanvasAdapter {
+  @objc dynamic public func handlePanGesture(recognizer: UIKit.UIPanGestureRecognizer)
+  @objc dynamic public func handlePinchGesture(recognizer: UIKit.UIPinchGestureRecognizer)
+  @objc dynamic public func handleSingleTapGesture(recognizer: UIKit.UITapGestureRecognizer)
+  @objc dynamic public func handleDoubleTapGesture(recognizer: UIKit.UITapGestureRecognizer)
+  @objc dynamic public func handleLongPressGesture(recognizer: UIKit.UILongPressGestureRecognizer)
+}
+extension ConfigWiseSDK.CanvasAdapter {
+  public func cameraRotate(xRadians: Swift.Float, yRadians: Swift.Float)
+  public func focusToCenter(animate: Swift.Bool = true, resetCameraZoom: Swift.Bool = false, resetCameraOrientation: Swift.Bool = false)
+}
+extension ConfigWiseSDK.CanvasAdapter {
+  public func resetSelection()
+  public func selectModelById(id: Swift.String)
+  public func addModel(modelNode: ConfigWiseSDK.ComponentModelNode, position: simd.simd_float3? = nil, orientation: simd.simd_quatf? = nil, selectModel: Swift.Bool = false, closeToPosition: simd.simd_float3? = nil, notifyManagementDelegate: Swift.Bool = true, completion: (() -> Swift.Void)? = nil)
+  public func removeModelBy(id: Swift.String)
+  public func removeModels()
+}
+extension ConfigWiseSDK.CanvasAdapter {
+  public func assignMaterialToModel(modelId: Swift.String, nodeNamesOrNodeIds: [ConfigWiseSDK.NodeNameOrNodeId], materialId: Swift.String?, material: SceneKit.SCNMaterial?)
+}
+extension simd.simd_float4x4 {
+  public var translation: simd.simd_float3 {
+    get
+    set
+  }
+  public var orientation: simd.simd_quatf {
+    get
+  }
+  public var scale: simd.simd_float3 {
+    get
+    set
+  }
+}
+@_inheritsConvenienceInitializers @objc(ConceptItemEntity) public class ConceptItemEntity : CoreData.NSManagedObject {
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  @objc deinit
+}
+public enum Loadable<T> {
+  case notRequested
+  case isLoading(last: T?)
+  case loaded(T)
+  case failed(Swift.Error)
+  public var value: T? {
+    get
+  }
+  public var error: Swift.Error? {
+    get
+  }
+  public var isLoading: Swift.Bool {
+    get
+  }
+  public var isLoaded: Swift.Bool {
+    get
+  }
+  public var isFailed: Swift.Bool {
+    get
+  }
+  public var isNotRequested: Swift.Bool {
+    get
+  }
+}
+extension ConfigWiseSDK.Loadable : Swift.Equatable where T : Swift.Equatable {
+  public static func == (lhs: ConfigWiseSDK.Loadable<T>, rhs: ConfigWiseSDK.Loadable<T>) -> Swift.Bool
+}
+@objc @_inheritsConvenienceInitializers public class FileSizeEntity : ConfigWiseSDK.EmbeddedEntity {
+  public var filePath: Swift.String {
+    get
+  }
+  public var size: Swift.Int {
+    get
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+public enum AnchorObjectType : Swift.String {
+  case object
+  case measurement
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers public class AnchorObjectEntity : ConfigWiseSDK.CatalogAwareEntity, Parse.PFSubclassing {
+  @objc public static func parseClassName() -> Swift.String
+  public var name: Swift.String {
+    get
+  }
+  public var type: ConfigWiseSDK.AnchorObjectType {
+    get
+    set
+  }
+  public var thumbnailFilePath: Swift.String? {
+    get
+  }
+  public func isThumbnailFileExist() -> Swift.Bool
+  public func getThumbnailFileData(block: @escaping (Foundation.Data?, Swift.Error?) -> Swift.Void)
+  public var scnModelFilePath: Swift.String? {
+    get
+  }
+  public func isScnModelFileExist() -> Swift.Bool
+  public var scnModelAssetFilePaths: [Swift.String] {
+    get
+  }
+  public func isScnModelAssetFilePathsExist() -> Swift.Bool
+  public var fileSizes: [ConfigWiseSDK.FileSizeEntity] {
+    get
+  }
+  public var totalSize: Swift.Int {
+    get
+  }
+  @objc override dynamic public init(className newClassName: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class CatalogEntity : Parse.PFObject, Parse.PFSubclassing {
+  public var company: ConfigWiseSDK.CompanyEntity {
+    get
+  }
+  @objc public static func parseClassName() -> Swift.String
+  @objc override dynamic public init(className newClassName: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class SnappingAreaEntity : ConfigWiseSDK.EmbeddedEntity {
+  public var connectToComponentId: Swift.String {
+    get
+  }
+  public var offsetPosition: SceneKit.SCNVector3 {
+    get
+  }
+  public var offsetOrientation: SceneKit.SCNQuaternion {
+    get
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class OrderService {
+  public static let sharedInstance: ConfigWiseSDK.OrderService
+  public func generateOrderAsHtml(of concept: ConfigWiseSDK.ConceptEntity, logoImage: UIKit.UIImage, block: @escaping (Swift.String, Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class ConceptService {
+  public static let sharedInstance: ConfigWiseSDK.ConceptService
+  public func spawnConcept(userId: Swift.String, name: Swift.String) -> ConfigWiseSDK.ConceptEntity
+  public func spawnConceptItem(componentId: Swift.String, position: SceneKit.SCNVector3, rotation: SceneKit.SCNVector4) -> ConfigWiseSDK.ConceptItemEntity
+  public func spawnAssignedMaterial(tag: Swift.String, materialId: Swift.String?) -> ConfigWiseSDK.AssignedMaterialEntity
+  public func clone(concept: ConfigWiseSDK.ConceptEntity) -> ConfigWiseSDK.ConceptEntity
+  public func clone(conceptItem: ConfigWiseSDK.ConceptItemEntity) -> ConfigWiseSDK.ConceptItemEntity
+  public func clone(assignedMaterial: ConfigWiseSDK.AssignedMaterialEntity) -> ConfigWiseSDK.AssignedMaterialEntity
+  public func delete(concept: ConfigWiseSDK.ConceptEntity)
+  public func delete(conceptItem: ConfigWiseSDK.ConceptItemEntity)
+  public func delete(assignedMaterial: ConfigWiseSDK.AssignedMaterialEntity)
+  public func getAllConceptsByUserId(userId: Swift.String, block: @escaping ([ConfigWiseSDK.ConceptEntity], Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class ImagesEntity : ConfigWiseSDK.EmbeddedEntity {
+  public var frame: ConfigWiseSDK.ImagesFrameEntity {
+    get
+    set
+  }
+  public var frame360: ConfigWiseSDK.ImagesFrame360Entity {
+    get
+    set
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class ImagesFrameEntity : ConfigWiseSDK.EmbeddedEntity {
+  public var original: Swift.String? {
+    get
+    set
+  }
+  public var small: Swift.String? {
+    get
+    set
+  }
+  public var medium: Swift.String? {
+    get
+    set
+  }
+  public var large: Swift.String? {
+    get
+    set
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class ImagesFrame360Entity : ConfigWiseSDK.EmbeddedEntity {
+  public var original: [Swift.String] {
+    get
+    set
+  }
+  public var small: [Swift.String] {
+    get
+    set
+  }
+  public var medium: [Swift.String] {
+    get
+    set
+  }
+  public var large: [Swift.String] {
+    get
+    set
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class ComponentModelNode : ConfigWiseSDK.ModelNode {
+  @_Concurrency.MainActor(unsafe) final public let component: ConfigWiseSDK.ComponentEntity
+  @_Concurrency.MainActor(unsafe) public var isSizesShown: Swift.Bool {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public var anchorObjectDestinationModel: SceneKit.SCNNode? {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public init(id: Swift.String? = nil, component: ConfigWiseSDK.ComponentEntity)
+  @_Concurrency.MainActor(unsafe) override public func load(completion: (() -> Swift.Void)? = nil)
+  @_Concurrency.MainActor(unsafe) override public func unload(completion: (() -> Swift.Void)? = nil)
+  @objc deinit
+}
+extension ConfigWiseSDK.ComponentModelNode {
+  @_Concurrency.MainActor(unsafe) public func showAnchorObjectDestinationModel(anchorObjectModel: ConfigWiseSDK.AnchorObjectModelNode, offsetPosition: SceneKit.SCNVector3, offsetOrientation: SceneKit.SCNQuaternion, scale: SceneKit.SCNVector3)
+  @_Concurrency.MainActor(unsafe) public func hideAnchorObjectDestinationModel()
+}
+extension ConfigWiseSDK.ComponentModelNode {
+  @_Concurrency.MainActor(unsafe) public func assignMaterial(material: SceneKit.SCNMaterial?, nodeNamesOrNodeIds: [ConfigWiseSDK.NodeNameOrNodeId])
+}
+extension ConfigWiseSDK.ComponentModelNode {
+  @_Concurrency.MainActor(unsafe) public func showSizes()
+  @_Concurrency.MainActor(unsafe) public func hideSizes()
+}
+extension ConfigWiseSDK.ConceptEntity {
+  @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<ConfigWiseSDK.ConceptEntity>
+  @objc @NSManaged dynamic public var conflictsMessage: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var name: Swift.String {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var popularity: Swift.Int16 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var thumbnail: Foundation.NSData? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var user_id: Swift.String {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var groundEnabled: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var groundColorRgba: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var conceptItems: Foundation.NSSet? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var lastOpened: Foundation.Date {
+    @objc get
+    @objc set
+  }
+}
+extension ConfigWiseSDK.ConceptEntity {
+  @objc(addConceptItemsObject:) @NSManaged dynamic public func addToConceptItems(_ value: ConfigWiseSDK.ConceptItemEntity)
+  @objc(removeConceptItemsObject:) @NSManaged dynamic public func removeFromConceptItems(_ value: ConfigWiseSDK.ConceptItemEntity)
+  @objc(addConceptItems:) @NSManaged dynamic public func addToConceptItems(_ values: Foundation.NSSet)
+  @objc(removeConceptItems:) @NSManaged dynamic public func removeFromConceptItems(_ values: Foundation.NSSet)
+}
+@objc @_inheritsConvenienceInitializers public class CatalogAwareEntity : Parse.PFObject {
+  public var catalog: ConfigWiseSDK.CatalogEntity {
+    get
+  }
+  public var isInDraft: Swift.Bool {
+    get
+  }
+  @objc override dynamic public init(className newClassName: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class MaterialEntity : ConfigWiseSDK.CatalogAwareEntity, Parse.PFSubclassing {
+  public var name: Swift.String {
+    get
+  }
+  public var scnProperties: ConfigWiseSDK.ScnMaterialPropertiesEntity? {
+    get
+  }
+  @objc public static func parseClassName() -> Swift.String
+  @objc override dynamic public init(className newClassName: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+extension ConfigWiseSDK.MaterialEntity {
+  public var rgbHexCodes: [Swift.String : Swift.String] {
+    get
+  }
+  public var uiColors: [Swift.String : UIKit.UIColor] {
+    get
+  }
+  public var textureFilePaths: [Swift.String : Swift.String] {
+    get
+  }
+  public func getTextureFileDatas(block: @escaping ([Swift.String : Foundation.Data]) -> Swift.Void)
+  public func getTextureImages(block: @escaping ([Swift.String : UIKit.UIImage]) -> Swift.Void)
+  public func getPaletteImage(block: @escaping (UIKit.UIImage?) -> Swift.Void)
+  public func getScnMaterial(block: @escaping (SceneKit.SCNMaterial?) -> Swift.Void)
+}
+extension ConfigWiseSDK.CompanyEntity.WatermarkPosition : Swift.Equatable {}
+extension ConfigWiseSDK.CompanyEntity.WatermarkPosition : Swift.Hashable {}
+extension ConfigWiseSDK.CompanyEntity.WatermarkPosition : Swift.RawRepresentable {}
+extension ConfigWiseSDK.AppListItemEntity.AppListItemType : Swift.Equatable {}
+extension ConfigWiseSDK.AppListItemEntity.AppListItemType : Swift.Hashable {}
+extension ConfigWiseSDK.AppListItemEntity.AppListItemType : Swift.RawRepresentable {}
+extension ConfigWiseSDK.RoleEntity.SupportedRole : Swift.Equatable {}
+extension ConfigWiseSDK.RoleEntity.SupportedRole : Swift.Hashable {}
+extension ConfigWiseSDK.RoleEntity.SupportedRole : Swift.RawRepresentable {}
+extension ConfigWiseSDK.CanvasSettingsType : Swift.Equatable {}
+extension ConfigWiseSDK.CanvasSettingsType : Swift.Hashable {}
+extension ConfigWiseSDK.ProgressStatus : Swift.Equatable {}
+extension ConfigWiseSDK.ProgressStatus : Swift.Hashable {}
+extension ConfigWiseSDK.CWSDK.LogLevel : Swift.Equatable {}
+extension ConfigWiseSDK.CWSDK.LogLevel : Swift.Hashable {}
+extension ConfigWiseSDK.CWSDK.LogLevel : Swift.RawRepresentable {}
+extension ConfigWiseSDK.SdkVariant : Swift.Equatable {}
+extension ConfigWiseSDK.SdkVariant : Swift.Hashable {}
+extension ConfigWiseSDK.SceneEnvironment : Swift.Equatable {}
+extension ConfigWiseSDK.SceneEnvironment : Swift.Hashable {}
+extension ConfigWiseSDK.SceneEnvironment : Swift.RawRepresentable {}
+extension ConfigWiseSDK.CanvasControlAction : Swift.Equatable {}
+extension ConfigWiseSDK.CanvasControlAction : Swift.Hashable {}
+extension ConfigWiseSDK.AnchorObjectType : Swift.Equatable {}
+extension ConfigWiseSDK.AnchorObjectType : Swift.Hashable {}
+extension ConfigWiseSDK.AnchorObjectType : Swift.RawRepresentable {}
