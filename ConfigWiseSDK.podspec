@@ -7,6 +7,7 @@ Pod::Spec.new do |s|
     s.author                  = { "VipaHelda BV" => "sdk@configwise.io" }
     s.license                 = { :type => 'Apache-2.0', :file => 'LICENSE' }
 
+    s.source                  = { :git => "https://github.com/configwise/configwise-sdk-ios.git", :tag => "#{s.version}" }
     s.vendored_frameworks     = "#{s.name}/Sources/#{s.name}.xcframework"
 
     s.platform                = :ios
