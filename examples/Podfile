@@ -22,7 +22,10 @@ workspace 'examples'
 target 'ios-example' do
     project 'ios-example/ios-example.xcodeproj'
 
-    pod 'ConfigWiseSDK', '1.6.0'
+    # TODO [smuravev] Currently ConfigWiseSDK v1.7.0 (distributed as .xcframework) is non linkable
+    #                 under Xcode due, known issue, see (workarounds and recommendations there):
+    #                 https://github.com/parse-community/Parse-SDK-iOS-OSX/issues/1601
+    pod 'ConfigWiseSDK', :git => 'https://github.com/configwise/configwise-sdk-ios.git', :tag => '1.7.0'
 end
 
 post_install do |installer|

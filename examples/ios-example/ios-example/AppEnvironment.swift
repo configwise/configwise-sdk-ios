@@ -43,7 +43,7 @@ final class AppEnvironment: ObservableObject {
     
     init() {
         // Let's initialize ConfigWiseSDK here
-        ConfigWiseSDK.initialize([
+        CWSDK.initialize([
             .variant(self.mode),
             .companyAuthToken("YOUR_COMPANY_AUTH_TOKEN"),
             .dbAccessPeriod(1.0 * 60 * 60), // (sec) 1 hr
@@ -93,7 +93,7 @@ extension AppEnvironment {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.onSignOut),
-            name: ConfigWiseSDK.signOutNotification,
+            name: CWSDK.signOutNotification,
             object: nil
         )
     }

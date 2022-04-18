@@ -32,7 +32,7 @@ struct ArSceneView: UIViewRepresentable {
     
     var onSelectionReset: () -> Void
     
-    var onAdapterMessage: (ConfigWiseSDK.LogLevel, String) -> Void
+    var onAdapterMessage: (CWSDK.LogLevel, String) -> Void
     
     func makeCoordinator() -> ArSceneView.Coordinator {
         return Coordinator(representable: self)
@@ -137,7 +137,7 @@ struct ArSceneView: UIViewRepresentable {
         func onAnchorObjectModelDeselected(model: AnchorObjectModelNode) {
         }
         
-        func onAdapterMessage(logLevel: ConfigWiseSDK.LogLevel, message: String) {
+        func onAdapterMessage(logLevel: CWSDK.LogLevel, message: String) {
             self.representable.onAdapterMessage(logLevel, message)
         }
     }
