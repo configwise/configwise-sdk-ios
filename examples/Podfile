@@ -25,6 +25,7 @@ target 'ios-example' do
     # TODO [smuravev] Currently ConfigWiseSDK v1.7.0 (distributed as .xcframework) is non linkable
     #                 under Xcode due, known issue, see (workarounds and recommendations there):
     #                 https://github.com/parse-community/Parse-SDK-iOS-OSX/issues/1601
+    #                 https://forums.swift.org/t/frameworkname-is-not-a-member-type-of-frameworkname-errors-inside-swiftinterface/28962/3
     pod 'ConfigWiseSDK', :git => 'https://github.com/configwise/configwise-sdk-ios.git', :tag => '1.7.0'
 end
 
